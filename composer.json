@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "lserv" : "php -S 127.0.0.1:5050 -t ./public_html"
+  },
+  "autoload": {
+    "psr-4": {
+      "TUDublin\\" : "src"
+    }
+  },
+  "require": {
+    "twig/twig": "^3.0"
+  }
+}
