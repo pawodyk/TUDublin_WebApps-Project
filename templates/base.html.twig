@@ -1,32 +1,98 @@
 <!DOCTYPE>
 <html>
-<head>
-    <title>Home Page</title>
-    
-    {# Bootstrap Link #}
-    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+	<head>
+		<title>Home Page</title>
 
-    {# my stylesheet #}
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+		{# Bootstrap Link #}
+		<link
+		rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
 
-</head>
-<body>
+		{# my stylesheet #}
+		<link rel="stylesheet" type="text/css" href="/css/styles.css">
 
-{% block content %}
-{% endblock %}
+	</head>
+	<body>
 
-<nav>
-    <ul>
-        <li>
-            <a href="index.php?page=home">Home</a>
-        </li>
-    </ul>
-</nav>
+		<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+			<div class="">
+				<a class="navbar-brand" href="#">Coffe Shop Review</a>
+			</div>
+			<div class="navbar_toggler">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColapseSection" aria-controls="navbarColapseSection" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
 
-{# Bootstrap scripts #}
-<script src="/scripts/bootstrap/jquery-3.4.1.slim.min.js"></script>
-<script src="/scripts/bootstrap/popper.min.js"></script>
-<script src="/scripts/bootstrap/bootstrap.min.js"></script>
+			<div class="collapse navbar-collapse text-center " id="navbarColapseSection">
+				<ul class="navbar-nav ml-0 ml-lg-auto">
+					<li class="nav-item">
+						<a class="nav-link active" href="index.php?page=home">Home
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link disabled" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link disabled" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link disabled" href="#">Link</a>
+					</li>
+				</ul>
+				<button type="button" class="btn btn-outline-primary mx-lg-2 " data-toggle="modal" data-target="#signInModal">
+					Login
+				</button>
+				<a href="#" class="btn btn-outline-success">
+					Sign Up
+				</a>
+			</div>
+		</nav>
 
-</body>
+
+
+		{% block content %}{% endblock %}
+
+		<!-- Modal -->
+		<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="signInModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">Sign In</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Email address</label>
+								<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+								<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputPassword1">Password</label>
+								<input type="password" class="form-control" id="exampleInputPassword1">
+							</div>
+							<div class="form-group text-center">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary">Sign In</button>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<div class="text-center">
+							new to Review Sign up here
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# Bootstrap scripts #}
+		<script src="/scripts/bootstrap/jquery-3.4.1.slim.min.js"></script>
+		<script src="/scripts/bootstrap/popper.min.js"></script>
+		<script src="/scripts/bootstrap/bootstrap.min.js"></script>
+
+	</body>
 </html>
