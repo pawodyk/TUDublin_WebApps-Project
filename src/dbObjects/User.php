@@ -9,8 +9,8 @@ class User {
 CREATE TABLE user (
     id integer PRIMARY KEY AUTO_INCREMENT,
     username varchar(50) NOT NULL,
-    password varchar(100) NOT NULL,
-    user_type varchar(10) NOT NULL CHECK (user_type IN ('ROLE_STAFF', 'ROLE_SHOP', 'ROLE_ADMIN'))
+    password varchar(255) NOT NULL,
+    user_type varchar(10) NOT NULL
 );
 HERE;
 
@@ -65,7 +65,8 @@ HERE;
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $hashPassword;
     }
 
     /**
