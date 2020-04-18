@@ -10,7 +10,7 @@ class CoffeeshopComment
         <<<HERE
 CREATE TABLE `coffeeshopcomment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `name` varchar(100) NULL,
   `message` text NOT NULL,
   `coffeeshop` int NOT NULL DEFAULT '0',
   `is_published` tinyint(1) NOT NULL DEFAULT '0',

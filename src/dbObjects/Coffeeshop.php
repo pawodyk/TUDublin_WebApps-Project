@@ -10,10 +10,10 @@ class Coffeeshop
 <<<HERE
 CREATE TABLE `coffeeshop` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `summary` varchar(255) NOT NULL,
-  `address_id` int NOT NULL DEFAULT '0',
-  `paid_content_id` int NOT NULL DEFAULT '0',
+  `name` varchar(150) NOT NULL,
+  `summary` varchar(500) NOT NULL,
+  `address_id` int NULL,
+  `paid_content_id` int NULL,
   PRIMARY KEY (`id`),
   KEY `FK_COFFEESHOP_ADDRESS` (`address_id`),
   KEY `FK_COFFEESHOP_PAIDCONTENT` (`paid_content_id`),

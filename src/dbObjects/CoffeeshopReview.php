@@ -12,7 +12,7 @@ class CoffeeshopReview
 CREATE TABLE `coffeeshopreview` (
   `id` int NOT NULL AUTO_INCREMENT,
   `coffeeshop` int NOT NULL,
-  `title` varchar(50) NOT NULL,
+  `title` varchar(100) NOT NULL,
   `review` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `rating` tinyint NOT NULL DEFAULT '0',
   `expense` tinyint NOT NULL DEFAULT '0',

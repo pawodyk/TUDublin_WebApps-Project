@@ -12,8 +12,9 @@ CREATE TABLE `coffeeshopaddress` (
   `id` int NOT NULL AUTO_INCREMENT,
   `country` varchar(60) NOT NULL DEFAULT 'Ireland',
   `county` varchar(60) NOT NULL,
+  `city` varchar(60) NOT NULL,
   `street1` varchar(120) NOT NULL,
-  `street2` varchar(120) NOT NULL,
+  `street2` varchar(120) NULL,
   `postcode` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
 );
@@ -22,6 +23,7 @@ HERE;
     private $id;
     private $country;
     private $county;
+    private $city;
     private $street1;
     private $street2;
     private $postcode;
@@ -73,6 +75,23 @@ HERE;
     {
         $this->county = $county;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
 
     /**
      * @return mixed

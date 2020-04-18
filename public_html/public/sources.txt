@@ -1,0 +1,5 @@
+- picture for default.jpg image
+    https://unsplash.com/photos/NZMeJsrMC8U
+
+- names of a drinks for coffee shop menu in database
+    https://nbcoffee.com/menu/
