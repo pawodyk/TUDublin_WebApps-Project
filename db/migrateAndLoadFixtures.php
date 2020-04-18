@@ -25,6 +25,9 @@ use TUDublin\dbObjects\PictureRepository;
 use TUDublin\dbObjects\User;
 use TUDublin\dbObjects\UserRepository;
 
+$faker = Faker\Factory::create('en_GB');
+$limit = 10;
+
 $csRepo = new CoffeeshopRepository();
 $csAddressRepo = new CoffeeshopAddressRepository();
 $csCommentRepo = new CoffeeshopCommentRepository();
@@ -71,16 +74,10 @@ foreach ($userData as $cred) {
     $u->setUserType($cred[2]);
 
     $usersRepo->create($u);
-
 }
 
 
-$users = $usersRepo->findAll();
-
-foreach ($users as $user){
-    print $user->getPassword();
-    print PHP_EOL;
-}
+//$users = $usersRepo->findAll();
 
 //var_dump($users);
 
