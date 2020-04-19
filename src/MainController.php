@@ -19,7 +19,9 @@ class MainController {
 
     public function home(){
         $template = 'home.html.twig';
-        $args = [];
+        $args = [
+            'user_role'=>''
+        ];
 
         $this->renderPage($template, $args);
 
