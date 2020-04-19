@@ -101,7 +101,7 @@ $csRepo->createTable();
 $csCommentRepo->createTable(); $csReviewRepo->createTable(); $pictureRepo->createTable();
 
 // add fake data
-for ($i = 0; $i < 10; $i++){
+for ($i = 0; $i < $limit; $i++){
      $m = new CoffeeshopMenu();
 
      $m->getOwnerId(null);
@@ -109,9 +109,9 @@ for ($i = 0; $i < 10; $i++){
      $csMenuRepo->create($m);
  }
 
- for ($i = 0; $i < 50; $i++){
+ for ($i = 0; $i < $limit * 5; $i++){
     $ml = new MenuList();
-    $ml->setMenuId(rand(1,5));
+    $ml->setMenuId(rand(1,$limit));
     $ml->setItemName($drinkNames[rand(0, $drinkNamesSize - 1)]);
     $ml->setItemPrice($faker->randomFloat(2,0.5, 5));
 
@@ -137,7 +137,7 @@ for ($i = 0; $i < $limit; $i++) {
     $pc = new CoffeeshopPaidContent();
 
     $pc->setSummary($faker->text(500));
-    $pc->setMenuId(rand(1, 5));
+    $pc->setMenuId($user->getId());
     $pc->setOwnerId($user->getId());
     $pc->setOwnerName($name);
 
@@ -195,13 +195,7 @@ for ($i = 0; $i < $limit; $i++) {
     $csCommentRepo->create($c);
 }
 
-// fix fk to point to the right data
-//$local_users = $usersRepo->findAll();
-//$local_menu = $csMenuRepo->findAll();
-//foreach ($local_users as $u){
-//    $paidContentQueryResultList = $csPaidContentRepo->searchByColumn('owner_id', $u->getId());
-//    var_dump($paidContentQueryResultList[0]->getMenuId());
-//}
+//// fix fk to point to the right data
 
 // add required user per project description
 foreach (PREDEFINED_USERS as $cred) {
