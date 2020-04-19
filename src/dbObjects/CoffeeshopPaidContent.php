@@ -10,19 +10,21 @@ class CoffeeshopPaidContent
         <<<HERE
 CREATE TABLE `coffeeshoppaidcontent` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `owner` int DEFAULT NULL,
-  `summary` text,
-  `menu_id` int DEFAULT NULL,
+  `owner_name` varchar(120) NULL,
+  `owner_id` int NOT NULL,
+  `summary` varchar(1000) NULL,
+  `menu_id` int NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_PAIDCONTENT_OWNER` (`owner`),
+  KEY `FK_PAIDCONTENT_USER` (`owner_id`),
   KEY `FK_PAIDCONTENT_MENU` (`menu_id`),
-  CONSTRAINT `FK_PAIDCONTENT_MENU` FOREIGN KEY (`menu_id`) REFERENCES `manulist` (`menu_id`),
-  CONSTRAINT `FK_PAIDCONTENT_OWNER` FOREIGN KEY (`owner`) REFERENCES `ownerdetails` (`id`)
+  CONSTRAINT `FK_PAIDCONTENT_USER` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `FK_PAIDCONTENT_MENU` FOREIGN KEY (`menu_id`) REFERENCES `coffeeshopmenu` (`id`)
 );
 HERE;
 
     private $id;
-    private $owner;
+    private $owner_name;
+    private $owner_id;
     private $summary;
     private $menu_id;
 
@@ -45,17 +47,33 @@ HERE;
     /**
      * @return mixed
      */
-    public function getOwner()
+    public function getOwnerName()
     {
-        return $this->owner;
+        return $this->owner_name;
     }
 
     /**
-     * @param mixed $owner
+     * @param mixed $owner_name
      */
-    public function setOwner($owner)
+    public function setOwnerName($owner_name)
     {
-        $this->owner = $owner;
+        $this->owner_name = $owner_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwnerId()
+    {
+        return $this->owner_id;
+    }
+
+    /**
+     * @param mixed $owner_id
+     */
+    public function setOwnerId($owner_id)
+    {
+        $this->owner_id = $owner_id;
     }
 
     /**
@@ -89,7 +107,5 @@ HERE;
     {
         $this->menu_id = $menu_id;
     }
-
-
 
 }

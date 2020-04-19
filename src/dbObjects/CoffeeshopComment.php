@@ -10,20 +10,20 @@ class CoffeeshopComment
         <<<HERE
 CREATE TABLE `coffeeshopcomment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NULL,
-  `message` text NOT NULL,
-  `coffeeshop` int NOT NULL DEFAULT '0',
+  `coffeeshop_id` int NOT NULL,
+  `name` varchar(60) NULL,
+  `message` varchar(500) NOT NULL,
   `is_published` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `FK_COMMENT_COFFEESHOP` (`coffeeshop`),
-  CONSTRAINT `FK_COMMENT_COFFEESHOP` FOREIGN KEY (`coffeeshop`) REFERENCES `coffeeshop` (`id`)
+  KEY `FK_COMMENT_COFFEESHOP` (`coffeeshop_id`),
+  CONSTRAINT `FK_COMMENT_COFFEESHOP` FOREIGN KEY (`coffeeshop_id`) REFERENCES `coffeeshop` (`id`)
 );
 HERE;
 
     private $id;
+    private $coffeeshop_id;
     private $name;
     private $message;
-    private $coffeeshop;
     private $is_published;
 
     /**
@@ -40,6 +40,22 @@ HERE;
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCoffeeshopId()
+    {
+        return $this->coffeeshop_id;
+    }
+
+    /**
+     * @param mixed $coffeeshop_id
+     */
+    public function setCoffeeshopId($coffeeshop_id)
+    {
+        $this->coffeeshop_id = $coffeeshop_id;
     }
 
     /**
@@ -72,22 +88,6 @@ HERE;
     public function setMessage($message)
     {
         $this->message = $message;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCoffeeshop()
-    {
-        return $this->coffeeshop;
-    }
-
-    /**
-     * @param mixed $coffeeshop
-     */
-    public function setCoffeeshop($coffeeshop)
-    {
-        $this->coffeeshop = $coffeeshop;
     }
 
     /**

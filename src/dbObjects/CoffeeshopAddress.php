@@ -11,11 +11,11 @@ class CoffeeshopAddress
 CREATE TABLE `coffeeshopaddress` (
   `id` int NOT NULL AUTO_INCREMENT,
   `country` varchar(60) NOT NULL DEFAULT 'Ireland',
-  `county` varchar(60) NOT NULL,
-  `city` varchar(60) NOT NULL,
+  `county` varchar(60) NULL,
+  `city` varchar (60) NOT NULL,
   `street1` varchar(120) NOT NULL,
   `street2` varchar(120) NULL,
-  `postcode` varchar(20) NOT NULL,
+  `postcode` varchar(20) NULL,
   PRIMARY KEY (`id`)
 );
 HERE;

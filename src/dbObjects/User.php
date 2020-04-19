@@ -28,14 +28,13 @@ HERE;
         return $this->id;
     }
 
-//    need to check do I need to allow setting of id for users
-//    /**
-//     * @param string $id
-//     */
-//    public function setId($id)
-//    {
-//        $this->id = $id;
-//    }
+    /**
+     * @param string $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return string
@@ -50,7 +49,13 @@ HERE;
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+        $username = str_replace(' ', '', $username);
+        if(strlen($username) > 50){
+            $this->username = substr($username, 0, 50);
+        } else{
+            $this->username = $username;
+        }
+        
     }
 
     /**

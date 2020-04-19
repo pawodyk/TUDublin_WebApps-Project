@@ -10,8 +10,8 @@ class Coffeeshop
 <<<HERE
 CREATE TABLE `coffeeshop` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) NOT NULL,
-  `summary` varchar(500) NOT NULL,
+  `name` VARCHAR(120) NOT NULL,
+  `summary` text NULL,
   `address_id` int NULL,
   `paid_content_id` int NULL,
   PRIMARY KEY (`id`),
