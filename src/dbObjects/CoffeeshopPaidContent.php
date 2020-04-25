@@ -108,4 +108,10 @@ HERE;
         $this->menu_id = $menu_id;
     }
 
+    public function getMenu(){
+        $csMenuRepo = new CoffeeshopMenuRepository();
+        $menu = $csMenuRepo->find($this->getMenuId());
+        return $menu->getMenuItemsArray();
+    }
+
 }

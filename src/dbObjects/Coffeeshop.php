@@ -92,6 +92,13 @@ HERE;
         $this->address_id = $address_id;
     }
 
+    public function getAddress()
+    {
+        $csAddressRepo = new CoffeeshopAddressRepository();
+
+        return $csAddressRepo->find($this->address_id);
+    }
+
     /**
      * @return mixed
      */
@@ -108,6 +115,14 @@ HERE;
         $this->paid_content_id = $paid_content_id;
     }
 
+    /**
+     * @return CoffeeshopPaidContentRepository
+     */
+    public function getPaidContent()
+    {
+        $csPaidContentRepo = new CoffeeshopPaidContentRepository();
 
+        return $csPaidContentRepo->find($this->getPaidContentId());
+    }
 
 }

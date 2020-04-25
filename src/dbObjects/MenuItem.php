@@ -4,21 +4,20 @@
 namespace TUDublin\dbObjects;
 
 
-class MenuList
+class MenuItem
 {
     const CREATE_TABLE_SQL =
         <<<HERE
-CREATE TABLE `menulist` (
+CREATE TABLE `menuitem` (
   `id` int NOT NULL AUTO_INCREMENT,
   `menu_id` int NULL,
-  `item_name` varchar(60) NOT NULL,
-  `item_price` double(5,2) NOT NULL DEFAULT '0',
+  `item_name` varchar(60),
+  `item_price` double(5,2),
   PRIMARY KEY (`id`),
-  KEY `menu_id` (`menu_id`),
-  CONSTRAINT `FK_MENULIST_MENU` FOREIGN KEY (`menu_id`) REFERENCES `coffeeshopmenu` (`id`)
+  KEY `FK_MENUITEM_MENU` (`menu_id`),
+  CONSTRAINT `FK_MENUITEM_MENU` FOREIGN KEY (`menu_id`) REFERENCES `coffeeshopmenu` (`id`)
 );
 HERE;
-
     private $id;
     private $menu_id;
     private $item_name;
@@ -87,5 +86,7 @@ HERE;
     {
         $this->item_price = $item_price;
     }
+
+
 
 }

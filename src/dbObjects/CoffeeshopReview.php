@@ -14,8 +14,8 @@ CREATE TABLE `coffeeshopreview` (
   `coffeeshop_id` int NOT NULL,
   `title` VARCHAR(120) NOT NULL,
   `review` text NOT NULL,
-  `rating` tinyint NOT NULL DEFAULT '0',
-  `expense` tinyint NOT NULL DEFAULT '0',
+  `rating` tinyint NOT NULL DEFAULT 0,
+  `expense` tinyint NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK_REVIEW_COFFEESHOP` (`coffeeshop_id`),
   CONSTRAINT `FK_REVIEW_COFFEESHOP` FOREIGN KEY (`coffeeshop_id`) REFERENCES `coffeeshop` (`id`)
@@ -25,8 +25,8 @@ HERE;
     private $id;
     private $coffeeshop_id;
     private $title;
-    private $review;
-    private $rating;
+    private $review = 0;
+    private $rating = 0;
     private $expense;
 
     /**
@@ -106,7 +106,13 @@ HERE;
      */
     public function setRating($rating)
     {
-        $this->rating = $rating;
+        if (is_integer($rating)){
+            if ($rating < 6 && $rating >= 0) {
+                $this->rating = $rating;
+            }
+        } else {
+            $this->rating = 0;
+        }
     }
 
     /**
@@ -122,7 +128,13 @@ HERE;
      */
     public function setExpense($expense)
     {
-        $this->expense = $expense;
+        if (is_integer($expense)){
+            if ($expense < 6 && $expense >= 0) {
+                $this->expense = $expense;
+            }
+        } else {
+            $this->expense = 0;
+        }
     }
 
 }

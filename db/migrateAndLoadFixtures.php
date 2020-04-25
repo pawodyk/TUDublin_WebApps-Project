@@ -16,8 +16,8 @@ use TUDublin\dbObjects\CoffeeshopReview;
 use TUDublin\dbObjects\CoffeeshopReviewRepository;
 use TUDublin\dbObjects\CoffeeshopMenu;
 use TUDublin\dbObjects\CoffeeshopMenuRepository;
-use TUDublin\dbObjects\MenuList;
-use TUDublin\dbObjects\MenuListRepository;
+use TUDublin\dbObjects\MenuItem;
+use TUDublin\dbObjects\MenuItemRepository;
 use TUDublin\dbObjects\Picture;
 use TUDublin\dbObjects\PictureRepository;
 use TUDublin\dbObjects\User;
@@ -27,9 +27,9 @@ $faker = Faker\Factory::create('en_GB');
 $limit = 10;
 
 const PREDEFINED_USERS = [
-    ['id' => 100,     'uname' => 'admin',    'pass' => 'admin',   'role' => 'ROLE_ADMIN'],
-    ['id' => 101,     'uname' => 'user',     'pass' => 'user',    'role' => 'ROLE_STAFF'],
-    ['id' => 102,     'uname' => 'owner',    'pass' => 'owner',   'role' => 'ROLE_SHOP'],
+    ['uname' => 'admin',    'pass' => 'admin',   'role' => 'ROLE_ADMIN'],
+    ['uname' => 'user',     'pass' => 'user',    'role' => 'ROLE_STAFF'],
+    ['uname' => 'owner',    'pass' => 'owner',   'role' => 'ROLE_SHOP' ],
 ];
 
 $local_users = [];
@@ -63,7 +63,7 @@ $csCommentRepo = new CoffeeshopCommentRepository();
 $csPaidContentRepo = new CoffeeshopPaidContentRepository();
 $csReviewRepo = new CoffeeshopReviewRepository();
 $csMenuRepo = new CoffeeshopMenuRepository();
-$menuListRepo = new MenuListRepository();
+$menuItemRepo = new MenuItemRepository();
 $pictureRepo = new PictureRepository();
 $usersRepo = new UserRepository();
 
@@ -82,7 +82,7 @@ $csCommentRepo->dropTable(); $csReviewRepo->dropTable(); $pictureRepo->dropTable
 
 $csRepo->dropTable();
 
-$menuListRepo->dropTable(); $csPaidContentRepo->dropTable();
+$menuItemRepo->dropTable(); $csPaidContentRepo->dropTable();
 
 $csMenuRepo->dropTable();
 
@@ -94,7 +94,7 @@ $usersRepo->createTable(); $csAddressRepo->createTable();
 
 $csMenuRepo->createTable();
 
-$menuListRepo->createTable(); $csPaidContentRepo->createTable();
+$menuItemRepo->createTable(); $csPaidContentRepo->createTable();
 
 $csRepo->createTable();
 
@@ -104,18 +104,16 @@ $csCommentRepo->createTable(); $csReviewRepo->createTable(); $pictureRepo->creat
 for ($i = 0; $i < $limit; $i++){
      $m = new CoffeeshopMenu();
 
-     $m->getOwnerId(null);
-
      $csMenuRepo->create($m);
  }
 
  for ($i = 0; $i < $limit * 5; $i++){
-    $ml = new MenuList();
+    $ml = new MenuItem();
     $ml->setMenuId(rand(1,$limit));
     $ml->setItemName($drinkNames[rand(0, $drinkNamesSize - 1)]);
     $ml->setItemPrice($faker->randomFloat(2,0.5, 5));
 
-    $menuListRepo->create($ml);
+     $menuItemRepo->create($ml);
  }
 
 
@@ -142,6 +140,12 @@ for ($i = 0; $i < $limit; $i++) {
     $pc->setOwnerName($name);
 
     $csPaidContentRepo->create($pc);
+
+    $m = $csMenuRepo->find($pc->getMenuId());
+    $m->setOwnerId($user->getId());
+
+    $csMenuRepo->update($m);
+
 }
 
 for ($i = 0; $i < $limit; $i++) {
@@ -152,7 +156,7 @@ for ($i = 0; $i < $limit; $i++) {
     $a->setCity($faker->city);
     $a->setPostcode($faker->postcode);
 
-    //split address from faker to seperate columns in address table
+    //split address from faker to separate columns in address table
     $street = explode("\n", $faker->streetAddress);
     $a->setStreet1($street[0]);
     if (sizeof($street) > 1) {

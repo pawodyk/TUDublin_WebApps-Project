@@ -52,6 +52,20 @@ HERE;
         $this->owner_id = $owner_id;
     }
 
+    public function getMenuItemsArray(){
+        $menuArray = [];
+
+        $repo = new MenuItemRepository();
+        $menuItems =  $repo->getAllMenuItems($this->getId());
+        foreach ($menuItems as $item){
+            $menuArray[] = [
+                'name' => $item->getItemName(),
+                'price' => $item->getItemPrice()
+            ];
+        }
+
+        return $menuArray;
+    }
 
 
 }

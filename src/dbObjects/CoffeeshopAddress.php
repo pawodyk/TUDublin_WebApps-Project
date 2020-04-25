@@ -21,7 +21,7 @@ CREATE TABLE `coffeeshopaddress` (
 HERE;
 
     private $id;
-    private $country;
+    private $country = 'Ireland';
     private $county;
     private $city;
     private $street1;
