@@ -21,6 +21,13 @@ class WebApplication {
 
 
         switch($page){
+            case 'login':
+                $data_in = $_POST;
+                var_dump($_POST['username']);
+                var_dump($_POST['password']);
+
+//                print filter_input(INPUT_POST, usernae);
+//                print filter_input(INPUT_POST, password);
             case 'home':
             default:
                 $this->mainControl->home();
