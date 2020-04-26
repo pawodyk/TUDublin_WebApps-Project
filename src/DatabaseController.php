@@ -36,7 +36,7 @@ class DatabaseController
     private $csPaidContentRepo;
     private $csReviewRepo;
     private $csMenuRepo;
-    private $menuListRepo;
+    private $menuItemRepo;
     private $pictureRepo;
     private $usersRepo;
 
@@ -48,7 +48,7 @@ class DatabaseController
         $this->csPaidContentRepo = new CoffeeshopPaidContentRepository();
         $this->csReviewRepo = new CoffeeshopReviewRepository();
         $this->csMenuRepo = new CoffeeshopMenuRepository();
-        $this->menuListRepo = new MenuItemRepository();
+        $this->menuItemRepo = new MenuItemRepository();
         $this->pictureRepo = new PictureRepository();
         $this->usersRepo = new UserRepository();
     }
@@ -67,5 +67,13 @@ class DatabaseController
         }
 
         return $returnValue;
+    }
+
+    public function getAllReviews(){
+        return $this->csReviewRepo->findAll();
+    }
+
+    public function getAllReviewsFor($coffeeshop_id){
+        return $this->csReviewRepo->searchByColumn('coffeeshop_id', $coffeeshop_id);
     }
 }

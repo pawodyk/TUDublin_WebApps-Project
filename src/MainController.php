@@ -6,12 +6,15 @@ use TUDublin\DatabaseController;
 
 class MainController {
 
+    const TEMPLATES_PATH = __DIR__ . "/../templates/";
+
     private $twig;
     private $dbController;
 
-    public function __construct(\Twig\Environment $twig)
+    public function __construct()
     {
-        $this->twig = $twig;
+        $loader =  new \Twig\Loader\FilesystemLoader(self::TEMPLATES_PATH);
+        $this->twig = new \Twig\Environment($loader);
         $this->dbController = new DatabaseController();
     }
 
@@ -27,6 +30,7 @@ class MainController {
             'user_id'=>1,
             'is_loggedIn'=> true,
             'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
+            'reviews_list'=> $this->dbController->getAllReviews(),
         ];
 //        print '<pre>';
 //        var_dump($this->dbController->getCoffeeshops());
@@ -34,6 +38,10 @@ class MainController {
 
         $this->dbController->getCoffeeshops();
         $this->renderPage($template, $args);
+
+    }
+
+    public function shop(){
 
     }
 
