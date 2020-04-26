@@ -180,10 +180,10 @@ for ($i = 0; $i < $limit; $i++) {
     $r = new CoffeeshopReview();
 
     $r->setCoffeeshopId($faker->randomDigit() + 1);
-    $r->setExpense(rand(0, 5));
-    $r->setRating(rand(0, 5));
+    $r->setExpense(rand(1, 5));
+    $r->setRating(rand(1, 5));
     $r->setTitle($faker->text(100));
-    $r->setReview($faker->text);
+    $r->setReview($faker->text(500));
 
     $csReviewRepo->create($r);
 }
