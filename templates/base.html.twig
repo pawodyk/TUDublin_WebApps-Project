@@ -17,7 +17,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm py-0 px-5">
     <div class="logo">
-        <a class="" href="/index.php">
+        <a class="" href="/">
             <img src="img/logo.png" alt="Coffeeshop Review">
         </a>
     </div>
@@ -31,36 +31,35 @@
     <div class="collapse navbar-collapse text-center" id="navbarColapseSection">
         <ul class="navbar-nav ml-0 ml-lg-auto">
             <li class="nav-item">
-                <a class="nav-link active" href="index.php?page=home">Home
+                <a class="nav-link active" href="/">Home
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
-            {% if user_role == "ROLE_ADMIN" %}
+            {% if session.user_role == "ROLE_ADMIN" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">ADMIN LINK</a>
                 </li>
             {% endif %}
-            {% if user_role == "ROLE_STAFF" %}
+            {% if session.user_role == "ROLE_STAFF" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">STAFF LINK</a>
                 </li>
             {% endif %}
-            {% if user_role == "ROLE_SHOP" %}
+            {% if session.user_role == "ROLE_SHOP" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">SHOP LINK</a>
                 </li>
             {% endif %}
         </ul>
-        {% if is_loggedIn == false %}
+        {% if session.user_id == false %}
             <button type="button" class="btn btn-outline-primary mx-lg-2 " data-toggle="modal"
                     data-target="#loginModal">
                 Login
             </button>
         {% else %}
-            <button type="button" class="btn btn-outline-warning mx-lg-2 " data-toggle="modal"
-                    data-target="#loginModal">
+            <a href="/?page=logout" class="btn btn-outline-warning mx-lg-2 ">
                 Log out
-            </button>
+            </a>
         {% endif %}
     </div>
 </nav>
@@ -71,7 +70,7 @@
 
 </div>
 
-{% if is_loggedIn == false %}
+{% if session.user_id == false %}
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalTitle"
          aria-hidden="true">

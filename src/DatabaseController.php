@@ -69,6 +69,17 @@ class DatabaseController
         return $returnValue;
     }
 
+    public function getCoffeeshop($csid){
+
+        $coffeeshop = $this->csRepo->find($csid);
+
+        return [
+            'sc'=>$coffeeshop,
+            'pc'=>$coffeeshop->getPaidContent(),
+        ];
+
+    }
+
     public function getAllReviews(){
         return $this->csReviewRepo->findAll();
     }
@@ -76,4 +87,6 @@ class DatabaseController
     public function getAllReviewsFor($coffeeshop_id){
         return $this->csReviewRepo->searchByColumn('coffeeshop_id', $coffeeshop_id);
     }
+
+
 }

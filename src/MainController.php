@@ -15,7 +15,9 @@ class MainController {
     {
         $loader =  new \Twig\Loader\FilesystemLoader(self::TEMPLATES_PATH);
         $this->twig = new \Twig\Environment($loader);
+        $this->twig->addGlobal('session', $_SESSION);
         $this->dbController = new DatabaseController();
+
     }
 
     private function renderPage($template, $args){
@@ -26,23 +28,31 @@ class MainController {
     public function home(){
         $template = 'home.html.twig';
         $args = [
-            'user_role'=>'ROLE_SHOP',
-            'user_id'=>1,
-            'is_loggedIn'=> true,
             'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
             'reviews_list'=> $this->dbController->getAllReviews(),
         ];
-//        print '<pre>';
-//        var_dump($this->dbController->getCoffeeshops());
-//        die;
 
-        $this->dbController->getCoffeeshops();
+//        print '<pre>';
+//        print_r($args);die;
+
         $this->renderPage($template, $args);
 
     }
 
-    public function shop(){
+    public function shop($csid){
+        $template = 'coffeeshop.html.twig';
+        $args = [
+            'coffeeshop'=>$this->dbController->getCoffeeshop($csid),
+            'reviews'=>$this->dbController->getAllReviewsFor($csid),
+            'comments'=>[
+                'hello world',
+                'good comment',
+            ],
+        ];
+//        print '<pre>';
+//        print_r($args);die;
 
+        $this->renderPage($template,$args);
     }
 
 }

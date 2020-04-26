@@ -24,4 +24,19 @@ class UserRepository extends DatabaseTableRepository
 
 
     }
+
+    public function getUser($username)
+    {
+        $db = new DatabaseManager();
+        $conn = $db->getDbh();
+
+        $sql = 'SELECT * FROM `user` WHERE `username` = :uname';
+
+        $statement = $conn->prepare($sql);
+        $statement->bindParam(':uname', $username, \PDO::PARAM_STR);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, $this->getClassNameForDbRecords());
+        $statement->execute();
+
+        return $statement->fetch();
+    }
 }

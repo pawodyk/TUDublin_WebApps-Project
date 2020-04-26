@@ -5,13 +5,13 @@ namespace TUDublin;
 
 class WebApplication {
 
-
-
-    private $mainControl;
+    private $loginController;
 
     public function __construct()
     {
-        $this->mainControl = new MainController();
+        $this->mainController = new MainController();
+        $this->loginController = new LoginController();
+
     }
 
     public function run() {
@@ -20,15 +20,24 @@ class WebApplication {
 
         switch($page){
             case 'login':
-                $data_in = $_POST;
-                var_dump($_POST['username']);
-                var_dump($_POST['password']);
+//                $data_in = $_POST;
+//                var_dump($_POST['username']);
+//                var_dump($_POST['password']); die;
 
-//                print filter_input(INPUT_POST, usernae);
-//                print filter_input(INPUT_POST, password);
+                $this->loginController->login();
+                break;
+            case 'logout':
+//                print '<pre>';
+//                var_dump($_SESSION);die;
+                $this->loginController->logout();
+                break;
+            case 'shop':
+                $csid = filter_input(INPUT_GET, 'csid');
+                $this->mainController->shop($csid);
+                break;
             case 'home':
             default:
-                $this->mainControl->home();
+                $this->mainController->home();
                 break;
         }
 
