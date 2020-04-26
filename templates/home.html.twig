@@ -42,19 +42,19 @@
         </div>
 
         {% for review in reviews_list %}
-            <div class="col-12 shadow-sm">
+            <div class="col-12 border border-secondary shadow-sm py-1 mb-4">
                 <h3>{{ review.title }}</h3>
-                <p>{{ review.review }}</p>
+                <p>{{ review.review }} <a href="/?page=review&revid={{ review.id }}" ><span class="badge badge-info">Read full review</span></a></p>
                 <p>
                     <span class="pr-2">Rating ({{ review.rating }}) :</span>
                     {% for i in 1..review.rating %}
-                        <span>*</span>
+                        <span class="mr-1"><i class="fas fa-mug-hot"></i></span>
                     {% endfor %}
                 </p>
                 <p>
                     <span class="pr-2">Expense ({{ review.expense }}) : </span>
                     {% for i in 1..review.expense %}
-                        <span>$</span>
+                        <span class="mr-1"><i class="fas fa-euro-sign" style="color: blue"></i></span>
                     {% endfor %}
                 </p>
             </div>
