@@ -16,6 +16,8 @@ CREATE TABLE `coffeeshopreview` (
   `review` text NOT NULL,
   `rating` tinyint NOT NULL DEFAULT 3,
   `expense` tinyint NOT NULL DEFAULT 3,
+  `review_date` date NOT NULL,
+  `picture_id` int NULL,
   PRIMARY KEY (`id`),
   KEY `FK_REVIEW_COFFEESHOP` (`coffeeshop_id`),
   CONSTRAINT `FK_REVIEW_COFFEESHOP` FOREIGN KEY (`coffeeshop_id`) REFERENCES `coffeeshop` (`id`)
@@ -28,6 +30,8 @@ HERE;
     private $review = 3;
     private $rating = 3;
     private $expense;
+    private $review_date;
+    private $picture_id;
 
     /**
      * @return mixed
@@ -135,6 +139,38 @@ HERE;
         } else {
             $this->expense = 3;
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReviewDate()
+    {
+        return $this->review_date;
+    }
+
+    /**
+     * @param mixed $review_date
+     */
+    public function setReviewDate($review_date)
+    {
+        $this->review_date = $review_date;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPictureId()
+    {
+        return $this->picture_id;
+    }
+
+    /**
+     * @param mixed $picture_id
+     */
+    public function setPictureId($picture_id)
+    {
+        $this->picture_id = $picture_id;
     }
 
 }

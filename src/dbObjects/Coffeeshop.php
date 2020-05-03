@@ -13,12 +13,17 @@ CREATE TABLE `coffeeshop` (
   `name` VARCHAR(120) NOT NULL,
   `summary` text NULL,
   `address_id` int NULL,
-  `paid_content_id` int NULL,
+  `owner_id` int NULL,
+  `menu_id` int NULL,
+  `picture_id` int NULL,
   PRIMARY KEY (`id`),
   KEY `FK_COFFEESHOP_ADDRESS` (`address_id`),
-  KEY `FK_COFFEESHOP_PAIDCONTENT` (`paid_content_id`),
+  KEY `FK_COFFEESHOP_OWNER` (`owner_id`),
+  KEY `FK_COFFEESHOP_PICTURE` (`picture_id`),
+  INDEX `KEY_COFFEESHOPMENU` (`menu_id`),
   CONSTRAINT `FK_COFFEESHOP_ADDRESS` FOREIGN KEY (`address_id`) REFERENCES `coffeeshopaddress` (`id`),
-  CONSTRAINT `FK_COFFEESHOP_PAIDCONTENT` FOREIGN KEY (`paid_content_id`) REFERENCES `coffeeshoppaidcontent` (`id`)
+  CONSTRAINT `FK_COFFEESHOP_OWNER` FOREIGN KEY (`owner_id`) REFERENCES `coffeeshopowner` (`id`),
+  CONSTRAINT `FK_COFFEESHOP_PICTURE` FOREIGN KEY (`picture_id`) REFERENCES `picture` (`id`)
 );
 HERE;
 
@@ -26,7 +31,9 @@ HERE;
     private $name;
     private $summary;
     private $address_id;
-    private $paid_content_id;
+    private $owner_id;
+    private $menu_id;
+    private $picture_id;
 
     /**
      * @return mixed
@@ -102,27 +109,70 @@ HERE;
     /**
      * @return mixed
      */
-    public function getPaidContentId()
+    public function getOwnerId()
     {
-        return $this->paid_content_id;
+        return $this->owner_id;
     }
 
     /**
-     * @param mixed $paid_content_id
+     * @param mixed $owner_id
      */
-    public function setPaidContentId($paid_content_id)
+    public function setOwnerId($owner_id)
     {
-        $this->paid_content_id = $paid_content_id;
+        $this->owner_id = $owner_id;
+    }
+
+    public function getOwner()
+    {
+        $csOwnerRepo = new CoffeeshopOwnerRepository();
+
+        return $csOwnerRepo->find($this->owner_id);
     }
 
     /**
-     * @return CoffeeshopPaidContentRepository
+     * @return mixed
      */
-    public function getPaidContent()
+    public function getMenuId()
     {
-        $csPaidContentRepo = new CoffeeshopPaidContentRepository();
+        return $this->menu_id;
+    }
 
-        return $csPaidContentRepo->find($this->getPaidContentId());
+    /**
+     * @param mixed $menu_id
+     */
+    public function setMenuId($menu_id)
+    {
+        $this->menu_id = $menu_id;
+    }
+
+    public function getMenuList()
+    {
+        $csMenuRepo = new MenuItemRepository();
+
+        return $csMenuRepo->getAllMenuItems($this->menu_id);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPictureId()
+    {
+        return $this->picture_id;
+    }
+
+    /**
+     * @param mixed $picture_id
+     */
+    public function setPictureId($picture_id)
+    {
+        $this->picture_id = $picture_id;
+    }
+
+    public function getPicture()
+    {
+        $pictureRepo = new PictureRepository();
+
+        return $pictureRepo->find($this->picture_id);
     }
 
 }

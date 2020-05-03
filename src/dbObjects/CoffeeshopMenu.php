@@ -3,7 +3,11 @@
 
 namespace TUDublin\dbObjects;
 
-
+/**
+ * Class CoffeeshopMenu
+ * @package TUDublin\dbObjects
+ * @deprecated
+ */
 class CoffeeshopMenu
 {
     const CREATE_TABLE_SQL =
@@ -12,8 +16,8 @@ CREATE TABLE `coffeeshopmenu` (
   `id` int NOT NULL AUTO_INCREMENT,
   `owner_id` int NULL,
   PRIMARY KEY (`id`),
-  KEY `FK_MENU_USER` (`owner_id`),
-  CONSTRAINT `FK_MENU_USER` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`)
+  KEY `FK_MENU_OWNER` (`owner_id`),
+  CONSTRAINT `FK_MENU_OWNER` FOREIGN KEY (`owner_id`) REFERENCES `coffeeshopowner` (`id`)
 );
 HERE;
 

@@ -10,19 +10,15 @@ class Picture
         <<<HERE
 CREATE TABLE `picture` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `coffeeshop_id` int NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT 'photo',
   `filename` varchar(255) NOT NULL DEFAULT 'default.png',
-  PRIMARY KEY (`id`),
-  KEY `FK_PICTURE_COFFEESHOP` (`coffeeshop_id`),
-  CONSTRAINT `FK_PICTURE_COFFEESHOP` FOREIGN KEY (`coffeeshop_id`) REFERENCES `coffeeshop` (`id`)
+  PRIMARY KEY (`id`)
 );
 HERE;
 
     private $id;
-    private $coffeeshop_id;
     private $name;
-    private $filename;
+    private $filename = 'default.png';
 
     /**
      * @return mixed

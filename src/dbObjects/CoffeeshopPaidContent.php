@@ -3,7 +3,11 @@
 
 namespace TUDublin\dbObjects;
 
-
+/**
+ * Class CoffeeshopPaidContent
+ * @package TUDublin\dbObjects
+ * @deprecated
+ */
 class CoffeeshopPaidContent
 {
     const CREATE_TABLE_SQL =

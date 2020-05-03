@@ -13,7 +13,7 @@ CREATE TABLE `coffeeshopcomment` (
   `coffeeshop_id` int NOT NULL,
   `name` varchar(60) NULL,
   `message` varchar(500) NOT NULL,
-  `is_published` tinyint(1) NOT NULL DEFAULT 0,
+  `is_published` boolean NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `FK_COMMENT_COFFEESHOP` (`coffeeshop_id`),
   CONSTRAINT `FK_COMMENT_COFFEESHOP` FOREIGN KEY (`coffeeshop_id`) REFERENCES `coffeeshop` (`id`)
