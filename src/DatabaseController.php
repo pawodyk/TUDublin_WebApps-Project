@@ -45,9 +45,7 @@ class DatabaseController
         $this->csRepo = new CoffeeshopRepository();
         $this->csAddressRepo = new CoffeeshopAddressRepository();
         $this->csCommentRepo = new CoffeeshopCommentRepository();
-        $this->csPaidContentRepo = new CoffeeshopPaidContentRepository();
         $this->csReviewRepo = new CoffeeshopReviewRepository();
-        $this->csMenuRepo = new CoffeeshopMenuRepository();
         $this->menuItemRepo = new MenuItemRepository();
         $this->pictureRepo = new PictureRepository();
         $this->usersRepo = new UserRepository();
@@ -56,36 +54,22 @@ class DatabaseController
 
     public function getCoffeeshops()
     {
-        $returnValue = [];
-        $coffeeshops = $this->csRepo->findAll();
-
-        foreach ($coffeeshops as $cs) {
-            $returnValue[] = [
-                'sc'=>$cs,
-                'pc'=>$cs->getPaidContent()
-            ];
-        }
-
-        return $returnValue;
+        return $this->csRepo->findAll();
     }
 
-    public function getCoffeeshop($csid){
-
-        $coffeeshop = $this->csRepo->find($csid);
-
-        return [
-            'sc'=>$coffeeshop,
-            'pc'=>$coffeeshop->getPaidContent(),
-        ];
-
+    public function getCoffeeshop($csid)
+    {
+        return $this->csRepo->find($csid);
     }
 
-    public function getAllReviews(){
+    public function getAllReviews()
+    {
         return $this->csReviewRepo->findAll();
     }
 
-    public function getAllReviewsFor($coffeeshop_id){
-        return $this->csReviewRepo->searchByColumn('coffeeshop_id', $coffeeshop_id);
+    public function getAllReviewsFor($coffeeshop_id)
+    {
+        return $this->csReviewRepo->getAllReviewsForCoffeeshop($coffeeshop_id);
     }
 
 

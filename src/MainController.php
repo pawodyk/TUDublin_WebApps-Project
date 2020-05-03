@@ -55,4 +55,13 @@ class MainController {
         $this->renderPage($template,$args);
     }
 
+    public function shops(){
+        $template= 'coffeeshoplist.html.twig';
+        $args = [
+            'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
+        ];
+
+        $this->renderPage($template,$args);
+    }
+
 }

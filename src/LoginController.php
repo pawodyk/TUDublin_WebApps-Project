@@ -32,11 +32,11 @@ class LoginController
             if (password_verify($pass, $databasePassword)){
                 $_SESSION['user_id'] = $user->getId();
                 $_SESSION['user_role'] = $user->getUserType(); //TODO change user_type to user_role for consistancy
+                $_POST = [];
                 (new MainController())->home();
             }
         }
         print "unable to login";
-        (new MainController())->home();
 
     }
 

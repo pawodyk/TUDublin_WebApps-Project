@@ -35,17 +35,18 @@
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/?page=shops">Coffee Shops</a>
+            </li>
             {% if session.user_role == "ROLE_ADMIN" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">ADMIN LINK</a>
                 </li>
-            {% endif %}
-            {% if session.user_role == "ROLE_STAFF" %}
+            {% elseif session.user_role == "ROLE_STAFF" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">STAFF LINK</a>
                 </li>
-            {% endif %}
-            {% if session.user_role == "ROLE_SHOP" %}
+            {% elseif  session.user_role == "ROLE_SHOP" %}
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">SHOP LINK</a>
                 </li>

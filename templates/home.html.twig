@@ -8,35 +8,6 @@
         </div>
 
     </div>
-    <div class="row">
-        <div class="col-12">
-            <h2>Coffeeshops :</h2>
-        </div>
-
-        {% for cs in coffeeshop_list %}
-            <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-0">
-                <div class="card mb-4 shadow-sm {% if cs.pc %} bg-success text-light {% endif %}">
-                    <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
-                    <div class="card-body">
-                        <h3>{{ cs.sc.name }}</h3>
-                        <p class="card-text">{{ cs.sc.summary }}</p>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="btn-group">
-                                <a href="/?page=shop&csid={{ cs.sc.id }}" class="btn btn-sm btn-primary">View</a>
-                                {% if session.user_id %}
-                                    {% if cs.pc.getOwnerId() == session.user_id %}
-                                        <a href="" class="btn btn-sm btn-primary">Edit</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            {#<small class="text-muted"></small>#}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-
 
     <div class="row">
         <div class="col-12">

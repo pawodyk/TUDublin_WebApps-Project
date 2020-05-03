@@ -4,9 +4,9 @@
 
     <div class="row">
         <div class="col">
-            <h1>Coffeeshop {% if coffeeshop.pc %} <span class="badge badge-danger">CSR User</span> {% endif %}</h1>
-            <h2>{{ coffeeshop.sc.name }}</h2>
-            <p>{{ coffeeshop.sc.summary }}</p>
+            <h1>Coffeeshop {% if coffeeshop.owner_id %} <span class="badge badge-danger">CSR User</span> {% endif %}</h1>
+            <h2>{{ coffeeshop.name }}</h2>
+            <p>{{ coffeeshop.summary }}</p>
 
             <hr class="my-5">
 

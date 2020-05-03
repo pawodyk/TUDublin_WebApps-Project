@@ -25,16 +25,20 @@ class WebApplication {
 //                var_dump($_POST['password']); die;
 
                 $this->loginController->login();
+
                 break;
             case 'logout':
 //                print '<pre>';
 //                var_dump($_SESSION);die;
                 $this->loginController->logout();
+
                 break;
             case 'shop':
                 $csid = filter_input(INPUT_GET, 'csid');
                 $this->mainController->shop($csid);
                 break;
+            case 'shops':
+                $this->mainController->shops();
             case 'home':
             default:
                 $this->mainController->home();
