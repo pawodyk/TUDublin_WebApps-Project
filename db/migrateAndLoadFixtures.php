@@ -195,7 +195,7 @@ for ($i = 0; $i < $menuItterator * 5; $i++) {
 }
 
 
-for ($i = 0; $i < $limit * 2; $i++) {
+for ($i = 0; $i < sizeof($coffeeshops) * 2; $i++) {
     $r = new CoffeeshopReview();
 
     $r->setCoffeeshopId($faker->numberBetween(1, sizeof($coffeeshops)));
