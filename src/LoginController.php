@@ -31,7 +31,7 @@ class LoginController
             $databasePassword = $user->getPassword();
             if (password_verify($pass, $databasePassword)){
                 $_SESSION['user_id'] = $user->getId();
-                $_SESSION['user_role'] = $user->getUserType(); //TODO change user_type to user_role for consistency
+                $_SESSION['user_role'] = $user->getUserRole();
                 $_POST = [];
 
                 //TODO check ownerid and add it to session

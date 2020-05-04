@@ -10,7 +10,7 @@ CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
-  `user_type` varchar(10) NOT NULL,
+  `user_role` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 );
 HERE;
@@ -18,7 +18,7 @@ HERE;
     private $id;
     private $username;
     private $password;
-    private $user_type;
+    private $user_role;
 
     /**
      * @return string
@@ -78,19 +78,19 @@ HERE;
     /**
      * @return string
      */
-    public function getUserType()
+    public function getUserRole()
     {
-        return $this->user_type;
+        return $this->user_role;
     }
 
     /**
-     * @param string $user_type
+     * @param string $user_role
      */
-    public function setUserType($user_type)
+    public function setUserRole($user_role)
     {
         $allowed = ['ROLE_STAFF', 'ROLE_SHOP', 'ROLE_ADMIN'];
-        if (in_array($user_type, $allowed)) {
-            $this->user_type = $user_type;
+        if (in_array($user_role, $allowed)) {
+            $this->user_role = $user_role;
         }
     }
 

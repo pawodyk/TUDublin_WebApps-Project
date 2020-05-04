@@ -13,7 +13,7 @@ class UserRepository extends DatabaseTableRepository
         $db = new DatabaseManager();
         $conn = $db->getDbh();
 
-        $sql = 'SELECT * FROM `user` WHERE `user_type` = :role';
+        $sql = 'SELECT * FROM `user` WHERE `user_role` = :role';
 
         $statement = $conn->prepare($sql);
         $statement->bindParam(':role', $role, \PDO::PARAM_STR);

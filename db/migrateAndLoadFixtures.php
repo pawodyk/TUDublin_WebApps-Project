@@ -118,7 +118,7 @@ for ($i = 0; $i < round($limit / 2); $i++) {
     $u = new User();
     $u->setUsername($uname);
     $u->setPassword('pass');
-    $u->setUserType('ROLE_SHOP');
+    $u->setUserRole('ROLE_SHOP');
 
     $usersRepo->create($u);
 
@@ -224,7 +224,7 @@ foreach (PREDEFINED_USERS as $cred) {
     $u = new User();
     $u->setUsername($cred['uname']);
     $u->setPassword($cred['pass']);
-    $u->setUserType($cred['role']);
+    $u->setUserRole($cred['role']);
 
     $usersRepo->create($u);
 }

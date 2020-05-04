@@ -70,12 +70,15 @@ class WebApplication {
 //                $this->mainController->searchUser($username);
                 break;
             case 'remove_user':
-//                print '<pre>';
-//                var_dump($_POST);
-//                var_dump($_GET);
-//                die;
                 $this->dbController->deleteUser(filter_input(INPUT_GET, 'userid'));
                 unset($_GET);
+                $this->mainController->admin();
+                break;
+            case 'edit_user':
+                $this->mainController->editUser();
+                break;
+            case 'update_user':
+                $this->dbController->updateUser(filter_input(INPUT_POST, 'userid'));
                 $this->mainController->admin();
                 break;
             default:

@@ -76,6 +76,15 @@ class MainController {
         $this->renderPage($template, $args);
     }
 
+    public function editUser(){
+        $template = 'admin_edituser.html.twig';
+        $args = [
+            'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
+        ];
+
+            $this->renderPage($template, $args);
+    }
+
     public function test(){
 
 
