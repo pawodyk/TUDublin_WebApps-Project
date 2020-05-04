@@ -43,6 +43,9 @@ class WebApplication {
             case 'admin':
                 $this->adminControls();
                 break;
+            case 'test':
+                $this->mainController->test();
+                break;
             case 'home':
             default:
                 $this->mainController->home();

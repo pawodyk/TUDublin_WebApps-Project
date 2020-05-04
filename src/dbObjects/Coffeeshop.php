@@ -35,6 +35,7 @@ HERE;
     private $menu_id;
     private $picture_id;
 
+
     /**
      * @return mixed
      */

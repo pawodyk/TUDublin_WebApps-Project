@@ -3,6 +3,8 @@
 namespace TUDublin;
 
 use TUDublin\DatabaseController;
+use TUDublin\dbObjects\CoffeeshopComment;
+use TUDublin\dbObjects\CoffeeshopCommentRepository;
 use TUDublin\dbObjects\CoffeeshopRepository;
 
 class MainController {
@@ -73,6 +75,21 @@ class MainController {
 
         $this->renderPage($template, $args);
     }
+
+    public function test(){
+
+
+        $csRepo = new CoffeeshopRepository();
+        $testValue = [];
+        $testValue[] = $csRepo->getTopCoffeeshops(5);
+
+        $commentRepo = new CoffeeshopCommentRepository();
+        $testValue[] = $commentRepo->getAllNonPublishedComments();
+
+        print '<pre>';
+        print_r($testValue);die;
+    }
+
 
 
 }

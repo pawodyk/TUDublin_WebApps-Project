@@ -159,4 +159,32 @@ class DatabaseController
         $this->csRepo->update($cs);
     }
 
+    public function approveComment($commentId){
+        $csCom = $this->csCommentRepo->find($commentId);
+        $csCom->setIsPublished(true);
+        $this->csCommentRepo->update($csCom);
+    }
+
+    public function deleteComment($commentId){
+        $this->csCommentRepo->delete($commentId);
+    }
+
+    public function addCoffeeshop (){
+        $cs = new Coffeeshop();
+        $cs->setName(filter_input(INPUT_POST, 'coffeeshop_name'));
+        $this->csRepo->create($cs);
+    }
+
+    public function addReview($coffeeshopId){
+        $review = new CoffeeshopReview();
+        $review->setCoffeeshopId($coffeeshopId);
+        $review->setTitle(filter_input(INPUT_POST, 'review_title'));
+        $review->setReview(filter_input(INPUT_POST, 'review_text'));
+        $review->setRating(filter_input(INPUT_POST, 'review_rating'));
+        $review->setTitle(filter_input(INPUT_POST, 'review_expense'));
+        $review->setReviewDate(date('Y-m-d'));
+
+        $this->csReviewRepo->create($review);
+    }
+
 }
