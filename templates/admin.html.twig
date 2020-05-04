@@ -17,7 +17,7 @@
                {{ user.getUsername() }} - {{ user.getUserRole() }}
                 {% if session.user_id != user.getId() %}
                 <a class="btn btn-primary p-0" href="/?page=admin&action=edit_user&userid={{ user.getId() }}">Edit</a>
-                <a class="btn btn-danger p-0" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
+                <a class="btn btn-danger p-0" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset Password</a>
                 {% endif %}
             </li>
         {% endfor %}

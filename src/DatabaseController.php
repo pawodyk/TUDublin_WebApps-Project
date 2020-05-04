@@ -143,7 +143,7 @@ class DatabaseController
         } else {
             $error[] = 'could not find user';
         }
-        
+
 
     }
 
@@ -151,7 +151,7 @@ class DatabaseController
     {
         $u = $this->userRepo->find($userId);
 
-        if ($u) {
+        if ($u){
             $newPass = filter_input(INPUT_POST, 'user_pass');
             $u->setPassword($newPass);
             $this->userRepo->update($u);
@@ -165,7 +165,6 @@ class DatabaseController
         $owner = $this->csOwnerRepo->find($ownerId);
         $owner->setUserId($userId);
         $this->csOwnerRepo->update($owner);
-
     }
 
     public function setOwnerOfCoffeeshop($coffeeshopId, $ownerId)
@@ -206,12 +205,6 @@ class DatabaseController
         }
     }
 
-    public function setOwnerWithCoffeeshop($coffeeshopId, $ownerId)
-    {
-        $cs = $this->csRepo->find($coffeeshopId);
-        $cs->setOwnerId($ownerId);
-        $this->csRepo->update($cs);
-    }
 
     public function approveComment($commentId)
     {

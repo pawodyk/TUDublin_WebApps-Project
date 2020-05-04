@@ -81,6 +81,13 @@ class WebApplication {
                 $this->dbController->updateUser(filter_input(INPUT_POST, 'userid'));
                 $this->mainController->admin();
                 break;
+            case 'reset_password':
+                $this->mainController->editPassword();
+                break;
+            case 'submit_password':
+                $this->dbController->changeUserPassword(filter_input(INPUT_POST, 'userid'));
+                $this->mainController->admin();
+                break;
             default:
                 $this->mainController->admin();
         }

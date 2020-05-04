@@ -82,7 +82,16 @@ class MainController {
             'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
         ];
 
-            $this->renderPage($template, $args);
+        $this->renderPage($template, $args);
+    }
+
+    public function editPassword(){
+        $template = 'admin_resetpassword.html.twig';
+        $args = [
+            'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
+        ];
+
+        $this->renderPage($template, $args);
     }
 
     public function test(){
