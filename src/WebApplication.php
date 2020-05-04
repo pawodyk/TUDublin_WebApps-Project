@@ -39,12 +39,28 @@ class WebApplication {
                 break;
             case 'shops':
                 $this->mainController->shops();
+                break;
+            case 'admin':
+                $this->adminControls();
+                break;
             case 'home':
             default:
                 $this->mainController->home();
                 break;
         }
+    }
 
+    public function adminControls(){
+        $action = filter_input(INPUT_POST, 'action');
+
+        switch($action) {
+            case 'searchuser':
+                $username = filter_input(INPUT_POST, 'username');
+                $this->mainController->searchUser($username);
+                break;
+            default:
+                $this->mainController->admin();
+        }
     }
 
 }

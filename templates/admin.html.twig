@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <form method="POST" action="/index.php?page=admin">
+                <input type="hidden" id="action" name="action">
+                <input type="text" id="searchUser" name="searchUser">
+                <button type="submit">SEARCH</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

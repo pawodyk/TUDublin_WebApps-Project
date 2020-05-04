@@ -8,7 +8,7 @@ class User {
 <<<HERE
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
+  `username` varchar(50) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
   `user_type` varchar(10) NOT NULL,
   PRIMARY KEY (`id`)

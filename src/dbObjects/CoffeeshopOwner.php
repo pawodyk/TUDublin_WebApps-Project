@@ -9,7 +9,7 @@ class CoffeeshopOwner {
 CREATE TABLE `coffeeshopowner` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NULL,
-  `user_id` int NOT NULL,
+  `user_id` int NOT NULL UNIQUE,
   `bio` varchar(500) NULL,
   PRIMARY KEY (`id`),
   KEY `FK_OWNER_USER` (`user_id`),

@@ -5,20 +5,17 @@ namespace TUDublin;
 
 require_once __DIR__ . '\..\env\dbConstants.php';
 
-use TUDublin\dbObjects\
-{
+use TUDublin\dbObjects\{
     Coffeeshop,
     CoffeeshopRepository,
     CoffeeshopAddress,
     CoffeeshopAddressRepository,
     CoffeeshopComment,
     CoffeeshopCommentRepository,
-    CoffeeshopPaidContent,
-    CoffeeshopPaidContentRepository,
+    CoffeeshopOwner,
+    CoffeeshopOwnerRepository,
     CoffeeshopReview,
     CoffeeshopReviewRepository,
-    CoffeeshopMenu,
-    CoffeeshopMenuRepository,
     MenuItem,
     MenuItemRepository,
     Picture,
@@ -33,22 +30,22 @@ class DatabaseController
     private $csRepo;
     private $csAddressRepo;
     private $csCommentRepo;
-    private $csPaidContentRepo;
+    private $csOwnerRepo;
     private $csReviewRepo;
-    private $csMenuRepo;
     private $menuItemRepo;
     private $pictureRepo;
-    private $usersRepo;
+    private $userRepo;
 
     public function __construct()
     {
         $this->csRepo = new CoffeeshopRepository();
         $this->csAddressRepo = new CoffeeshopAddressRepository();
         $this->csCommentRepo = new CoffeeshopCommentRepository();
+        $this->csOwnerRepo = new CoffeeshopOwnerRepository();
         $this->csReviewRepo = new CoffeeshopReviewRepository();
         $this->menuItemRepo = new MenuItemRepository();
         $this->pictureRepo = new PictureRepository();
-        $this->usersRepo = new UserRepository();
+        $this->userRepo = new UserRepository();
     }
 
 
@@ -57,9 +54,9 @@ class DatabaseController
         return $this->csRepo->findAll();
     }
 
-    public function getCoffeeshop($csid)
+    public function getCoffeeshop($coffeeshopId)
     {
-        return $this->csRepo->find($csid);
+        return $this->csRepo->find($coffeeshopId);
     }
 
     public function getAllReviews()
@@ -67,10 +64,99 @@ class DatabaseController
         return $this->csReviewRepo->findAll();
     }
 
-    public function getAllReviewsFor($coffeeshop_id)
+    public function getAllReviewsFor($coffeeshopId)
     {
-        return $this->csReviewRepo->getAllReviewsForCoffeeshop($coffeeshop_id);
+        return $this->csReviewRepo->getAllReviewsForCoffeeshop($coffeeshopId);
     }
 
+    public function getAllCommentFor($coffeeshopId){
+        return $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
+    }
+
+    /**
+     * @param User $user
+     */
+    public function addUser()
+    {
+        $uname = filter_input(INPUT_POST, 'username');
+        $pass = filter_input(INPUT_POST, 'password');
+        $role = filter_input(INPUT_POST, 'role');
+
+        $u = new User();
+        $u->setUsername($uname);
+        $u->setPassword($pass);
+        $u->setUserType($role);
+        if ($this->hasUniqueUsername()) {
+            $this->userRepo->create($u);
+        }else {
+            $error[] = 'username already in use';
+        }
+
+    }
+
+    public function hasUniqueUsername($username){
+        $user = $this->userRepo->getUser($username);
+        if ($user){
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function changeUserRole($userId){
+        $u = $this->userRepo->find($userId);
+
+        if ($u){
+            $newRole = filter_input(INPUT_POST, 'user_role');
+            $u->setUserType($newRole);
+            $this->userRepo->update($u);
+        } else {
+            $error[] = 'could not find user';
+        }
+
+    }
+
+    public function changeUserPassword($userId){
+        $u = $this->userRepo->find($userId);
+
+        if ($u){
+            $newPass = filter_input(INPUT_POST, 'user_pass');
+            $u->setUserType($newPass);
+            $this->userRepo->update($u);
+        } else {
+            $error[] = 'could not find user';
+        }
+    }
+
+    public function joinOwnerWithUser($ownerId, $userId){
+        $owner = $this->csOwnerRepo->find($ownerId);
+        $owner->setUserId($userId);
+        $this->csOwnerRepo->update($owner);
+
+    }
+
+    public function setOwnerOfCoffeeshop($coffeeshopId, $ownerId){
+        $cs = $this->csRepo->find($coffeeshopId);
+        $cs->setOwnerId($ownerId);
+        $this->csRepo->update($cs);
+    }
+
+    public function deleteUser($userId){
+        $u = $this->userRepo->find($userId);
+
+        if ($u->getUserType() == 'ROLE_SHOP'){
+            $o = $this->csOwnerRepo->getOwnerByUserId($userId);
+            $this->csOwnerRepo->delete($o->getId());
+        }
+        $this->userRepo->delete($userId);
+
+    }
+
+    public function setOwnerWithCoffeeshop($coffeeshopId, $ownerId){
+        $cs = $this->csRepo->find($coffeeshopId);
+        $cs->setOwnerId($ownerId);
+        $this->csRepo->update($cs);
+    }
 
 }

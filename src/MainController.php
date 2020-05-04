@@ -3,6 +3,7 @@
 namespace TUDublin;
 
 use TUDublin\DatabaseController;
+use TUDublin\dbObjects\CoffeeshopRepository;
 
 class MainController {
 
@@ -63,5 +64,15 @@ class MainController {
 
         $this->renderPage($template,$args);
     }
+
+    public function admin(){
+        $template = 'admin.html.twig';
+        $args= [
+
+        ];
+
+        $this->renderPage($template, $args);
+    }
+
 
 }
