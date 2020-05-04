@@ -6,11 +6,14 @@ namespace TUDublin;
 class WebApplication {
 
     private $loginController;
+    private $mainController;
+    private $dbController;
 
     public function __construct()
     {
         $this->mainController = new MainController();
         $this->loginController = new LoginController();
+        $this->dbController = new DatabaseController();
 
     }
 
@@ -54,12 +57,26 @@ class WebApplication {
     }
 
     public function adminControls(){
-        $action = filter_input(INPUT_POST, 'action');
+
+
+        $action = filter_input(INPUT_GET, 'action');
+        if (!$action) {
+            $action = filter_input(INPUT_POST, 'action');
+        }
 
         switch($action) {
-            case 'searchuser':
+            case 'search_user':
                 $username = filter_input(INPUT_POST, 'username');
-                $this->mainController->searchUser($username);
+//                $this->mainController->searchUser($username);
+                break;
+            case 'remove_user':
+//                print '<pre>';
+//                var_dump($_POST);
+//                var_dump($_GET);
+//                die;
+                $this->dbController->deleteUser(filter_input(INPUT_GET, 'userid'));
+                unset($_GET);
+                $this->mainController->admin();
                 break;
             default:
                 $this->mainController->admin();

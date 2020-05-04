@@ -22,4 +22,14 @@ class MenuItemRepository extends DatabaseTableRepository
 
         return $statement->fetchAll();
     }
+
+    public function deleteAllMenusForCoffeeshop($menuId){
+        $db = new DatabaseManager();
+        $connection = $db->getDbh();
+
+        $sql = 'DELETE FROM menuitem WHERE menu_id = :menuId';
+        $statement = $connection->prepare($sql);
+        $statement->bindParam(':menuId', $menuId, \PDO::PARAM_INT);
+        $statement->execute();
+    }
 }

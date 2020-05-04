@@ -9,14 +9,14 @@ use Mattsmithdev\PdoCrudRepo\DatabaseTableRepository;
 
 class CoffeeshopRepository extends DatabaseTableRepository
 {
-    public function getAllCoffeeshopsForUser($user_id){
+    public function getAllCoffeeshopsFor($owner_id){
         $db = new DatabaseManager();
         $conn = $db->getDbh();
 
-        $sql = 'SELECT * FROM `coffeeshop` WHERE `owner_id` = :userid';
+        $sql = 'SELECT * FROM `coffeeshop` WHERE `owner_id` = :ownerid';
 
         $statement = $conn->prepare($sql);
-        $statement->bindParam(':userid', $user_id, \PDO::PARAM_INT);
+        $statement->bindParam(':ownerid', $owner_id, \PDO::PARAM_INT);
         $statement->setFetchMode(\PDO::FETCH_CLASS, $this->getClassNameForDbRecords());
         $statement->execute();
 

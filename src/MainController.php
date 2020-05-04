@@ -70,7 +70,7 @@ class MainController {
     public function admin(){
         $template = 'admin.html.twig';
         $args= [
-
+            'users' => $this->dbController->getAllUsers(),
         ];
 
         $this->renderPage($template, $args);

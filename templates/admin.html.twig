@@ -5,11 +5,21 @@
     <div class="row">
         <div class="col-12">
             <form method="POST" action="/index.php?page=admin">
-                <input type="hidden" id="action" name="action">
+                <input type="hidden" id="action" name="action" value="search_user">
                 <input type="text" id="searchUser" name="searchUser">
                 <button type="submit">SEARCH</button>
             </form>
         </div>
     </div>
-
+    <ol>
+        {% for user in users %}
+            <li>
+               {{ user.getUsername() }} - {{ user.getUserType() }}
+                {% if session.user_id != user.getId() %}
+                <a class="btn btn-primary p-0" href="/?page=admin&action=edit_user&userid={{ user.getId() }}">Edit</a>
+                <a class="btn btn-danger p-0" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ol>
 {% endblock %}

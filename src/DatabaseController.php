@@ -73,6 +73,10 @@ class DatabaseController
         return $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
     }
 
+    public function getAllUsers(){
+        return $this->userRepo->findAll();
+    }
+
     /**
      * @param User $user
      */
@@ -146,9 +150,24 @@ class DatabaseController
         $u = $this->userRepo->find($userId);
 
         if ($u->getUserType() == 'ROLE_SHOP'){
+
             $o = $this->csOwnerRepo->getOwnerByUserId($userId);
-            $this->csOwnerRepo->delete($o->getId());
+            if ($o){
+                $ownedCoffeeshops = $this->csRepo->getAllCoffeeshopsFor($o->getId());
+                foreach($ownedCoffeeshops as $cs){
+                    $cs->setOwnerId(null);
+                    $cs->setSummary(null);
+
+                    $this->menuItemRepo->deleteAllMenusForCoffeeshop($cs->getMenuId());
+
+                    $cs->setMenuId(null);
+                    $this->csRepo->update($cs);
+                }
+
+                $this->csOwnerRepo->delete($o->getId());
+            }
         }
+
         $this->userRepo->delete($userId);
 
     }
