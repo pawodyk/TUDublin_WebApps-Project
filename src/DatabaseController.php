@@ -89,18 +89,39 @@ class DatabaseController
      */
     public function addUser()
     {
-        $uname = filter_input(INPUT_POST, 'username');
-        $pass = filter_input(INPUT_POST, 'password');
-        $role = filter_input(INPUT_POST, 'role');
+        global $errors;
+        $isValid = true;
 
-        $u = new User();
-        $u->setUsername($uname);
-        $u->setPassword($pass);
-        $u->setUserRole($role);
-        if ($this->hasUniqueUsername($uname)) {
+        $uname = filter_input(INPUT_POST, 'username');
+        $pass = filter_input(INPUT_POST, 'userpass');
+        $role = filter_input(INPUT_POST, 'userrole');
+
+        if (empty($uname)) {
+            $errors[] = "name is empty";
+            $isValid = false;
+        } else {
+            if (!$this->hasUniqueUsername($uname)) {
+                $isValid = false;
+                $errors[] = 'username already in use';
+            } elseif (strlen($uname) > 50) {
+                $errors[] = 'username is too long';
+            }
+        }
+
+        if (empty($pass)) {
+            $errors[] = "password is empty";
+            $isValid = false;
+        }
+
+        if ($isValid) {
+            $u = new User();
+            $u->setUsername($uname);
+            $u->setPassword($pass);
+            $u->setUserRole($role);
+
             $this->userRepo->create($u);
         } else {
-            $error[] = 'username already in use';
+            //$errors[] = 'could not add the user' ;
         }
 
     }
@@ -127,13 +148,13 @@ class DatabaseController
 
             $newName = filter_input(INPUT_POST, 'username');
             $newRole = filter_input(INPUT_POST, 'userrole');
-            if($this->hasUniqueUsername($newName)){
+            if ($this->hasUniqueUsername($newName)) {
                 $u->setUsername($newName);
-            }else{
+            } else {
                 $error[] = 'username already in use';
             }
 
-            if ($u->getUserRole() == 'ROLE_SHOP'){
+            if ($u->getUserRole() == 'ROLE_SHOP') {
                 $this->eraseOwnerData($u->getId());
             }
             $u->setUserRole($newRole);
@@ -141,7 +162,7 @@ class DatabaseController
             $this->userRepo->update($u);
 
         } else {
-            $error[] = 'could not find user';
+            $errors[] = 'could not find user';
         }
 
 
@@ -151,12 +172,13 @@ class DatabaseController
     {
         $u = $this->userRepo->find($userId);
 
-        if ($u){
-            $newPass = filter_input(INPUT_POST, 'user_pass');
+        if ($u) {
+            $newPass = filter_input(INPUT_POST, 'userpass');
             $u->setPassword($newPass);
             $this->userRepo->update($u);
+
         } else {
-            $error[] = 'could not find user';
+            $errors[] = 'could not find user';
         }
     }
 

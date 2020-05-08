@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {% if session.user_role == "ROLE_ADMIN" %}
+        <form method="POST" action="/?page=admin&action=submit_new_user">
+            <label for="username">Username:</label>
+            <input type="text" maxlength="50" id="username" name="username">
+            <br>
+            <label for="userpass">Password:</label>
+            <input type="password" maxlength="100" id="userpass" name="userpass">
+            <br>
+            <label for="userrole">User Role</label>
+            <select class="custom-select" id="userrole" name="userrole">
+                <option value="ROLE_STAFF" {% if user.getUserRole() == 'ROLE_STAFF' %}selected{% endif %}>
+                    ROLE_STAFF
+                </option>
+                <option value="ROLE_SHOP" {% if user.getUserRole() == 'ROLE_SHOP' %}selected{% endif %}>
+                    ROLE_SHOP
+                </option>
+                <option value="ROLE_ADMIN" {% if user.getUserRole() == 'ROLE_ADMIN' %}selected{% endif %}>
+                    ROLE_ADMIN
+                </option>
+            </select>
+
+            <button type="submit">Submit New User</button>
+        </form>
+        <p><a href="/?page=admin">return to admin page</a></p>
+
+
+    {% else %}
+        <p>Admins only</p>
+    {% endif %}
+{% endblock %}

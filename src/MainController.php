@@ -19,11 +19,14 @@ class MainController {
         $loader =  new \Twig\Loader\FilesystemLoader(self::TEMPLATES_PATH);
         $this->twig = new \Twig\Environment($loader);
         $this->twig->addGlobal('session', $_SESSION);
+
         $this->dbController = new DatabaseController();
 
     }
 
     private function renderPage($template, $args){
+        global $errors;
+        $args['errors'] = $errors;
 
         print $this->twig->render($template, $args);
     }
@@ -34,6 +37,9 @@ class MainController {
             'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
             'reviews_list'=> $this->dbController->getAllReviews(),
         ];
+
+//        $GLOBALS['errors'][] = 'error in home';
+
 
 //        print '<pre>';
 //        print_r($args);die;
@@ -52,6 +58,9 @@ class MainController {
                 'good comment',
             ],
         ];
+
+//        $GLOBALS['errors'][] = 'error in shop';
+
 //        print '<pre>';
 //        print_r($args);die;
 
@@ -89,6 +98,15 @@ class MainController {
         $template = 'admin_resetpassword.html.twig';
         $args = [
             'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
+        ];
+
+        $this->renderPage($template, $args);
+    }
+
+    public function newUser(){
+        $template = 'admin_newuser.html.twig';
+        $args = [
+
         ];
 
         $this->renderPage($template, $args);

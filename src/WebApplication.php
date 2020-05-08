@@ -9,12 +9,15 @@ class WebApplication {
     private $mainController;
     private $dbController;
 
+    public $errors;
+
     public function __construct()
     {
         $this->mainController = new MainController();
         $this->loginController = new LoginController();
         $this->dbController = new DatabaseController();
 
+        $GLOBALS['errors'] = [];
     }
 
     public function run() {
@@ -86,6 +89,13 @@ class WebApplication {
                 break;
             case 'submit_password':
                 $this->dbController->changeUserPassword(filter_input(INPUT_POST, 'userid'));
+                $this->mainController->admin();
+                break;
+            case 'new_user':
+                $this->mainController->newUser();
+                break;
+            case 'submit_new_user':
+                $this->dbController->addUser();
                 $this->mainController->admin();
                 break;
             default:
