@@ -2,40 +2,67 @@
 
 {% block content %}
     {% if session.user_role == "ROLE_ADMIN" %}
-    <div class="row">
-        <div class="col-12 py-3">
-            <form method="POST" action="/index.php?page=admin">
-                <input type="hidden" id="action" name="action" value="search_user">
-                <input type="text" id="searchUser" name="searchUser">
-                <button type="submit">SEARCH</button>
-            </form>
-            <hr>
-        </div>
-        <div class="col-12">
-            <h2>User Controls</h2>
-            <ol>
-                {% for user in users %}
-                    <li>
-                        {{ user.getUsername() }} - {{ user.getUserRole() }}
-                        {% if session.user_id != user.getId() %}
-                            <a class="btn btn-primary py-0" href="/?page=admin&action=edit_user&userid={{ user.getId() }}" title="Edit User"><i class="fas fa-user-edit"></i></a>
-                            <a class="btn btn-danger py-0" href="/?page=admin&action=reset_password&userid={{ user.getId() }}" title="Reset Password"><i class="fas fa-key"></i></a>
+        <div class="row">
+            <div class="col-12 py-3">
+                <form method="POST" action="/index.php?page=admin">
+                    <input type="hidden" id="action" name="action" value="search_user">
+                    <input type="text" id="searchUser" name="searchUser">
+                    <button type="submit">SEARCH</button>
+                </form>
+                <hr>
+            </div>
+            <div class="col-12">
+                <h2>User Controls</h2>
+                <ol>
+                    {% for user in users %}
+                        <li>
+                            {{ user.getUsername() }} - {{ user.getUserRole() }}
+                            {% if session.user_id != user.getId() %}
+                                <a class="btn btn-primary py-0"
+                                   href="/?page=admin&action=edit_user&userid={{ user.getId() }}" title="Edit User">
+                                    <i class="fas fa-user-edit"></i>
+                                </a>
+                                <a class="btn btn-danger py-0"
+                                   href="/?page=admin&action=reset_password&userid={{ user.getId() }}"
+                                   title="Reset Password">
+                                    <i class="fas fa-key"></i>
+                                </a>
+                            {% else %}
+                                <span class="badge badge-info"
+                                      title="You cannot edit your own account. Please ask other admins for help."> Your account</span>
+                            {% endif %}
+                        </li>
                         {% else %}
-                            <span class="badge badge-info" title="You cannot edit your own account. Please ask other admins for help."> Your account</span>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ol>
-            <a class="btn btn-success" href="/?page=admin&action=new_user">Add user <i class="fas fa-user-plus"></i></a>
-            <hr>
-        </div>
-        <div class="col-12">
-            <h2>Owner Controls</h2>
+                        <p>no users to display</p>
+                    {% endfor %}
+                </ol>
+                <a class="btn btn-success" href="/?page=admin&action=new_user">Add user <i class="fas fa-user-plus"></i></a>
+                <hr>
+            </div>
+            <div class="col-12">
+                <h2>Owner Controls</h2>
+                <ol>
+                    {% for user in users|filter (user => user.getUserRole() == 'ROLE_SHOP') %}
+                        <li>
+                            {{ user.getUsername() }}
 
-            <hr>
+                            {% for owner in owners|filter (owner=> owner.getUserId() == user.getId())  %}
+                                {% if owner.getName() %}
+                                    - {{ owner.getName() }}
+                                {% endif %}
+                                <span class="badge badge-info">paid user</span>
+                            {% else %}
+                                <a href="/?page=admin&action=join_owner&userid={{ user.getId() }}" class="btn btn-success py-0">add to paid users</a>
+                            {% endfor %}
+
+                        </li>
+                    {% endfor %}
+                </ol>
+                <a class="btn btn-success" href="/?page=admin&action=coffeeshop_owners">Coffeeshop owners setup</a>
+                <hr>
+            </div>
         </div>
-    </div>
     {% else %}
-    <p>Admins only</p>
+        <p>Admins only</p>
     {% endif %}
 {% endblock %}

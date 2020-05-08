@@ -70,6 +70,12 @@ HERE;
         $this->user_id = $user_id;
     }
 
+    public function getUser(){
+        $userRepo = new UserRepository();
+
+        return $userRepo->find($this->getUserId());
+    }
+
     /**
      * @return mixed
      */

@@ -59,6 +59,10 @@ class DatabaseController
         return $this->csRepo->find($coffeeshopId);
     }
 
+    public function getAllCoffeeshopsForOwner($ownerId){
+        return $this->csRepo->getAllCoffeeshopsFor($ownerId);
+    }
+
     public function getAllReviews()
     {
         return $this->csReviewRepo->findAll();
@@ -82,6 +86,10 @@ class DatabaseController
     public function getUser($userId)
     {
         return $this->userRepo->find($userId);
+    }
+
+    public function getAllOwners(){
+        return $this->csOwnerRepo->findAll();
     }
 
     /**
@@ -148,16 +156,28 @@ class DatabaseController
 
             $newName = filter_input(INPUT_POST, 'username');
             $newRole = filter_input(INPUT_POST, 'userrole');
-            if ($this->hasUniqueUsername($newName)) {
-                $u->setUsername($newName);
-            } else {
-                $error[] = 'username already in use';
+
+            if ($newName != $u->getUsername()) {
+                if ($this->hasUniqueUsername($newName)) {
+                    $u->setUsername($newName);
+                } else {
+                    $error[] = 'username already in use';
+                }
             }
 
-            if ($u->getUserRole() == 'ROLE_SHOP') {
-                $this->eraseOwnerData($u->getId());
+            if ($newRole != $u->getUserRole()) {
+                if ($newRole == 'ROLE_SHOP') {
+
+                    $o = new CoffeeshopOwner();
+                    $o->setUserId($u->getId());
+                    $this->csOwnerRepo->create($o);
+
+                } elseif ($u->getUserRole() == 'ROLE_SHOP') {
+                    $this->eraseOwnerData($u->getId());
+                }
+                $u->setUserRole($newRole);
             }
-            $u->setUserRole($newRole);
+
 
             $this->userRepo->update($u);
 
@@ -182,11 +202,11 @@ class DatabaseController
         }
     }
 
-    public function joinOwnerWithUser($ownerId, $userId)
+    public function addOwnerProfile($userId)
     {
-        $owner = $this->csOwnerRepo->find($ownerId);
+        $owner = new CoffeeshopOwner();
         $owner->setUserId($userId);
-        $this->csOwnerRepo->update($owner);
+        $this->csOwnerRepo->create($owner);
     }
 
     public function setOwnerOfCoffeeshop($coffeeshopId, $ownerId)

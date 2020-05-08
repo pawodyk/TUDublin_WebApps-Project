@@ -80,6 +80,7 @@ class MainController {
         $template = 'admin.html.twig';
         $args= [
             'users' => $this->dbController->getAllUsers(),
+            'owners' => $this->dbController->getAllOwners(),
         ];
 
         $this->renderPage($template, $args);
@@ -109,6 +110,15 @@ class MainController {
 
         ];
 
+        $this->renderPage($template, $args);
+    }
+
+    public function coffeeshopOwnersSetup(){
+        $template = 'admin_coffeeshopsowners.html.twig';
+        $args = [
+          'coffeeshops' => $this->dbController->getCoffeeshops(),
+            'owners' => $this->dbController->getAllOwners(),
+        ];
         $this->renderPage($template, $args);
     }
 

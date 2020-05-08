@@ -98,6 +98,24 @@ class WebApplication {
                 $this->dbController->addUser();
                 $this->mainController->admin();
                 break;
+            case 'join_owner':
+                $this->dbController->addOwnerProfile(filter_input(INPUT_GET, 'userid'));
+                $this->mainController->admin();
+                break;
+            case 'coffeeshop_owners':
+                $this->mainController->coffeeshopOwnersSetup();
+                break;
+            case 'update_coffeeshop_owner':
+                $csid = filter_input(INPUT_GET, 'coffeeshopid');
+                $ownerId = filter_input(INPUT_GET, 'owner_select');
+
+                if ($ownerId == -1){
+                    $ownerId = null;
+                }
+
+                $this->dbController->setOwnerOfCoffeeshop($csid, $ownerId);
+                $this->mainController->coffeeshopOwnersSetup();
+                break;
             default:
                 $this->mainController->admin();
         }

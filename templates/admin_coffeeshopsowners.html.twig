@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <p>test</p>
+            <ul>
+                {% for coffeeshop in coffeeshops %}
+                    <li>{{ coffeeshop.getName() }}
+                        <form method="get" action="?page=admin">
+                            <input type="hidden" name="page" value="admin">
+                            <input type="hidden" name="action" value="update_coffeeshop_owner">
+                            <input type="hidden" name="coffeeshopid" value="{{ coffeeshop.getId() }}">
+                            <label for="owner"></label>
+                            <select name="owner_select" id="owner_select">
+
+                                <option value="-1" {% if not coffeeshop.getOwner() %} selected {% endif %}>
+                                    [no registered owner]
+                                </option>
+
+                                {% for owner in owners %}
+                                    <option value="{{ owner.getId() }}"
+                                            {% if owner.getId() == coffeeshop.getOwner().getId() %}selected {% endif %}>
+                                        {{ owner.getUser().getUsername() }} [Owner ID: {{ owner.getId() }}]
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Change Owner</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
