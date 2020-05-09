@@ -40,11 +40,14 @@
             </li>
             {% if session.user_role == "ROLE_ADMIN" %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/?page=admin">ADMIN LINK</a>
+                    <a class="nav-link" href="/?page=admin">ADMIN CENTER</a>
                 </li>
             {% elseif session.user_role == "ROLE_STAFF" %}
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">STAFF LINK</a>
+                    <a class="nav-link disabled" href="#">Write a Review</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Review Comments</a>
                 </li>
             {% elseif  session.user_role == "ROLE_SHOP" %}
                 <li class="nav-item">

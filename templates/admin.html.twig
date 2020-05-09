@@ -50,9 +50,9 @@
                                 {% if owner.getName() %}
                                     - {{ owner.getName() }}
                                 {% endif %}
-                                <span class="badge badge-info">paid user</span>
+                                <span class="badge badge-info">shop owner</span>
                             {% else %}
-                                <a href="/?page=admin&action=join_owner&userid={{ user.getId() }}" class="btn btn-success py-0">add to paid users</a>
+                                <a href="/?page=admin&action=join_owner&userid={{ user.getId() }}" class="btn btn-success py-0">add shop owner profile</a>
                             {% endfor %}
 
                         </li>

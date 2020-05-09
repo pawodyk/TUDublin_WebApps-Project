@@ -24,9 +24,9 @@
                     <small>warning! changeing user type for shop owner will delete the link to their shop, and erase the paid content</small>
                 {% endif %}
             </p>
-            <button type="submit">Submit changes</button>
-            <a class="btn btn-danger p-0" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset Password</a>
-            <a class="btn btn-danger p-0" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
+            <button class="btn btn-primary" type="submit">Submit changes</button>
+            <a class="btn btn-warning" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset Password</a>
+            <a class="btn btn-danger" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
         </form>
         <p><a href="/?page=admin">return to admin page</a></p>
 

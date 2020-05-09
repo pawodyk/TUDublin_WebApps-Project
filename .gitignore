@@ -3,5 +3,8 @@
 env/
 vendor/
 composer.lock
+runMigration.bat
+runServer.bat
+runServerWithNewData.bat
 
 

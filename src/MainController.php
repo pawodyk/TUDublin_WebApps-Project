@@ -53,10 +53,7 @@ class MainController {
         $args = [
             'coffeeshop'=>$this->dbController->getCoffeeshop($csid),
             'reviews'=>$this->dbController->getAllReviewsFor($csid),
-            'comments'=>[
-                'hello world',
-                'good comment',
-            ],
+            'comments'=>$this->dbController->getAllCommentFor($csid),
         ];
 
 //        $GLOBALS['errors'][] = 'error in shop';
