@@ -104,7 +104,6 @@ class WebApplication
                     break;
                 case 'update_coffeeshop_owner':
                     $this->dbController->setOwnerOfCoffeeshop();
-                    header('Location: /?page=admin&action=coffeeshop_owners');
                     break;
                 default:
                     $this->mainController->admin();

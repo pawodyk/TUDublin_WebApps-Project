@@ -241,11 +241,16 @@ class DatabaseController extends Controller
         $result = $this->csRepo->update($cs);
 
         if ($result) {
-            $this->logMessage('Coffeeshop ID ' . $coffeeshopId . ' asigned to owner ' . $ownerId);
-            return;
+            if ($ownerId){
+                $this->logMessage('Owner ' . $ownerId . ' now owns the coffeeshop ID ' . $coffeeshopId);
+            } else {
+                $this->logMessage('Removed Owner from coffeeshop ID ' . $coffeeshopId );
+            }
+
         } else {
             $this->logError('Could not assign Coffeeshop ID ' . $coffeeshopId . ' to owner ' . $ownerId);
         }
+        header('Location: /?page=admin&action=coffeeshop_owners');
     }
 
     public function deleteUser()

@@ -21,18 +21,11 @@ class MainController extends Controller
     }
 
     private function renderPage($template, $args){
-        //$args['messages'] = [];
 
-        print '<pre>';
-
-        //var_dump($_SESSION['messages']);
         if (isset($_SESSION['messages'])){
             $args['messages'] = $_SESSION['messages'];
             $_SESSION['messages'] = [];
         }
-
-        var_dump($args);
-        print '</pre>';
 
         print $this->twig->render($template, $args);
     }
