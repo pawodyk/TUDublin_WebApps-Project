@@ -24,7 +24,7 @@ use TUDublin\dbObjects\{
     UserRepository
 };
 
-class DatabaseController
+class DatabaseController extends Controller
 {
 
     private $csRepo;
@@ -103,23 +103,22 @@ class DatabaseController
         $userpass = filter_input(INPUT_POST, 'userpass');
         $userrole = filter_input(INPUT_POST, 'userrole');
 
-        global $errors;
         $isValid = true;
 
         if (empty($username)) {
-            $errors[] = "name is empty";
+            $this->logError("name is empty");
             $isValid = false;
         } else {
             if (!$this->hasUniqueUsername($username)) {
                 $isValid = false;
-                $errors[] = 'username already in use';
+                $this->logError('username already in use');
             } elseif (strlen($username) > 50) {
-                $errors[] = 'username is too long';
+                $this->logError('username is too long');
             }
         }
 
         if (empty($userpass)) {
-            $errors[] = "password is empty";
+            $this->logError("password is empty");
             $isValid = false;
         }
 
@@ -129,11 +128,14 @@ class DatabaseController
             $u->setPassword($userpass);
             $u->setUserRole($userrole);
 
-            $this->userRepo->create($u);
-        } else {
-            //$errors[] = 'could not add the user' ;
-        }
+            $returncode = $this->userRepo->create($u);
 
+            if ($returncode > 0) {
+                $this->logMessage('User added successfully with id ' . $returncode);
+            } else {
+                $this->logError('could not add the user');
+            }
+        }
     }
 
     public function hasUniqueUsername($username)
@@ -161,7 +163,7 @@ class DatabaseController
                 if ($this->hasUniqueUsername($newName)) {
                     $u->setUsername($newName);
                 } else {
-                    $error[] = 'username already in use';
+                    $this->logError('username already in use');
                 }
             }
 
@@ -179,10 +181,17 @@ class DatabaseController
             }
 
 
-            $this->userRepo->update($u);
+            $result = $this->userRepo->update($u);
+
+            if ($result) {
+                $this->logMessage('User ID ' . $userId . ' updated successfully!');
+                return;
+            } else {
+                $this->logError('Could not Update the User ' . $userId);
+            }
 
         } else {
-            $errors[] = 'could not find user';
+            $this->logError('could not find user');
         }
     }
 
@@ -195,10 +204,17 @@ class DatabaseController
 
         if ($u) {
             $u->setPassword($newPass);
-            $this->userRepo->update($u);
+            $result = $this->userRepo->update($u);
+
+            if ($result) {
+                $this->logMessage('Password for user ' . $userId . ' changed successfully!');
+                return;
+            } else {
+                $this->logError('Could not Change password for user ' . $userId);
+            }
 
         } else {
-            $errors[] = 'could not find user';
+            $this->logError('could not find user');
         }
     }
 
@@ -216,13 +232,20 @@ class DatabaseController
         $coffeeshopId = filter_input(INPUT_GET, 'coffeeshopid');
         $ownerId = filter_input(INPUT_GET, 'owner_select');
 
-        if ($ownerId == -1){
+        if ($ownerId == -1) {
             $ownerId = null;
         }
 
         $cs = $this->csRepo->find($coffeeshopId);
         $cs->setOwnerId($ownerId);
-        $this->csRepo->update($cs);
+        $result = $this->csRepo->update($cs);
+
+        if ($result) {
+            $this->logMessage('Coffeeshop ID ' . $coffeeshopId . ' asigned to owner ' . $ownerId);
+            return;
+        } else {
+            $this->logError('Could not assign Coffeeshop ID ' . $coffeeshopId . ' to owner ' . $ownerId);
+        }
     }
 
     public function deleteUser()
@@ -235,7 +258,13 @@ class DatabaseController
             $this->eraseOwnerData($userId);
         }
 
-        $this->userRepo->delete($userId);
+        $result = $this->userRepo->delete($userId);
+        if ($result) {
+            $this->logMessage('User ID ' . $userId . ' deleted successfully!');
+            return;
+        } else {
+            $this->logError('Could not delete the User ' . $userId);
+        }
 
     }
 
@@ -257,7 +286,6 @@ class DatabaseController
             $this->csOwnerRepo->delete($o->getId());
         }
     }
-
 
     public function approveComment($commentId)
     {
@@ -293,5 +321,4 @@ class DatabaseController
 
         $this->csReviewRepo->create($review);
     }
-
 }

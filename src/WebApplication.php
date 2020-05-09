@@ -3,13 +3,12 @@
 namespace TUDublin;
 
 
-class WebApplication {
+class WebApplication
+{
 
     private $loginController;
     private $mainController;
     private $dbController;
-
-    public $errors;
 
     public function __construct()
     {
@@ -17,21 +16,20 @@ class WebApplication {
         $this->loginController = new LoginController();
         $this->dbController = new DatabaseController();
 
-        $GLOBALS['errors'] = [];
     }
 
-    public function run() {
+    public function run()
+    {
         $page = filter_input(INPUT_GET, 'page');
 
-
-        switch($page){
+        switch ($page) {
             case 'login':
                 $this->loginController->login();
-
+                header('Location: /' );
                 break;
             case 'logout':
                 $this->loginController->logout();
-
+                header('Location: /' );
                 break;
             case 'shop':
                 $this->mainController->shop();
@@ -59,58 +57,64 @@ class WebApplication {
         }
     }
 
-    public function adminControls(){
+    public function adminControls()
+    {
+        if ($this->loginController->verifyAccess('ROLE_ADMIN')) {
 
+            $action = filter_input(INPUT_GET, 'action');
+            if (!$action) {
+                $action = filter_input(INPUT_POST, 'action');
+            }
 
-        $action = filter_input(INPUT_GET, 'action');
-        if (!$action) {
-            $action = filter_input(INPUT_POST, 'action');
+            switch ($action) {
+                case 'search_user':
+                    //$this->mainController->searchUser();
+                    break;
+                case 'remove_user':
+                    $this->dbController->deleteUser();
+                    header('Location: /?page=admin' );
+                    break;
+                case 'edit_user':
+                    $this->mainController->editUser();
+                    break;
+                case 'update_user':
+                    $this->dbController->updateUser();
+                    header('Location: /?page=admin' );
+                    break;
+                case 'reset_password':
+                    $this->mainController->editPassword();
+                    break;
+                case 'submit_password':
+                    $this->dbController->changeUserPassword();
+                    header('Location: /?page=admin' );
+                    break;
+                case 'new_user':
+                    $this->mainController->newUser();
+                    break;
+                case 'submit_new_user':
+                    $this->dbController->addUser();
+                    header('Location: /?page=admin' );
+                    break;
+                case 'join_owner':
+                    $this->dbController->addOwnerProfile();
+                    header('Location: /?page=admin' );
+                    break;
+                case 'coffeeshop_owners':
+                    $this->mainController->coffeeshopOwnersSetup();
+                    break;
+                case 'update_coffeeshop_owner':
+                    $this->dbController->setOwnerOfCoffeeshop();
+                    header('Location: /?page=admin&action=coffeeshop_owners');
+                    break;
+                default:
+                    $this->mainController->admin();
+            }
         }
-
-        switch($action) {
-            case 'search_user':
-                //$this->mainController->searchUser();
-                break;
-            case 'remove_user':
-                $this->dbController->deleteUser();
-                unset($_GET);
-                $this->mainController->admin();
-                break;
-            case 'edit_user':
-                $this->mainController->editUser();
-                break;
-            case 'update_user':
-                $this->dbController->updateUser();
-                $this->mainController->admin();
-                break;
-            case 'reset_password':
-                $this->mainController->editPassword();
-                break;
-            case 'submit_password':
-                $this->dbController->changeUserPassword();
-                $this->mainController->admin();
-                break;
-            case 'new_user':
-                $this->mainController->newUser();
-                break;
-            case 'submit_new_user':
-                $this->dbController->addUser();
-                $this->mainController->admin();
-                break;
-            case 'join_owner':
-                $this->dbController->addOwnerProfile();
-                $this->mainController->admin();
-                break;
-            case 'coffeeshop_owners':
-                $this->mainController->coffeeshopOwnersSetup();
-                break;
-            case 'update_coffeeshop_owner':
-                $this->dbController->setOwnerOfCoffeeshop();
-                $this->mainController->coffeeshopOwnersSetup();
-                break;
-            default:
-                $this->mainController->admin();
+        else {
+            $this->mainController->accessDenied();
         }
     }
+
+
 
 }

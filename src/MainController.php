@@ -2,12 +2,8 @@
 
 namespace TUDublin;
 
-use TUDublin\DatabaseController;
-use TUDublin\dbObjects\CoffeeshopComment;
-use TUDublin\dbObjects\CoffeeshopCommentRepository;
-use TUDublin\dbObjects\CoffeeshopRepository;
-
-class MainController {
+class MainController extends Controller
+{
 
     const TEMPLATES_PATH = __DIR__ . "/../templates/";
 
@@ -25,13 +21,24 @@ class MainController {
     }
 
     private function renderPage($template, $args){
-        global $errors;
-        $args['errors'] = $errors;
+        //$args['messages'] = [];
+
+        print '<pre>';
+
+        //var_dump($_SESSION['messages']);
+        if (isset($_SESSION['messages'])){
+            $args['messages'] = $_SESSION['messages'];
+            $_SESSION['messages'] = [];
+        }
+
+        var_dump($args);
+        print '</pre>';
 
         print $this->twig->render($template, $args);
     }
 
     public function home(){
+        $this->redirect('/', ['page'=>'admin', 'action'=>'edit_user','userid'=>'5']);
         $template = 'home.html.twig';
         $args = [
             'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
@@ -81,11 +88,13 @@ class MainController {
         $args = [
             'user' => $this->dbController->getUser($userId),
         ];
+//        print '<pre>';
+//        var_dump($args);die;
 
         $this->renderPage($template, $args);
     }
 
-    public function editPassword($userid){
+    public function editPassword(){
         $userid = filter_input(INPUT_GET, 'userid');
 
         $template = 'admin_resetpassword.html.twig';
@@ -114,15 +123,18 @@ class MainController {
         $this->renderPage($template, $args);
     }
 
+    public function accessDenied(){
+        $template = 'accessdenied.html.twig';
+        $args = [
+
+        ];
+        $this->renderPage($template, $args);
+    }
+
     public function test(){
-
-
-        $csRepo = new CoffeeshopRepository();
         $testValue = [];
-        $testValue[] = $csRepo->getTopCoffeeshops(5);
 
-        $commentRepo = new CoffeeshopCommentRepository();
-        $testValue[] = $commentRepo->getAllNonPublishedComments();
+        $testValue[] = [];
 
         print '<pre>';
         print_r($testValue);die;

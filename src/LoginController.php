@@ -6,7 +6,7 @@ namespace TUDublin;
 
 use TUDublin\dbObjects\UserRepository;
 
-class LoginController
+class LoginController extends Controller
 {
     /**
      * LoginController constructor.
@@ -20,12 +20,11 @@ class LoginController
      *
      */
     public function login(){
+
         $uname = filter_input(INPUT_POST, 'username');
         $pass = filter_input(INPUT_POST, 'password');
 
         $user = $this->usersRepo->getUser($uname);
-
-//        var_dump($user);die;
 
         if ($user){
             $databasePassword = $user->getPassword();
@@ -36,16 +35,21 @@ class LoginController
 
                 //TODO check ownerid and add it to session
 
-                (new MainController())->home();
+                $this->logMessage('Login Successful!');
+
+                header('Location: /' );
+                die;
             }
         }
-        print "unable to login";
 
+        $this->logError('Unable to login');
+        (new MainController())->home();
     }
 
     public function logout(){
         $_SESSION = [];
-        (new MainController())->home();
+        header('Location: /' );
+        die;
     }
 
     public function veryfyUser(){
@@ -58,9 +62,13 @@ class LoginController
      * @param $role
      */
     public function verifyAccess($role){
-        if (isset($_SESSION['role'])){
 
+        if (isset($_SESSION['user_role'])){
+            if($_SESSION['user_role'] == $role){
+                return true;
+            }
         }
+        return false;
     }
 
 
