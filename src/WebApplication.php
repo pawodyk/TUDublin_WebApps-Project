@@ -26,28 +26,28 @@ class WebApplication {
 
         switch($page){
             case 'login':
-//                $data_in = $_POST;
-//                var_dump($_POST['username']);
-//                var_dump($_POST['password']); die;
-
                 $this->loginController->login();
 
                 break;
             case 'logout':
-//                print '<pre>';
-//                var_dump($_SESSION);die;
                 $this->loginController->logout();
 
                 break;
             case 'shop':
-                $csid = filter_input(INPUT_GET, 'csid');
-                $this->mainController->shop($csid);
+                $this->mainController->shop();
                 break;
             case 'shops':
                 $this->mainController->shops();
                 break;
             case 'admin':
                 $this->adminControls();
+                break;
+            case 'add_review':
+
+                break;
+            case 'submit_review':
+                $this->dbController->addReview();
+                $this->mainController->shop();
                 break;
             case 'test':
                 $this->mainController->test();
@@ -69,11 +69,10 @@ class WebApplication {
 
         switch($action) {
             case 'search_user':
-                $username = filter_input(INPUT_POST, 'username');
-//                $this->mainController->searchUser($username);
+                //$this->mainController->searchUser();
                 break;
             case 'remove_user':
-                $this->dbController->deleteUser(filter_input(INPUT_GET, 'userid'));
+                $this->dbController->deleteUser();
                 unset($_GET);
                 $this->mainController->admin();
                 break;
@@ -81,14 +80,14 @@ class WebApplication {
                 $this->mainController->editUser();
                 break;
             case 'update_user':
-                $this->dbController->updateUser(filter_input(INPUT_POST, 'userid'));
+                $this->dbController->updateUser();
                 $this->mainController->admin();
                 break;
             case 'reset_password':
                 $this->mainController->editPassword();
                 break;
             case 'submit_password':
-                $this->dbController->changeUserPassword(filter_input(INPUT_POST, 'userid'));
+                $this->dbController->changeUserPassword();
                 $this->mainController->admin();
                 break;
             case 'new_user':
@@ -99,21 +98,14 @@ class WebApplication {
                 $this->mainController->admin();
                 break;
             case 'join_owner':
-                $this->dbController->addOwnerProfile(filter_input(INPUT_GET, 'userid'));
+                $this->dbController->addOwnerProfile();
                 $this->mainController->admin();
                 break;
             case 'coffeeshop_owners':
                 $this->mainController->coffeeshopOwnersSetup();
                 break;
             case 'update_coffeeshop_owner':
-                $csid = filter_input(INPUT_GET, 'coffeeshopid');
-                $ownerId = filter_input(INPUT_GET, 'owner_select');
-
-                if ($ownerId == -1){
-                    $ownerId = null;
-                }
-
-                $this->dbController->setOwnerOfCoffeeshop($csid, $ownerId);
+                $this->dbController->setOwnerOfCoffeeshop();
                 $this->mainController->coffeeshopOwnersSetup();
                 break;
             default:

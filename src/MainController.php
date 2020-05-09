@@ -38,28 +38,19 @@ class MainController {
             'reviews_list'=> $this->dbController->getAllReviews(),
         ];
 
-//        $GLOBALS['errors'][] = 'error in home';
-
-
-//        print '<pre>';
-//        print_r($args);die;
-
         $this->renderPage($template, $args);
 
     }
 
-    public function shop($csid){
+    public function shop(){
+        $csid = filter_input(INPUT_GET, 'csid');
+
         $template = 'coffeeshop.html.twig';
         $args = [
             'coffeeshop'=>$this->dbController->getCoffeeshop($csid),
             'reviews'=>$this->dbController->getAllReviewsFor($csid),
             'comments'=>$this->dbController->getAllCommentFor($csid),
         ];
-
-//        $GLOBALS['errors'][] = 'error in shop';
-
-//        print '<pre>';
-//        print_r($args);die;
 
         $this->renderPage($template,$args);
     }
@@ -84,18 +75,22 @@ class MainController {
     }
 
     public function editUser(){
+        $userId = filter_input(INPUT_GET, 'userid');
+
         $template = 'admin_edituser.html.twig';
         $args = [
-            'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
+            'user' => $this->dbController->getUser($userId),
         ];
 
         $this->renderPage($template, $args);
     }
 
-    public function editPassword(){
+    public function editPassword($userid){
+        $userid = filter_input(INPUT_GET, 'userid');
+
         $template = 'admin_resetpassword.html.twig';
         $args = [
-            'user' => $this->dbController->getUser(filter_input(INPUT_GET, 'userid')),
+            'user' => $this->dbController->getUser($userid),
         ];
 
         $this->renderPage($template, $args);

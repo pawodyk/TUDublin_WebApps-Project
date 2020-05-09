@@ -59,7 +59,8 @@ class DatabaseController
         return $this->csRepo->find($coffeeshopId);
     }
 
-    public function getAllCoffeeshopsForOwner($ownerId){
+    public function getAllCoffeeshopsForOwner($ownerId)
+    {
         return $this->csRepo->getAllCoffeeshopsFor($ownerId);
     }
 
@@ -88,7 +89,8 @@ class DatabaseController
         return $this->userRepo->find($userId);
     }
 
-    public function getAllOwners(){
+    public function getAllOwners()
+    {
         return $this->csOwnerRepo->findAll();
     }
 
@@ -97,35 +99,35 @@ class DatabaseController
      */
     public function addUser()
     {
+        $username = filter_input(INPUT_POST, 'username');
+        $userpass = filter_input(INPUT_POST, 'userpass');
+        $userrole = filter_input(INPUT_POST, 'userrole');
+
         global $errors;
         $isValid = true;
 
-        $uname = filter_input(INPUT_POST, 'username');
-        $pass = filter_input(INPUT_POST, 'userpass');
-        $role = filter_input(INPUT_POST, 'userrole');
-
-        if (empty($uname)) {
+        if (empty($username)) {
             $errors[] = "name is empty";
             $isValid = false;
         } else {
-            if (!$this->hasUniqueUsername($uname)) {
+            if (!$this->hasUniqueUsername($username)) {
                 $isValid = false;
                 $errors[] = 'username already in use';
-            } elseif (strlen($uname) > 50) {
+            } elseif (strlen($username) > 50) {
                 $errors[] = 'username is too long';
             }
         }
 
-        if (empty($pass)) {
+        if (empty($userpass)) {
             $errors[] = "password is empty";
             $isValid = false;
         }
 
         if ($isValid) {
             $u = new User();
-            $u->setUsername($uname);
-            $u->setPassword($pass);
-            $u->setUserRole($role);
+            $u->setUsername($username);
+            $u->setPassword($userpass);
+            $u->setUserRole($userrole);
 
             $this->userRepo->create($u);
         } else {
@@ -146,17 +148,15 @@ class DatabaseController
 
     }
 
-    public function updateUser($userId)
+    public function updateUser()
     {
+        $userId = filter_input(INPUT_POST, 'userid');
+        $newName = filter_input(INPUT_POST, 'username');
+        $newRole = filter_input(INPUT_POST, 'userrole');
 
         $u = $this->userRepo->find($userId);
 
-
         if ($u) {
-
-            $newName = filter_input(INPUT_POST, 'username');
-            $newRole = filter_input(INPUT_POST, 'userrole');
-
             if ($newName != $u->getUsername()) {
                 if ($this->hasUniqueUsername($newName)) {
                     $u->setUsername($newName);
@@ -184,16 +184,16 @@ class DatabaseController
         } else {
             $errors[] = 'could not find user';
         }
-
-
     }
 
-    public function changeUserPassword($userId)
+    public function changeUserPassword()
     {
+        $userId = filter_input(INPUT_POST, 'userid');
+        $newPass = filter_input(INPUT_POST, 'userpass');
+
         $u = $this->userRepo->find($userId);
 
         if ($u) {
-            $newPass = filter_input(INPUT_POST, 'userpass');
             $u->setPassword($newPass);
             $this->userRepo->update($u);
 
@@ -202,22 +202,33 @@ class DatabaseController
         }
     }
 
-    public function addOwnerProfile($userId)
+    public function addOwnerProfile()
     {
+        $userId = filter_input(INPUT_GET, 'userid');
+
         $owner = new CoffeeshopOwner();
         $owner->setUserId($userId);
         $this->csOwnerRepo->create($owner);
     }
 
-    public function setOwnerOfCoffeeshop($coffeeshopId, $ownerId)
+    public function setOwnerOfCoffeeshop()
     {
+        $coffeeshopId = filter_input(INPUT_GET, 'coffeeshopid');
+        $ownerId = filter_input(INPUT_GET, 'owner_select');
+
+        if ($ownerId == -1){
+            $ownerId = null;
+        }
+
         $cs = $this->csRepo->find($coffeeshopId);
         $cs->setOwnerId($ownerId);
         $this->csRepo->update($cs);
     }
 
-    public function deleteUser($userId)
+    public function deleteUser()
     {
+        $userId = filter_input(INPUT_GET, 'userid');
+
         $u = $this->userRepo->find($userId);
 
         if ($u->getUserRole() == 'ROLE_SHOP') {
@@ -260,21 +271,24 @@ class DatabaseController
         $this->csCommentRepo->delete($commentId);
     }
 
-    public function addCoffeeshop()
+    public function addCoffeeshop($coffeeshopName)
     {
         $cs = new Coffeeshop();
-        $cs->setName(filter_input(INPUT_POST, 'coffeeshop_name'));
+        $cs->setName($coffeeshopName);
         $this->csRepo->create($cs);
     }
 
-    public function addReview($coffeeshopId)
+    public function addReview()
     {
         $review = new CoffeeshopReview();
-        $review->setCoffeeshopId($coffeeshopId);
-        $review->setTitle(filter_input(INPUT_POST, 'review_title'));
-        $review->setReview(filter_input(INPUT_POST, 'review_text'));
-        $review->setRating(filter_input(INPUT_POST, 'review_rating'));
-        $review->setTitle(filter_input(INPUT_POST, 'review_expense'));
+
+        $csid = filter_input(INPUT_POST, 'coffeeshopid');
+
+        $review->setCoffeeshopId($csid);
+        $review->setTitle(filter_input(INPUT_POST, 'reviewtitle'));
+        $review->setReview(filter_input(INPUT_POST, 'reviewtext'));
+        $review->setRating(filter_input(INPUT_POST, 'reviewrating'));
+        $review->setTitle(filter_input(INPUT_POST, 'reviewexpense'));
         $review->setReviewDate(date('Y-m-d'));
 
         $this->csReviewRepo->create($review);
