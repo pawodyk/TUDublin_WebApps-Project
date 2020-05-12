@@ -27,9 +27,11 @@ class CoffeeshopCommentRepository extends DatabaseTableRepository
         $db = new DatabaseManager();
         $conn = $db->getDbh();
 
-        $sql = 'SELECT * FROM `coffeeshopcomment` WHERE  `is_published` = FALSE ';
+        $sql = 'SELECT * FROM `coffeeshopcomment` WHERE  `is_published` = 0';
 
         $statement = $conn->query($sql);
+        $statement->setFetchMode(\PDO::FETCH_CLASS, $this->getClassNameForDbRecords());
+        $statement->execute();
 
         return $statement->fetchAll();
     }

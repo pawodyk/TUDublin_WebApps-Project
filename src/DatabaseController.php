@@ -79,6 +79,10 @@ class DatabaseController extends Controller
         return $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
     }
 
+    public function getNewComments(){
+        return $this->csCommentRepo->getAllNonPublishedComments();
+    }
+
     public function getAllUsers()
     {
         return $this->userRepo->findAll();
@@ -400,13 +404,16 @@ class DatabaseController extends Controller
     {
         $review = new CoffeeshopReview();
 
+//        print '<PRE>';
+//        var_dump($_POST);die;
+
         $csid = filter_input(INPUT_POST, 'coffeeshopid');
 
         $review->setCoffeeshopId($csid);
         $review->setTitle(filter_input(INPUT_POST, 'reviewtitle'));
         $review->setReview(filter_input(INPUT_POST, 'reviewtext'));
         $review->setRating(filter_input(INPUT_POST, 'reviewrating'));
-        $review->setTitle(filter_input(INPUT_POST, 'reviewexpense'));
+        $review->setExpense(filter_input(INPUT_POST, 'reviewexpense'));
         $review->setReviewDate(date('Y-m-d'));
 
         $this->csReviewRepo->create($review);

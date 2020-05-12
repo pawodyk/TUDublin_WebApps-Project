@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    {% if session.user_role == 'ROLE_STAFF' %}
+        {% for com in comments %}
+            <ul>
+                <li>{{ com.id }}</li>
+                <li>{{ com.getCoffeeshop().name }}</li>
+                <li>{{ com.getName() }}</li>
+                <li>{{ com.getMessage() }}</li>
+                <li>{% if com.isPublished() == 0 %} <a href="" class="btn btn-success"> Publish me!</a> {% else %} I should not be here {% endif %}</li>
+            </ul>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>You cannot view this page</p>
+    {% endif %}
+
+
+
+
+{% endblock %}

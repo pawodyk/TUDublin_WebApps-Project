@@ -63,6 +63,29 @@ class MainController extends Controller
         $this->renderPage($template,$args);
     }
 
+    public function newReview(){
+        $template = 'writereview.html.twig';
+        $args = [
+            'coffeeshops' => $this->dbController->getCoffeeshops()
+        ];
+
+        $this->renderPage($template, $args);
+    }
+
+    public function reviewComments(){
+        $template = 'newcomments.html.twig';
+        $args = [
+            'comments'=>$this->dbController->getNewComments(),
+        ];
+
+//        print '<pre>';
+//        var_dump($args);die;
+
+        $this->renderPage($template, $args);
+    }
+
+
+
     public function admin(){
         $template = 'admin.html.twig';
         $args= [
@@ -80,8 +103,6 @@ class MainController extends Controller
         $args = [
             'user' => $this->dbController->getUser($userId),
         ];
-//        print '<pre>';
-//        var_dump($args);die;
 
         $this->renderPage($template, $args);
     }

@@ -38,12 +38,15 @@ class WebApplication
             case 'admin':
                 $this->adminControls();
                 break;
-            case 'add_review':
-
+            case 'new_review':
+                $this->mainController->newReview();
                 break;
             case 'submit_review':
                 $this->dbController->addReview();
                 $this->mainController->shop();
+                break;
+            case 'comments':
+                $this->mainController->reviewComments();
                 break;
             case 'test':
                 $this->mainController->test();
