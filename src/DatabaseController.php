@@ -105,20 +105,11 @@ class DatabaseController extends Controller
 
         $isValid = true;
 
-        if (empty($username)) {
-            $this->logError("name is empty");
+        if (!$this->validUsername($username)) {
             $isValid = false;
-        } else {
-            if (!$this->hasUniqueUsername($username)) {
-                $isValid = false;
-                $this->logError('username already in use');
-            } elseif (strlen($username) > 50) {
-                $this->logError('username is too long');
-            }
         }
 
-        if (empty($userpass)) {
-            $this->logError("password is empty");
+        if (!$this->validPassword($userpass)) {
             $isValid = false;
         }
 
@@ -132,13 +123,41 @@ class DatabaseController extends Controller
 
             if ($returncode > 0) {
                 $this->logMessage('User added successfully with id ' . $returncode);
+                if ($userrole == 'ROLE_SHOP'){
+                    $this->createOwnerProfileFor($returncode);
+                }
+                $this->redirect('/', [
+                    'page' => 'admin',
+                ]);
             } else {
                 $this->logError('could not add the user');
             }
         }
+        $this->redirect('/', [
+            'page' => 'admin',
+            'action' => 'new_user',
+        ]);
     }
 
-    public function hasUniqueUsername($username)
+    private function validUsername($username)
+    {
+        if (empty($username)) {
+            $this->logError("username cannot be empty");
+            return false;
+        } else {
+            if (strlen($username) > 50) {
+                $this->logError('username is too long');
+                return false;
+            } elseif (!$this->hasUniqueUsername($username)) {
+                $this->logError('username already in use');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function hasUniqueUsername($username)
     {
         $user = $this->userRepo->getUser($username);
 
@@ -150,6 +169,27 @@ class DatabaseController extends Controller
 
     }
 
+    private function validPassword($password)
+    {
+        if (empty($password)) {
+            $this->logError("password cannot be empty");
+            return false;
+        } else {
+            $passlen = strlen($password);
+            if ($passlen < 5) {
+                $this->logError("password is too short.");
+                return false;
+            } elseif ($passlen > 100) {
+                $this->logError("password is too long.");
+                return false;
+            }
+
+            //TODO here can go some other password validity checks like at least 1 digit and 1 letter
+        }
+
+        return true;
+    }
+
     public function updateUser()
     {
         $userId = filter_input(INPUT_POST, 'userid');
@@ -158,41 +198,54 @@ class DatabaseController extends Controller
 
         $u = $this->userRepo->find($userId);
 
+        $hasChanged = false;
+
         if ($u) {
+            // if there was a change
             if ($newName != $u->getUsername()) {
-                if ($this->hasUniqueUsername($newName)) {
+                // validate input
+                if ($this->validUsername($newName)) {
                     $u->setUsername($newName);
-                } else {
-                    $this->logError('username already in use');
+                    $hasChanged = true;
                 }
             }
 
             if ($newRole != $u->getUserRole()) {
                 if ($newRole == 'ROLE_SHOP') {
 
-                    $o = new CoffeeshopOwner();
-                    $o->setUserId($u->getId());
-                    $this->csOwnerRepo->create($o);
+                    $this->createOwnerProfileFor($u->getId());
 
                 } elseif ($u->getUserRole() == 'ROLE_SHOP') {
                     $this->eraseOwnerData($u->getId());
                 }
                 $u->setUserRole($newRole);
+                $hasChanged = true;
             }
 
-
-            $result = $this->userRepo->update($u);
-
-            if ($result) {
-                $this->logMessage('User ID ' . $userId . ' updated successfully!');
-                return;
-            } else {
-                $this->logError('Could not Update the User ' . $userId);
+            if ($hasChanged) {
+                $result = $this->userRepo->update($u);
+                if ($result) {
+                    $this->logMessage('User ID ' . $userId . ' updated successfully!');
+                    $this->redirect('/', [
+                        'page' => 'admin'
+                    ]);
+                } else {
+                    $this->logError('Could not Update the User ' . $userId);
+                }
             }
 
+            $this->redirect('/', [
+                'page' => 'admin',
+                'action' => 'edit_user',
+                'userid' => $u->getId(),
+            ]);
         } else {
             $this->logError('could not find user');
         }
+
+        $this->redirect('/', [
+            'page' => 'admin'
+        ]);
     }
 
     public function changeUserPassword()
@@ -203,25 +256,46 @@ class DatabaseController extends Controller
         $u = $this->userRepo->find($userId);
 
         if ($u) {
-            $u->setPassword($newPass);
-            $result = $this->userRepo->update($u);
+            if ($this->validPassword($newPass)) {
+                $u->setPassword($newPass);
+                $result = $this->userRepo->update($u);
 
-            if ($result) {
-                $this->logMessage('Password for user ' . $userId . ' changed successfully!');
-                return;
-            } else {
-                $this->logError('Could not Change password for user ' . $userId);
+                if ($result) {
+                    $this->logMessage('Password for user ' . $userId . ' changed successfully!');
+                    $this->redirect('/', [
+                        'page' => 'admin',
+                    ]);
+                } else {
+                    $this->logError('Could not Change password for user ' . $userId);
+                }
             }
+            $this->redirect('/', [
+                'page' => 'admin',
+                'action' => 'reset_password',
+                'userid' => $u->getId(),
+            ]);
 
         } else {
             $this->logError('could not find user');
         }
+        $this->redirect('/', [
+            'page' => 'admin',
+            'action' => 'new_user',
+        ]);
     }
 
     public function addOwnerProfile()
     {
         $userId = filter_input(INPUT_GET, 'userid');
 
+        $this->createOwnerProfileFor($userId);
+
+        $this->redirect('/', [
+            'page' => 'admin'
+        ]);
+    }
+
+    private function createOwnerProfileFor($userId){
         $owner = new CoffeeshopOwner();
         $owner->setUserId($userId);
         $this->csOwnerRepo->create($owner);
@@ -241,10 +315,10 @@ class DatabaseController extends Controller
         $result = $this->csRepo->update($cs);
 
         if ($result) {
-            if ($ownerId){
+            if ($ownerId) {
                 $this->logMessage('Owner ' . $ownerId . ' now owns the coffeeshop ID ' . $coffeeshopId);
             } else {
-                $this->logMessage('Removed Owner from coffeeshop ID ' . $coffeeshopId );
+                $this->logMessage('Removed Owner from coffeeshop ID ' . $coffeeshopId);
             }
 
         } else {
@@ -259,17 +333,28 @@ class DatabaseController extends Controller
 
         $u = $this->userRepo->find($userId);
 
-        if ($u->getUserRole() == 'ROLE_SHOP') {
-            $this->eraseOwnerData($userId);
+        if ($u) {
+            if ($u->getUserRole() == 'ROLE_SHOP') {
+                $this->eraseOwnerData($userId);
+            }
+
+            $result = $this->userRepo->delete($userId);
+            if ($result) {
+                $this->logMessage('User ID ' . $userId . ' deleted successfully!');
+                $this->redirect('/', [
+                    'page' => 'admin',
+
+                ]);
+            } else {
+                $this->logError('Could not delete the User ' . $userId);
+            }
         }
 
-        $result = $this->userRepo->delete($userId);
-        if ($result) {
-            $this->logMessage('User ID ' . $userId . ' deleted successfully!');
-            return;
-        } else {
-            $this->logError('Could not delete the User ' . $userId);
-        }
+        $this->redirect('/', [
+            'page' => 'admin',
+            'action' => 'edit_user',
+            'userid' => $userId,
+        ]);
 
     }
 

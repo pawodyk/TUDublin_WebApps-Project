@@ -31,31 +31,38 @@ class LoginController extends Controller
             if (password_verify($pass, $databasePassword)){
                 $_SESSION['user_id'] = $user->getId();
                 $_SESSION['user_role'] = $user->getUserRole();
-                $_POST = [];
 
                 //TODO check ownerid and add it to session
 
                 $this->logMessage('Login Successful!');
-
-                header('Location: /' );
-                die;
+                $this->redirect($_SERVER['HTTP_REFERER']);
             }
         }
 
         $this->logError('Unable to login');
-        (new MainController())->home();
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function logout(){
         $_SESSION = [];
-        header('Location: /' );
+        $this->logMessage('You were successfully logged out');
+        $this->redirect('/');
         die;
     }
 
-    public function veryfyUser(){
-        if (isset($_SESSION['user_id'])){
-
+    public function isLoggedIn(){
+        if (isset($_SESSION['user_id']) && isset($_SESSION['user_role'])){
+            return true;
         }
+        return false;
+
+    }
+
+    public function veryfyUser($userId){
+        if (isset($_SESSION['user_id'])){
+            return $_SESSION['user_id'] == $userId;
+        }
+        return -1;
     }
 
     /**

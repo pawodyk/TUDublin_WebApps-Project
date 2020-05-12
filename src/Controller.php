@@ -22,6 +22,7 @@ class Controller
             foreach ($args as $var => $value){
                 $url .= $var . '=' . $value . '&';
             }
+            $url = rtrim($url, '&');
         }
 
         header('Location: ' . $url );

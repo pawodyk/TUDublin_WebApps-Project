@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    {% if session.user_role == "ROLE_ADMIN" %}
-{#        {% if user%}#}
+    {% if session.user_role == "ROLE_ADMIN" and user.getId() != session.user_id %}
+        {% if user %}
             <form method="POST" action="/?page=admin&action=update_user">
                 <input type="hidden" id="userid" name="userid" value="{{ user.getId() }}">
                 <label for="username">Username:</label>
@@ -22,15 +22,20 @@
                 </select>
                 <p>
                     {% if user.getUserRole() == 'ROLE_SHOP' %}
-                        <small>warning! changeing user type for shop owner will delete the link to their shop, and erase the paid content</small>
+                        <small>warning! changeing user type for shop owner will delete the link to their shop, and erase
+                            the paid content</small>
                     {% endif %}
                 </p>
                 <button class="btn btn-primary" type="submit">Submit changes</button>
-                <a class="btn btn-warning" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset Password</a>
+                <a class="btn btn-warning" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset
+                    Password</a>
                 <a class="btn btn-danger" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
             </form>
-            <p><a href="/?page=admin">return to admin page</a></p>
-{#        {% endif %}#}
+
+        {% else %}
+            <p>Could not find user.</p>
+        {% endif %}
+        <p><a href="/?page=admin">return to admin page</a></p>
     {% else %}
         <p>Admins only</p>
     {% endif %}

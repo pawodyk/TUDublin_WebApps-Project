@@ -31,7 +31,6 @@ class MainController extends Controller
     }
 
     public function home(){
-        $this->redirect('/', ['page'=>'admin', 'action'=>'edit_user','userid'=>'5']);
         $template = 'home.html.twig';
         $args = [
             'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
