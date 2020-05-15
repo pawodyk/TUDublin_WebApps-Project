@@ -3,7 +3,7 @@
 
 namespace TUDublin;
 
-require_once __DIR__ . '\..\env\dbConstants.php';
+require_once __DIR__ . '/../env/dbConstants.php';
 
 use TUDublin\dbObjects\{
     Coffeeshop,
