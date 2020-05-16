@@ -56,18 +56,21 @@
                 </li>
             {% endif %}
         </ul>
-        {% if session.user_id == false %}
-            <button type="button" class="btn btn-outline-primary mx-lg-2 " data-toggle="modal"
-                    data-target="#loginModal">
-                Login
-            </button>
-        {% else %}
-            <a href="/?page=logout" class="btn btn-outline-warning mx-lg-2 ">
-                Log out
-            </a>
-        {% endif %}
+        <div class="pb-4 pt-2 py-lg-0 mx-lg-2">
+            {% if session.user_id == false %}
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#loginModal">
+                    Login
+                </button>
+            {% else %}
+                <a href="/?page=logout" class="btn btn-outline-warning">
+                    Log out
+                </a>
+            {% endif %}
+        </div>
     </div>
 </nav>
+
 
 <div class="container">
 
@@ -85,9 +88,12 @@
         {% endfor %}
     {% endif %}
 
-    {% block content %}{% endblock %}
 
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 </div>
+
 
 {% if session.user_id == false %}
     <!-- Modal -->

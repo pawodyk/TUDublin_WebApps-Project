@@ -1,3 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Chivo&display=swap');
+
+html {
+    background-color: wheat;
+}
+
+body {
+    font-family: 'Chivo', Roboto, Arial, sans-serif;
+    font-size: 14px;
+    background-color: antiquewhite;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: 'Balsamiq Sans', cursive;
+}
+
+footer {
+    background-color: navajowhite;
+}
+
+main {
+    min-height: calc(100vh - 272px); /* to eliminate the background below footer when the page dont have enough content to fill the page*/
+}
+
+
 .navbar_toggler {
     position: absolute;
     right: 10px;
@@ -12,4 +41,13 @@
 .logo img {
     height: 100%;
     width: auto;
+}
+
+.rating_icon {
+    font-size: 2rem;
+    color: #a1795a;
+}
+
+.hidden {
+    visibility:hidden;
 }
