@@ -33,10 +33,13 @@ class MainController extends Controller
 
     public function home()
     {
+        $coffeeshops = $this->dbController->getCoffeeshops();
+        $reviews = $this->dbController->getAllReviews();
+
         $template = 'home.html.twig';
         $args = [
-            'coffeeshop_list' => $this->dbController->getCoffeeshops(),
-            'reviews_list' => $this->dbController->getAllReviews(),
+            'coffeeshop_list' => $coffeeshops,
+            'reviews_list' => $reviews,
         ];
 
         $this->renderPage($template, $args);
@@ -47,11 +50,15 @@ class MainController extends Controller
     {
         $csid = filter_input(INPUT_GET, 'csid');
 
+        $cs = $this->dbController->getCoffeeshop($csid);
+        $reviews = $this->dbController->getAllReviewsFor($csid);
+        $comments = $this->dbController->getPublishedCommentsFor($csid);
+
         $template = 'coffeeshop.html.twig';
         $args = [
-            'coffeeshop' => $this->dbController->getCoffeeshop($csid),
-            'reviews' => $this->dbController->getAllReviewsFor($csid),
-            'comments' => $this->dbController->getPublishedCommentsFor($csid),
+            'coffeeshop' => $cs,
+            'reviews' => $reviews,
+            'comments' => $comments,
         ];
 
         $this->renderPage($template, $args);
@@ -59,9 +66,11 @@ class MainController extends Controller
 
     public function shops()
     {
+        $coffeeshops = $this->dbController->getCoffeeshops();
+
         $template = 'coffeeshoplist.html.twig';
         $args = [
-            'coffeeshop_list' => $this->dbController->getCoffeeshops(),
+            'coffeeshop_list' => $coffeeshops,
         ];
 
         $this->renderPage($template, $args);
@@ -69,9 +78,11 @@ class MainController extends Controller
 
     public function newReview()
     {
+        $cs = $this->dbController->getCoffeeshops();
+
         $template = 'writereview.html.twig';
         $args = [
-            'coffeeshops' => $this->dbController->getCoffeeshops()
+            'coffeeshops' => $cs,
         ];
 
         $this->renderPage($template, $args);
@@ -79,9 +90,11 @@ class MainController extends Controller
 
     public function reviewComments()
     {
+        $comments = $this->dbController->getNewComments();
+
         $template = 'newcomments.html.twig';
         $args = [
-            'comments' => $this->dbController->getNewComments(),
+            'comments' => $comments,
         ];
 
         $this->renderPage($template, $args);
@@ -91,9 +104,11 @@ class MainController extends Controller
     {
         $reviewId = filter_input(INPUT_GET, 'reviewId');
 
+        $review = $this->dbController->getReview($reviewId);
+
         $template = 'reviewpage.html.twig';
         $args = [
-            'review' => $this->dbController->getReview($reviewId),
+            'review' => $review,
         ];
 
         $this->renderPage($template, $args);
@@ -101,10 +116,13 @@ class MainController extends Controller
 
     public function admin()
     {
+        $users = $this->dbController->getAllUsers();
+        $owners = $this->dbController->getAllOwners();
+
         $template = 'admin.html.twig';
         $args = [
-            'users' => $this->dbController->getAllUsers(),
-            'owners' => $this->dbController->getAllOwners(),
+            'users' => $users,
+            'owners' => $owners,
         ];
 
         $this->renderPage($template, $args);
@@ -114,9 +132,11 @@ class MainController extends Controller
     {
         $userId = filter_input(INPUT_GET, 'userid');
 
+        $user = $this->dbController->getUser($userId);
+
         $template = 'admin_edituser.html.twig';
         $args = [
-            'user' => $this->dbController->getUser($userId),
+            'user' => $user,
         ];
 
         $this->renderPage($template, $args);
@@ -126,9 +146,11 @@ class MainController extends Controller
     {
         $userid = filter_input(INPUT_GET, 'userid');
 
+        $user = $this->dbController->getUser($userid);
+
         $template = 'admin_resetpassword.html.twig';
         $args = [
-            'user' => $this->dbController->getUser($userid),
+            'user' => $user,
         ];
 
         $this->renderPage($template, $args);
@@ -146,10 +168,13 @@ class MainController extends Controller
 
     public function coffeeshopOwnersSetup()
     {
+        $cs = $this->dbController->getCoffeeshops();
+        $owners = $this->dbController->getAllOwners();
+
         $template = 'admin_coffeeshopsowners.html.twig';
         $args = [
-            'coffeeshops' => $this->dbController->getCoffeeshops(),
-            'owners' => $this->dbController->getAllOwners(),
+            'coffeeshops' => $cs,
+            'owners' => $owners,
         ];
         $this->renderPage($template, $args);
     }
@@ -163,16 +188,41 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function test()
+    public function editCoffeeshop()
     {
-        $testValue = [];
+        $csid = filter_input(INPUT_GET, 'csid');
 
-        $testValue[] = [];
+        $cs = $this->dbController->getCoffeeshop($csid);
+        $cs_mi = $this->dbController->getMenuItems($cs->getId());
+        $owners_mi = $this->dbController->getMenuItemsForOwner($cs->getOwnerId());
 
-        print '<pre>';
-        print_r($testValue);
-        die;
+
+        $template = 'ownerscoffeeshops.html.twig';
+        $args = [
+            'coffeeshop'=> $cs,
+            'menuitems'=> $cs_mi,
+            'ownersitems'=>$owners_mi,
+        ];
+
+        $this->renderPage($template, $args);
     }
 
+    public function editMenu()
+    {
+        $csid = filter_input(INPUT_GET, 'csid');
+        $cs = $this->dbController->getCoffeeshop($csid);
+        $cs_mi = $this->dbController->getMenuItems($cs->getId());
+        $owners_mi = $this->dbController->getMenuItemsForOwner($cs->getOwnerId());
+
+
+        $template = 'ownerscoffeeshops.html.twig';
+        $args = [
+            'coffeeshop'=> $cs,
+            'menuitems'=> $cs_mi,
+            'ownersitems'=>$owners_mi,
+        ];
+
+        $this->renderPage($template, $args);
+    }
 
 }

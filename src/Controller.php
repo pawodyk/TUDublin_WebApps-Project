@@ -28,4 +28,10 @@ class Controller
         header('Location: ' . $url );
         die;
     }
+
+    protected function debug($variable){
+        print '<pre>';
+        var_dump($variable);
+        die;
+    }
 }

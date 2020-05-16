@@ -9,7 +9,7 @@
                 review for <a class="badge badge-pill badge-info"
                               href="/?page=shop&csid={{ review.getCoffeeshopId() }}">{{ review.getCoffeeshop().getName() }}</a>
             </h4>
-            <div class="border-top border-bottom border-dark my-4 p-4">
+            <div class="border-top border-bottom border-dark my-4 pt-4">
                 <p class="lead">{{ review.review }}</p>
                 <div class="d-flex flex-row justify-content-around py-4">
                     <div class="d-flex flex-column w-25 text-center">
@@ -29,8 +29,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center text-muted">
-                    <small>{{ review.review_date }}</small>
+                <div class="text-center text-muted py-1">
+                    <small>Published on {{ review.getReviewDate() }}</small>
                 </div>
             </div>
 

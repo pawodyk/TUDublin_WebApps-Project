@@ -35,31 +35,52 @@ class WebApplication
             case 'shops':
                 $this->mainController->shops();
                 break;
-            case 'admin':
-                $this->adminControls();
-                break;
-            case 'new_review':
-                $this->mainController->newReview();
-                break;
-            case 'submit_review':
-                $this->dbController->addReview();
+            case 'review':
+                $this->mainController->viewReview();
                 break;
             case 'submit_comment':
                 $this->dbController->addComment();
                 break;
+            case 'admin':
+                $this->adminControls();
+                break;
+            case 'new_review':
+            case 'submit_review':
             case 'comments':
-                $this->mainController->reviewComments();
+                $this->userControls($page);
                 break;
-            case 'review':
-                $this->mainController->viewReview();
+            case 'edit_coffeeshop':
+                if ($this->loginController->verifyAccess('ROLE_STAFF') || $this->loginController->verifyAccess('ROLE_SHOP')){
+                    $this->mainController->editCoffeeshop();
+                } else {
+                    $this->mainController->accessDenied();
+                }
                 break;
-            case 'test':
-                $this->mainController->test();
+            case 'submit_coffeeshop_update':
+                $this->dbController->updateCoffeeshop();
                 break;
             case 'home':
             default:
                 $this->mainController->home();
                 break;
+        }
+    }
+
+    public function userControls($page){
+        if ($this->loginController->verifyAccess('ROLE_STAFF')){
+            switch ($page){
+                case 'new_review':
+                    $this->mainController->newReview();
+                    break;
+                case 'submit_review':
+                    $this->dbController->addReview();
+                    break;
+                case 'comments':
+                    $this->mainController->reviewComments();
+                    break;
+            }
+        } else {
+            $this->mainController->accessDenied();
         }
     }
 

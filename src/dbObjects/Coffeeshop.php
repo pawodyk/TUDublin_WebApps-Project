@@ -176,4 +176,18 @@ HERE;
         return $pictureRepo->find($this->picture_id);
     }
 
+    public function getAverageRating()
+    {
+        $csRepo = new CoffeeshopRepository();
+
+        return $csRepo->getAverageRating();
+    }
+
+    public function getAverageExpense()
+    {
+        $csRepo = new CoffeeshopRepository();
+
+        return $csRepo->getAverageExpense();
+    }
+
 }

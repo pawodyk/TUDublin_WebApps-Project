@@ -64,6 +64,35 @@ class DatabaseController extends Controller
         return $this->csRepo->getAllCoffeeshopsFor($ownerId);
     }
 
+    public function updateCoffeeshop(){
+        $csId = filter_input(INPUT_POST, 'coffeeshop_id');
+        $csName = filter_input(INPUT_POST, 'coffeeshop_name');
+        $csSummary = filter_input(INPUT_POST, 'coffeeshop_summary');
+
+        $cs = $this->csRepo->find($csId);
+
+        $cs->setName($csName);
+        $cs->setSummary($csSummary);
+
+        $this->csRepo->update($cs);
+
+        $addressStreet1 = filter_input(INPUT_POST, 'address_street1');
+        $addressStreet2 = filter_input(INPUT_POST, 'address_street2');
+        $addressCity = filter_input(INPUT_POST, 'address_city');
+        $addressCounty = filter_input(INPUT_POST, 'address_county');
+        $addressPostcode = filter_input(INPUT_POST, 'address_postcode');
+
+        $adrs = $this->csAddressRepo->find($cs->getAddressId());
+        $adrs->setStreet1($addressStreet1);
+        $adrs->setStreet2($addressStreet2);
+        $adrs->setCity($addressCity);
+        $adrs->setCounty($addressCounty);
+        $adrs->setPostcode($addressPostcode);
+
+        $this->csAddressRepo->update($adrs);
+
+    }
+
     public function getReview($reviewId){
         return $this->csReviewRepo->find($reviewId);
     }
@@ -111,6 +140,16 @@ class DatabaseController extends Controller
     public function getAllOwners()
     {
         return $this->csOwnerRepo->findAll();
+    }
+
+    public function getMenuItems($menuId)
+    {
+        return $this->menuItemRepo->getAllMenuItems($menuId);
+    }
+
+    public function getMenuItemsForOwner($ownerId)
+    {
+        return $this->menuItemRepo->getAllMenuItemsForOwner($ownerId);
     }
 
     /**
