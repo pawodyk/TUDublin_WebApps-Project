@@ -43,7 +43,6 @@ class WebApplication
                 break;
             case 'submit_review':
                 $this->dbController->addReview();
-                $this->mainController->shop();
                 break;
             case 'comments':
                 $this->mainController->reviewComments();

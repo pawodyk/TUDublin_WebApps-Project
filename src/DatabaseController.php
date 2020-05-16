@@ -402,20 +402,50 @@ class DatabaseController extends Controller
 
     public function addReview()
     {
+        $csid = filter_input(INPUT_POST, 'coffeeshopid');
+        $title = filter_input(INPUT_POST, 'reviewtitle');
+        $text = filter_input(INPUT_POST, 'reviewtext');
+        $rating = filter_input(INPUT_POST, 'reviewrating', FILTER_VALIDATE_INT);
+        $expense = filter_input(INPUT_POST, 'reviewexpense', FILTER_VALIDATE_INT);
+
+        if (!isset($csid)){
+            $csname = filter_input(INPUT_POST, 'newcoffeeshopname');
+
+            $cs = new Coffeeshop();
+            $cs->setName($csname);
+            $csid = $this->csRepo->create($cs);
+
+            if ($csid < 0){
+                $this->logError("Failed to create new Coffee Shop");
+                $this->redirect('/', [
+                    'page'=>'new_review'
+                ]);
+            }
+        }
+
         $review = new CoffeeshopReview();
 
-//        print '<PRE>';
-//        var_dump($_POST);die;
-
-        $csid = filter_input(INPUT_POST, 'coffeeshopid');
-
         $review->setCoffeeshopId($csid);
-        $review->setTitle(filter_input(INPUT_POST, 'reviewtitle'));
-        $review->setReview(filter_input(INPUT_POST, 'reviewtext'));
-        $review->setRating(filter_input(INPUT_POST, 'reviewrating'));
-        $review->setExpense(filter_input(INPUT_POST, 'reviewexpense'));
+        $review->setTitle($title);
+        $review->setReview($text);
+        $review->setRating($rating);
+        $review->setExpense($expense);
         $review->setReviewDate(date('Y-m-d'));
 
-        $this->csReviewRepo->create($review);
+
+        $result = $this->csReviewRepo->create($review);
+
+        if ($result > 0 ){
+            $this->logMessage('Successfully added new review');
+            $this->redirect('/', [
+                'page'=>'shop',
+                'csid'=>$csid,
+            ]);
+        } else {
+            $this->logError('Could not add the review');
+            $this->redirect('/', [
+                'page'=>'new_review'
+            ]);
+        }
     }
 }

@@ -5,26 +5,36 @@
     {% if session.user_role == 'ROLE_STAFF' %}
         <h1>WRITE NEW REVIEW</h1>
         <form method="post" action="/?page=submit_review">
-            <label for="reviewtitle">title</label>
-            <input type="text" name="reviewtitle" id="reviewtitle">
-            <br>
-            <label for="reviewtext">Your Review</label>
-            <br>
-            <textarea name="reviewtext" id="reviewtext" cols="30" rows="10"></textarea>
-            <br>
-            <label for="reviewrating">Rating</label>
-            <br>
-            <input type="range" min="1" max="5" name="reviewrating" id="reviewrating">
-            <br>
-            <label for="reviewexpense">Expense</label>
-            <br>
-            <input type="range" min="1" max="5" name="reviewexpense" id="reviewexpense">
-            <br>
-            <select name="coffeeshopid" id="coffeeshopid">
-                {% for cs in coffeeshops %}
-                    <option value="{{ cs.getId() }}">{{ cs.getName() }}</option>
-                {% endfor %}
-            </select>
+            <div class="form-group">
+                <label for="reviewtitle">title</label>
+                <input class="form-control" type="text" name="reviewtitle" id="reviewtitle">
+            </div>
+            <div class="form-group">
+                <label for="reviewtext">Your Review</label>
+                <textarea class="form-control" name="reviewtext" id="reviewtext" cols="30" rows="10"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="reviewrating">Rating</label>
+                <input class="form-control" type="range" min="1" max="5" name="reviewrating" id="reviewrating">
+            </div>
+            <div class="form-group">
+                <label for="reviewexpense">Expense</label>
+                <input class="form-control" type="range" min="1" max="5" name="reviewexpense" id="reviewexpense">
+            </div>
+            <div class="input-group">
+                <select class="custom-select" name="coffeeshopid" id="coffeeshopid">
+                    {% for cs in coffeeshops %}
+                        <option value="{{ cs.getId() }}">{{ cs.getName() }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" id="changecoffeeshopinput">Add new coffee shop</button>
+                </div>
+            </div>
+            {#            <div class="form-group">#}
+            {#                <label for="exampleFormControlFile1">Example file input</label>#}
+            {#                <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
+            {#            </div>#}
             <br>
             <button type="submit">PUBLISH</button>
         </form>
@@ -34,6 +44,27 @@
 
 
 
+{% endblock %}
 
 
+{% block script %}
+    <script>
+        var element_selectShop = $('#coffeeshopid');
+        var element_newShopName = $('<input class="form-control" type="text" name="newcoffeeshopname" id="newcoffeeshopname" placeholder="New Coffee Shop Name">');
+
+
+        $("#changecoffeeshopinput").click(function (event) {
+            event.preventDefault();
+            if (document.querySelector('#coffeeshopid')) {
+                $('#coffeeshopid').replaceWith(element_newShopName);
+                $('#changecoffeeshopinput').text("Change to existing Coffee Shop");
+            } else {
+                $('#newcoffeeshopname').replaceWith(element_selectShop);
+                $('#changecoffeeshopinput').text("Add new coffee shop");
+            }
+
+        });
+
+
+    </script>
 {% endblock %}
