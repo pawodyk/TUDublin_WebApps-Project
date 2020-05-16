@@ -44,6 +44,9 @@ class WebApplication
             case 'submit_review':
                 $this->dbController->addReview();
                 break;
+            case 'submit_comment':
+                $this->dbController->addComment();
+                break;
             case 'comments':
                 $this->mainController->reviewComments();
                 break;

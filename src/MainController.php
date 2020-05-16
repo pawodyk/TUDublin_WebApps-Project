@@ -48,7 +48,7 @@ class MainController extends Controller
         $args = [
             'coffeeshop'=>$this->dbController->getCoffeeshop($csid),
             'reviews'=>$this->dbController->getAllReviewsFor($csid),
-            'comments'=>$this->dbController->getAllCommentFor($csid),
+            'comments'=>$this->dbController->getPublishedCommentsFor($csid),
         ];
 
         $this->renderPage($template,$args);
@@ -77,9 +77,6 @@ class MainController extends Controller
         $args = [
             'comments'=>$this->dbController->getNewComments(),
         ];
-
-//        print '<pre>';
-//        var_dump($args);die;
 
         $this->renderPage($template, $args);
     }

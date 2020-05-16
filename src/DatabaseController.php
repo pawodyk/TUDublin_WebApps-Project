@@ -79,6 +79,17 @@ class DatabaseController extends Controller
         return $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
     }
 
+    public function  getPublishedCommentsFor($coffeeshopId){
+        $comments = $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
+        foreach ($comments as $key=>$comment){
+            if (!$comment->getIsPublished()){
+                unset($comments[$key]);
+            }
+        }
+        return $comments;
+
+    }
+
     public function getNewComments(){
         return $this->csCommentRepo->getAllNonPublishedComments();
     }
@@ -447,5 +458,32 @@ class DatabaseController extends Controller
                 'page'=>'new_review'
             ]);
         }
+    }
+
+    public function addComment(){
+        $csid = filter_input(INPUT_POST, 'comment_csid');
+        $message = filter_input(INPUT_POST, 'comment_message');
+        $name = filter_input(INPUT_POST, 'comment_person_name');
+
+
+        $com = new CoffeeshopComment();
+        
+        $com->setCoffeeshopId($csid);
+        $com->setMessage($message);
+        $com->setName($name);
+
+        $result = $this->csCommentRepo->create($com);
+
+        if ($result>0){
+            $this->logMessage("Comment added successfully and will be reviewed by member of CSR staff.");
+        }else{
+            $this->logError("Comment could not be added, please try later.");
+        }
+
+        $this->redirect('/', [
+            'page'=>'shop',
+            'csid'=>$csid,
+        ]);
+
     }
 }
