@@ -65,6 +65,12 @@ HERE;
         $this->coffeeshop_id = $coffeeshop_id;
     }
 
+    public function getCoffeeshop(){
+        $csRepo = new CoffeeshopRepository();
+
+        return $csRepo->find($this->getCoffeeshopId());
+    }
+
     /**
      * @return mixed
      */

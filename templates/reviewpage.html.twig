@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col bg-light my-3 py-3 px-5 rounded border-light shadow-sm">
+            <h2 class="text-center">{{ review.title }}</h2>
+            <h4 class="text-center">
+                review for <a class="badge badge-pill badge-info"
+                              href="/?page=shop&csid={{ review.getCoffeeshopId() }}">{{ review.getCoffeeshop().getName() }}</a>
+            </h4>
+            <div class="border-top border-bottom border-dark my-4 p-4">
+                <p class="lead">{{ review.review }}</p>
+                <div class="d-flex flex-row justify-content-around py-4">
+                    <div class="d-flex flex-column w-25 text-center">
+                        <h5>Rating : </h5>
+                        <div class="d-flex flex-grow-1 justify-content-center">
+                            {% for i in 1..review.rating %}
+                                <span title="Expense: {{ review.rating }}" class="mr-2 rating_icon"><i class="fas fa-mug-hot"></i></span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column w-25 text-center">
+                        <h5>Expense : </h5>
+                        <div class="d-flex flex-grow-1 justify-content-center">
+                            {% for i in 1..review.expense %}
+                                <span title="Expense: {{ review.expense }}" class="mr-2 rating_icon"><i class="fas fa-euro-sign"></i></span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center text-muted">
+                    <small>{{ review.review_date }}</small>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

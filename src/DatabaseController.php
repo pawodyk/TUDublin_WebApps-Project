@@ -64,6 +64,10 @@ class DatabaseController extends Controller
         return $this->csRepo->getAllCoffeeshopsFor($ownerId);
     }
 
+    public function getReview($reviewId){
+        return $this->csReviewRepo->find($reviewId);
+    }
+
     public function getAllReviews()
     {
         return $this->csReviewRepo->findAll();

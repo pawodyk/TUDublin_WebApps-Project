@@ -12,7 +12,7 @@ class MainController extends Controller
 
     public function __construct()
     {
-        $loader =  new \Twig\Loader\FilesystemLoader(self::TEMPLATES_PATH);
+        $loader = new \Twig\Loader\FilesystemLoader(self::TEMPLATES_PATH);
         $this->twig = new \Twig\Environment($loader);
         $this->twig->addGlobal('session', $_SESSION);
 
@@ -20,9 +20,10 @@ class MainController extends Controller
 
     }
 
-    private function renderPage($template, $args){
+    private function renderPage($template, $args)
+    {
 
-        if (isset($_SESSION['messages'])){
+        if (isset($_SESSION['messages'])) {
             $args['messages'] = $_SESSION['messages'];
             $_SESSION['messages'] = [];
         }
@@ -30,40 +31,44 @@ class MainController extends Controller
         print $this->twig->render($template, $args);
     }
 
-    public function home(){
+    public function home()
+    {
         $template = 'home.html.twig';
         $args = [
-            'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
-            'reviews_list'=> $this->dbController->getAllReviews(),
+            'coffeeshop_list' => $this->dbController->getCoffeeshops(),
+            'reviews_list' => $this->dbController->getAllReviews(),
         ];
 
         $this->renderPage($template, $args);
 
     }
 
-    public function shop(){
+    public function shop()
+    {
         $csid = filter_input(INPUT_GET, 'csid');
 
         $template = 'coffeeshop.html.twig';
         $args = [
-            'coffeeshop'=>$this->dbController->getCoffeeshop($csid),
-            'reviews'=>$this->dbController->getAllReviewsFor($csid),
-            'comments'=>$this->dbController->getPublishedCommentsFor($csid),
+            'coffeeshop' => $this->dbController->getCoffeeshop($csid),
+            'reviews' => $this->dbController->getAllReviewsFor($csid),
+            'comments' => $this->dbController->getPublishedCommentsFor($csid),
         ];
 
-        $this->renderPage($template,$args);
+        $this->renderPage($template, $args);
     }
 
-    public function shops(){
-        $template= 'coffeeshoplist.html.twig';
+    public function shops()
+    {
+        $template = 'coffeeshoplist.html.twig';
         $args = [
-            'coffeeshop_list'=>$this->dbController->getCoffeeshops(),
+            'coffeeshop_list' => $this->dbController->getCoffeeshops(),
         ];
 
-        $this->renderPage($template,$args);
+        $this->renderPage($template, $args);
     }
 
-    public function newReview(){
+    public function newReview()
+    {
         $template = 'writereview.html.twig';
         $args = [
             'coffeeshops' => $this->dbController->getCoffeeshops()
@@ -72,20 +77,32 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function reviewComments(){
+    public function reviewComments()
+    {
         $template = 'newcomments.html.twig';
         $args = [
-            'comments'=>$this->dbController->getNewComments(),
+            'comments' => $this->dbController->getNewComments(),
         ];
 
         $this->renderPage($template, $args);
     }
 
+    public function viewReview()
+    {
+        $reviewId = filter_input(INPUT_GET, 'reviewId');
 
+        $template = 'reviewpage.html.twig';
+        $args = [
+            'review' => $this->dbController->getReview($reviewId),
+        ];
 
-    public function admin(){
+        $this->renderPage($template, $args);
+    }
+
+    public function admin()
+    {
         $template = 'admin.html.twig';
-        $args= [
+        $args = [
             'users' => $this->dbController->getAllUsers(),
             'owners' => $this->dbController->getAllOwners(),
         ];
@@ -93,7 +110,8 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function editUser(){
+    public function editUser()
+    {
         $userId = filter_input(INPUT_GET, 'userid');
 
         $template = 'admin_edituser.html.twig';
@@ -104,7 +122,8 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function editPassword(){
+    public function editPassword()
+    {
         $userid = filter_input(INPUT_GET, 'userid');
 
         $template = 'admin_resetpassword.html.twig';
@@ -115,7 +134,8 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function newUser(){
+    public function newUser()
+    {
         $template = 'admin_newuser.html.twig';
         $args = [
 
@@ -124,16 +144,18 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function coffeeshopOwnersSetup(){
+    public function coffeeshopOwnersSetup()
+    {
         $template = 'admin_coffeeshopsowners.html.twig';
         $args = [
-          'coffeeshops' => $this->dbController->getCoffeeshops(),
+            'coffeeshops' => $this->dbController->getCoffeeshops(),
             'owners' => $this->dbController->getAllOwners(),
         ];
         $this->renderPage($template, $args);
     }
 
-    public function accessDenied(){
+    public function accessDenied()
+    {
         $template = 'accessdenied.html.twig';
         $args = [
 
@@ -141,15 +163,16 @@ class MainController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function test(){
+    public function test()
+    {
         $testValue = [];
 
         $testValue[] = [];
 
         print '<pre>';
-        print_r($testValue);die;
+        print_r($testValue);
+        die;
     }
-
 
 
 }

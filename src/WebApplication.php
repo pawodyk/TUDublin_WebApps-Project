@@ -50,6 +50,9 @@ class WebApplication
             case 'comments':
                 $this->mainController->reviewComments();
                 break;
+            case 'review':
+                $this->mainController->viewReview();
+                break;
             case 'test':
                 $this->mainController->test();
                 break;

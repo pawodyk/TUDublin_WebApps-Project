@@ -20,26 +20,22 @@
             <div class="col-12 col-md-6 py-1 mb-4">
                 <div class="border border-secondary shadow-lg p-4">
                     <div class="d-flex flex-column">
-                        <div class="d-flex">
-                            <h4 style="text-overflow: ellipsis;">{{ review.title }}</h4>
-                            <a href="/?page=review&revid={{ review.id }}"><span
-                                        class="badge badge-info">Read full review</span></a>
-                        </div>
-
+                        <h4 style="text-overflow: ellipsis;">{{ review.title }} </h4>
                         <div class="d-flex flex-row justify-content-around py-4">
                             <div class="">
 {#                                <span class="pr-2">Rating</span>#}
                                 {% for i in 1..review.rating %}
-                                    <span class="mr-1 rating_icon"><i class="fas fa-mug-hot"></i></span>
+                                    <span title="Rating {{ review.rating }}" class="mr-1 rating_icon"><i class="fas fa-mug-hot"></i></span>
                                 {% endfor %}
                             </div>
                             <div class="">
 {#                                <span class="pr-2">Expense</span>#}
                                 {% for i in 1..review.expense %}
-                                    <span class="mr-1 rating_icon"><i class="fas fa-euro-sign"></i></span>
+                                    <span title="Expense {{ review.expense }}" class="mr-1 rating_icon"><i class="fas fa-euro-sign"></i></span>
                                 {% endfor %}
                             </div>
                         </div>
+                        <h5 class="text-center"><a href="/?page=review&reviewId={{ review.id }}" class="badge badge-info">Read full review</a></h5>
                     </div>
                 </div>
             </div>
