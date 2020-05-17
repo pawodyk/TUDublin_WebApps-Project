@@ -23,7 +23,7 @@ footer {
 }
 
 main {
-    min-height: calc(100vh - 272px); /* to eliminate the background below footer when the page dont have enough content to fill the page*/
+    min-height: calc(100vh - 292px); /* to eliminate the background below footer when the page dont have enough content to fill the page*/
 }
 
 
