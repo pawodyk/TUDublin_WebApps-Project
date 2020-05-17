@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
+            <div class="col">
+                <h2>Editing your Owner profile {{ owner.getUser().getUserName() }}</h2>
+                <form action="/?page=submit_edit_owner" method="post">
+                    <div class="form-group">
+                        <label for="owner_name">Name</label>
+                        <input type="text" class="form-control" id="owner_name" name="owner_name" value="{{ owner.name }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Bio:</label>
+                        <textarea class="form-control" name="owner_bio" id="owner_bio">{{ owner.bio }}</textarea>
+                    </div>
+                    <p>
+                        <button type="submit" class="btn btn-primary">Submit changes</button>
+                    </p>
+                </form>
+            </div>
+        {% else %}
+            <p>You cannot view this page</p>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

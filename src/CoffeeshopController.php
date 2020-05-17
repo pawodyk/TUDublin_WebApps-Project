@@ -77,17 +77,36 @@ class CoffeeshopController extends Controller
 
         $cs = $this->csRepo->find($csid);
         $cs_mi = $this->menuItemRepo->getAllMenuItems($cs->getMenuId());
-        $owners_mi = [] ; //getMenuItemsForOwner($cs->getOwnerId());
 
 
-        $template = 'ownerscoffeeshops.html.twig';
+        $template = 'editcoffeeshop.html.twig';
         $args = [
             'coffeeshop' => $cs,
             'menuitems' => $cs_mi,
-            'ownersitems' => $owners_mi,
         ];
 
         $this->renderPage($template, $args);
+    }
+
+    public function ownersCoffeeshopsPage(){
+        $owner_id = $_SESSION['owner_id'];
+
+        if ($owner_id){
+            $cs = $this->csRepo->getAllCoffeeshopsFor($owner_id);
+//            $cs_mi = $this->menuItemRepo->getAllMenuItems($cs->getMenuId());
+//            $owners_mi = [] ; //getMenuItemsForOwner($cs->getOwnerId());
+
+
+            $template = 'ownerscoffeeshops.html.twig';
+            $args = [
+                'coffeeshops' => $cs,
+            ];
+
+            $this->renderPage($template, $args);
+        }else {
+            $this->logError('We could not verify your ownership');
+            $this->redirect($_SERVER['HTTP_REFERER']);
+        }
     }
 
     public function updateCoffeeshop()

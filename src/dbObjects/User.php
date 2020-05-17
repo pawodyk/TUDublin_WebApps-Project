@@ -49,6 +49,7 @@ HERE;
      */
     public function setUsername($username)
     {
+        $username = strtolower($username);
         $username = str_replace(' ', '', $username);
         if(strlen($username) > 50){
             $this->username = substr($username, 0, 50);

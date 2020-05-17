@@ -52,7 +52,13 @@
                 </li>
             {% elseif  session.user_role == "ROLE_SHOP" %}
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">SHOP LINK</a>
+                    <a class="nav-link" href="/?page=owners_shops">My Coffeeshops</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/?page=owners_profile">My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/?page=menu_control">My Menu control</a>
                 </li>
             {% endif %}
         </ul>

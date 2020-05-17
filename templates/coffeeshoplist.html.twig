@@ -13,7 +13,8 @@
                     <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
                     <div class="card-body">
                         <h3>{{ cs.name }}</h3>
-                        <p class="card-text">{{ cs.summary }}</p>
+                        {#<p class="card-text">{{ cs.summary }}</p>#}
+                        <p>Avg Rating: {{ cs.getAverageRating() }} Avg Expense: {{ cs.getAverageExpense() }}</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="btn-group">
                                 <a href="/?page=shop&csid={{ cs.id }}" class="btn btn-sm btn-primary">View</a>

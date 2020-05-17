@@ -4,10 +4,14 @@
 namespace TUDublin;
 
 
+use TUDublin\dbObjects\CoffeeshopOwnerRepository;
 use TUDublin\dbObjects\UserRepository;
 
 class LoginController extends Controller
 {
+    private $usersRepo;
+    private $ownersRepo;
+
     /**
      * LoginController constructor.
      */
@@ -16,6 +20,7 @@ class LoginController extends Controller
         parent::__construct();
 
         $this->usersRepo = new UserRepository();
+        $this->ownersRepo = new CoffeeshopOwnerRepository();
     }
 
     /**
@@ -31,10 +36,16 @@ class LoginController extends Controller
         if ($user){
             $databasePassword = $user->getPassword();
             if (password_verify($pass, $databasePassword)){
-                $_SESSION['user_id'] = $user->getId();
-                $_SESSION['user_role'] = $user->getUserRole();
+                $userId = $user->getId();
+                $userRole = $user->getUserRole();
 
-                //TODO check ownerid and add it to session
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['user_role'] = $userRole;
+
+                if ($userRole == 'ROLE_SHOP'){
+                    $o = $this->ownersRepo->getOwnerByUserId($userId);
+                    $_SESSION['owner_id'] = $o->getId();
+                }
 
                 $this->logMessage('Login Successful!');
                 $this->redirect($_SERVER['HTTP_REFERER']);

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            {% if session.user_role == 'ROLE_STAFF' or ( session.user_role == 'ROLE_SHOP' and coffeeshop.getOwner().getUserId() == session.user_id ) %}
+                {% if coffeeshop.getOwner() %}
+                    <div class="wrapper">
+                        <div><h2>Coffeeshop ID {{ coffeeshop.getId }} edit page</h2>
+                            <hr>
+                            <form action="/?page=submit_coffeeshop_update" method="post">
+                                <input type="hidden" id="coffeeshop_id" name="coffeeshop_id"
+                                       value="{{ coffeeshop.getId() }}">
+                                <div class="form-group">
+                                    <label for="coffeeshop_name">Coffee Shop Name:</label>
+                                    <input type="text" class="form-control" id="coffeeshop_name" name="coffeeshop_name"
+                                           value="{{ coffeeshop.getName() }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="coffeeshop_summary">Your short description of the coffeeshop</label>
+                                    <textarea class="form-control" id="coffeeshop_summary" name="coffeeshop_summary"
+                                              rows="5">{{ coffeeshop.getSummary() }}</textarea>
+                                </div>
+
+
+                                <hr>
+                                <div class="w-50 d-flex align-content-center flex-column">
+                                    <h3>Address:</h3>
+                                    <div class="form-group">
+                                        <input class="form-control mb-2" type="text" id="address_street1"
+                                               name="address_street1"
+                                               placeholder="street line 1"
+                                               value="{{ coffeeshop.getAddress().getStreet1() }}">
+                                        <input class="form-control mb-2" type="text" id="address_street2"
+                                               name="address_street2"
+                                               placeholder="street line 2"
+                                               value="{{ coffeeshop.getAddress().getStreet2() }}">
+                                        <input class="form-control mb-2" type="text" id="address_city"
+                                               name="address_city"
+                                               placeholder="city" value="{{ coffeeshop.getAddress().getCity() }}">
+                                        <input class="form-control mb-2" type="text" id="address_county"
+                                               name="address_county"
+                                               placeholder="county" value="{{ coffeeshop.getAddress().getCounty() }}">
+                                        <input class="form-control mb-2" type="text" id="address_postcode"
+                                               name="address_postcode" placeholder="postcode"
+                                               value="{{ coffeeshop.getAddress().getPostcode() }}">
+                                    </div>
+                                </div>
+                                <button type="submit">Update Coffee shop info</button>
+                            </form>
+
+                            <hr>
+                        </div>
+                        <div><h4>Menu Items</h4>
+                            <ol>
+                                {% for key, mi in menuitems %}
+                                    <li>{{ mi.getItemName() }} : &euro;{{ mi.getItemPrice() }}</li>
+                                {% endfor %}
+                            </ol>
+                            <a href="/?page=edit_menu&csid={{ coffeeshop.getId() }}" class="btn btn-primary">edit menu
+                                items</a></div>
+                    </div>
+
+
+
+
+                {% else %}
+                    This Coffee Shop do not have Owner assigned to it, please ask page administrator to assign Owner
+                {% endif %}
+            {% else %}
+                <p>You cannot view this page</p>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}

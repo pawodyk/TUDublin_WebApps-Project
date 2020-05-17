@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
+            <div class="col">
+                <h2>Welcome user {{ owner.getUser().getUserName() }}</h2>
+                <p>Name: {{ owner.name }}</p>
+                <p>Bio:</p>
+                <p>{{ owner.bio }}</p>
+                <p>
+                    <a href="/?page=edit_owner" class="btn btn-primary">Edit your details </a>
+                </p>
+            </div>
+        {% else %}
+            <p>You cannot view this page</p>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

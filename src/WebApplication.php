@@ -14,6 +14,7 @@ class WebApplication
     private $commentCon;
     private $adminCon;
     private $pictureCon;
+    private $ownerCon;
 
     public function __construct()
     {
@@ -25,16 +26,14 @@ class WebApplication
         $this->commentCon = new CommentController();
         $this->adminCon = new AdminController();
         $this->pictureCon = new PictureController();
+        $this->ownerCon = new OwnerController();
 
     }
 
     public function run()
     {
         $page = filter_input(INPUT_GET, 'page');
-        $action = filter_input(INPUT_GET, 'action');
-        if (!$action) {
-            $action = filter_input(INPUT_POST, 'action');
-        }
+        $control = filter_input(INPUT_GET, 'control');
 
 
         switch ($page) {
@@ -57,7 +56,7 @@ class WebApplication
                 $this->commentCon->addComment();
                 break;
             case 'admin':
-                $this->adminControls($action);
+                $this->adminControls();
                 break;
             case 'new_review':
             case 'submit_review':
@@ -65,15 +64,33 @@ class WebApplication
                 $this->userControls($page);
                 break;
             case 'edit_coffeeshop':
-                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')){
+                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
                     $this->coffeeshopCon->editCoffeeshopPage();
                 } else {
                     $this->mainCon->accessDeniedPage();
                 }
                 break;
             case 'submit_coffeeshop_update':
-                $this->coffeeshopCon->updateCoffeeshop();
+                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
+                    $this->coffeeshopCon->updateCoffeeshop();
+                } else {
+                    $this->mainCon->accessDeniedPage();
+                }
                 break;
+            case 'owners_shops':
+                $this->coffeeshopCon->ownersCoffeeshopsPage();
+                break;
+            case 'owners_profile':
+                $this->ownerCon->ownerProfilePage();
+                break;
+            case 'edit_owner':
+                $this->ownerCon->editOwnerProfilePage();
+                break;
+            case 'submit_edit_owner':
+                $this->ownerCon->updateOwnerProfile();
+                break;
+            case 'menu_control':
+
             case 'home':
             default:
                 $this->mainCon->homePage();
@@ -81,9 +98,10 @@ class WebApplication
         }
     }
 
-    public function userControls($page){
-        if ($this->loginCon->verifyAccess('ROLE_STAFF')){
-            switch ($page){
+    public function userControls($page)
+    {
+        if ($this->loginCon->verifyAccess('ROLE_STAFF')) {
+            switch ($page) {
                 case 'new_review':
                     $this->reviewCon->newReviewPage();
                     break;
@@ -99,10 +117,13 @@ class WebApplication
         }
     }
 
-    public function adminControls($action)
+    public function adminControls()
     {
         if ($this->loginCon->verifyAccess('ROLE_ADMIN')) {
-
+            $action = filter_input(INPUT_GET, 'action');
+            if (!$action) {
+                $action = filter_input(INPUT_POST, 'action');
+            }
             switch ($action) {
 //                case 'search_user':
 //                    break;
@@ -139,12 +160,10 @@ class WebApplication
                 default:
                     $this->adminCon->adminPage();
             }
-        }
-        else {
+        } else {
             $this->mainController->accessDeniedPage();
         }
     }
-
 
 
 }
