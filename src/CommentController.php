@@ -51,16 +51,41 @@ class CommentController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function approveComment($commentId)
+    public function approveComment()
     {
+        $commentId = filter_input(INPUT_GET, comment);
+
         $csCom = $this->csCommentRepo->find($commentId);
         $csCom->setIsPublished(true);
-        $this->csCommentRepo->update($csCom);
+        $result = $this->csCommentRepo->update($csCom);
+
+        if ($result){
+            $this->logMessage('Comment ID ' . $commentId . ' was successfully approved and will now be visible on the Coffee Shop profile.');
+        } else {
+            $this->logError('could not approve comment ID ' . $commentId);
+        }
+
+        $this->redirect('/', [
+            'page'=>'comments'
+        ]);
+
     }
 
-    public function deleteComment($commentId)
+    public function deleteComment()
     {
-        $this->csCommentRepo->delete($commentId);
+        $commentId = filter_input(INPUT_GET, comment);
+
+        $result = $this->csCommentRepo->delete($commentId);
+
+        if ($result){
+            $this->logMessage('Comment ID ' . $commentId . ' was deleted successfully');
+        } else {
+            $this->logError('could not delete comment ID ' . $commentId);
+        }
+
+        $this->redirect('/', [
+            'page'=>'comments'
+        ]);
     }
 
     public function addComment(){

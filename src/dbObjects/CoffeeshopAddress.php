@@ -141,6 +141,29 @@ HERE;
         $this->postcode = $postcode;
     }
 
+    /**
+     * returns full address with <br> tags between the lines for easy display
+     */
+    public function getInHtml(){
+        $output = '';
+        $output .= $this->street1 . '<br>';
+        $output .= $this->street2 . '<br>';
+        $output .= $this->city . '<br>';
+        $output .= 'Co. ' . $this->county . '<br>';
+        $output .= $this->postcode . '<br>';
 
+        return $output;
+    }
+
+    public function getInArray(){
+        $output = [];
+        $output[] = $this->street1;
+        $output[] = $this->street2;
+        $output[] = $this->city;
+        $output[] = 'Co. ' . $this->county;
+        $output[] = $this->postcode;
+
+        return $output;
+    }
 
 }

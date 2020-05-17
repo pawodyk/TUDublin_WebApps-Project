@@ -8,27 +8,52 @@
         </div>
 
         {% for cs in coffeeshop_list %}
+
             <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-0">
-                <div class="card mb-4 shadow-sm {% if cs.owner_id %} bg-success text-light {% endif %}">
-                    <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
-                    <div class="card-body">
-                        <h3>{{ cs.name }}</h3>
-                        {#<p class="card-text">{{ cs.summary }}</p>#}
-                        <p>Avg Rating: {{ cs.getAverageRating() }} Avg Expense: {{ cs.getAverageExpense() }}</p>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <div class="btn-group">
-                                <a href="/?page=shop&csid={{ cs.id }}" class="btn btn-sm btn-primary">View</a>
-                                {% if session.user_id %}
-                                    {% if cs.getOwner().getUserId() == session.user_id %}
-                                        <a href="" class="btn btn-sm btn-primary">Edit</a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                            {#<small class="text-muted"></small>#}
+                <a class="text-decoration-none text-dark text-center" href="/?page=shop&csid={{ cs.id }}">
+                    <div class="card mb-4 shadow-sm border border-light {% if cs.getOwnerId() %} border-success{% endif %}">
+                        <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
+                        <div class="card-body">
+                            <h3>{{ cs.name }}</h3>
+                            {#<p class="card-text">{{ cs.summary }}</p>#}
+
+                            {% if cs.getAverageRating() > 0 %}
+
+                                <div class="float-left">
+
+                                    {% for i in 1..cs.getAverageRating() %}
+                                        <span title="Avarage Rating {{ cs.getAverageRating() }}"
+                                              class="mr-1 rating_icon"><i
+                                                    class="fas fa-mug-hot"></i></span>
+                                    {% endfor %}
+                                </div>
+                                <div class="float-right">
+
+                                    {% for i in 1..cs.getAverageExpense() %}
+                                        <span title="Avarage Expense Score {{ cs.getAverageExpense() }}"
+                                              class="mr-1 rating_icon"><i
+                                                    class="fas fa-euro-sign"></i></span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="py-4">{# EMPTY SPACE TO MAKE SURE THE CARDS ARE SIMILAR SIZE #}</div>
+                            {% endif %}
+
+
+                            {#                        <div class="d-flex justify-content-center align-items-center">#}
+                            {#                            <div class="btn-group">#}
+                            {#                                {% if session.user_id %}#}
+                            {#                                    {% if cs.getOwner().getUserId() == session.user_id %}#}
+                            {#                                        <a href="" class="btn btn-sm btn-primary">Edit</a>#}
+                            {#                                    {% endif %}#}
+                            {#                                {% endif %}#}
+                            {#                            </div>#}
+                            {#                        </div>#}
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
+
         {% endfor %}
     </div>
 

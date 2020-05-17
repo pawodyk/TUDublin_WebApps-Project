@@ -49,7 +49,13 @@ class OwnerController extends Controller
         $o = $this->ownerRepo->find($this->getOwnerId());
         $o->setName($ownerName);
         $o->setBio($ownerBio);
-        $this->ownerRepo->update($o);
+        $result = $this->ownerRepo->update($o);
+
+        if ($result){
+            $this->logMessage('Sucessfulty updated your owner profile');
+        } else {
+            $this->logError('Could not edit profile, please try again later');
+        }
 
         $this->redirect('/', [
             'page'=>'owners_profile',

@@ -2,92 +2,161 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-12">
-        <h1>Coffeeshop {% if coffeeshop.getOwner() %} <span class="badge badge-danger">CSR Patron</span> {% endif %}</h1>
-        <h2>{{ coffeeshop.name }}</h2>
-        <p>{{ coffeeshop.summary }}</p>
-        {% if ( session.user_role == 'ROLE_SHOP' and coffeeshop.getOwner().getUserId() == session.user_id ) or session.user_role == 'ROLE_STAFF' %}
-            <div>
-                <a href="/?page=edit_coffeeshop&csid={{ coffeeshop.getId() }}" class="btn btn-primary">EDIT PAID CONTENT</a>
+    <div class="row mb-4">
+        <div class="col-12 ">
+            <h1>{{ coffeeshop.name }} {% if coffeeshop.getOwner() %} <span class="badge badge-success badge-pill">CSR Patron</span> {% endif %}
+            </h1>
+            <div class="row mb-5">
+                <div class="col-12 col-lg-9">
+                    <h2></h2>
+                    <p>{{ coffeeshop.summary }}</p>
+                    <div class="row mb-4">
+                        {% if coffeeshop.getAverageRating() > 0 %}
+
+                            <div class="col-12 col-md-6">
+                                <span class="pr-2 lead">Average Rating :</span>
+                                {% for i in 1..coffeeshop.getAverageRating() %}
+                                    <span title="Avarage Rating {{ coffeeshop.getAverageRating() }}" class="mr-1 rating_icon"><i
+                                                class="fas fa-mug-hot"></i></span>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <span class="pr-2 lead">Average Expense :</span>
+                                {% for i in 1..coffeeshop.getAverageExpense() %}
+                                    <span title="Avarage Expense Score {{ coffeeshop.getAverageExpense() }}"
+                                          class="mr-1 rating_icon"><i
+                                                class="fas fa-euro-sign"></i></span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="col-12 pt-4">
+                                <p class="text-center lead">no reviews yet</p>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    {% if coffeeshop.getAddressId() %}
+                        <div class="col">
+                            <h5>Address</h5>
+                            <address>
+                            {% for line in coffeeshop.getAddress().getInArray() %}
+                                {{ line }}
+                                <br>
+                            {% endfor %}
+                            </address>
+                            <hr>
+                        </div>
+                    {% endif %}
+                    {% if coffeeshop.getMenuId() %}
+                        <div class="col">
+                            <h5>Menu</h5>
+                            <ul class="pl-2">
+                                {% for item in coffeeshop.getMenuList() %}
+                                    <li>{{ item.getItemName() }} : &euro;{{ item.getItemPrice() }}</li>
+
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    {% endif %}
+                </div>
             </div>
 
-        {% endif %}
-        <hr class="my-5">
+
+
+
+
+            {% if ( session.user_role == 'ROLE_SHOP' and coffeeshop.getOwner().getUserId() == session.user_id ) or session.user_role == 'ROLE_STAFF' %}
+                <div class="col text-center border-top border-dark mt-3 pt-3">
+                    <a href="/?page=edit_coffeeshop&csid={{ coffeeshop.getId() }}" class="btn btn-primary">EDIT PAID
+                        CONTENT</a>
+                </div>
+
+            {% endif %}
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <h3>Our Reviews for this coffee shop.</h3>
-    </div>
-    {% for review in reviews %}
-        <div class="col-12 col-md-6 py-1 mb-4">
-            <div class="border border-secondary shadow-lg p-4">
-                <div class="d-flex flex-column">
-                    <h4 style="text-overflow: ellipsis;">{{ review.title }} </h4>
-                    <div class="d-flex flex-row justify-content-around py-4">
-                        <div class="">
-                            {#                                <span class="pr-2">Rating</span>#}
-                            {% for i in 1..review.rating %}
-                                <span title="Rating {{ review.rating }}" class="mr-1 rating_icon"><i
-                                            class="fas fa-mug-hot"></i></span>
-                            {% endfor %}
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3>Our Reviews for this coffee shop.</h3>
+        </div>
+        {% for review in reviews %}
+            <div class="col-12 py-1 mb-4">
+                <div class="border border-light shadow-lg p-4 bg-light rounded">
+                    <div class="d-flex flex-column">
+                        <h4 style="text-overflow: ellipsis;">{{ review.title }} </h4>
+                        <div class="d-flex flex-row justify-content-around py-4">
+                            <div class="">
+                                {#                                <span class="pr-2">Rating</span>#}
+                                {% for i in 1..review.rating %}
+                                    <span title="Rating {{ review.rating }}" class="mr-1 rating_icon"><i
+                                                class="fas fa-mug-hot"></i></span>
+                                {% endfor %}
+                            </div>
+                            <div class="">
+                                {#                                <span class="pr-2">Expense</span>#}
+                                {% for i in 1..review.expense %}
+                                    <span title="Expense {{ review.expense }}" class="mr-1 rating_icon"><i
+                                                class="fas fa-euro-sign"></i></span>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div class="">
-                            {#                                <span class="pr-2">Expense</span>#}
-                            {% for i in 1..review.expense %}
-                                <span title="Expense {{ review.expense }}" class="mr-1 rating_icon"><i
-                                            class="fas fa-euro-sign"></i></span>
-                            {% endfor %}
-                        </div>
+                        <h5 class="text-center"><a href="/?page=review&reviewId={{ review.id }}"
+                                                   class="badge badge-info">Read
+                                full review</a></h5>
                     </div>
-                    <h5 class="text-center"><a href="/?page=review&reviewId={{ review.id }}" class="badge badge-info">Read
-                            full review</a></h5>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
-<div class="row">
-    <div class="col-12">
-        <h3 class="float-md-left">What the costumer says:</h3>
-        <button id="toggle_add_comment" class="btn btn-outline-info float-md-right">Toggle to add Comment</button>
+            {% else %}
+                <div class="col text-center pt-3 mt-3 border-top border-secondary">
+                    <p class="lead">There are currently no reviews for this coffee shop please stay tuned.</p>
+                </div>
+
+        {% endfor %}
     </div>
-    {% for comment in comments | reverse %}
-        <div class="col-6 shadow-sm py-2 mb-3">
-            <div class="media">
-                <div class="media-body">
-                    <p>{{ comment.message }}</p>
-                    <h5 class="mt-0">{{ comment.name }}</h5>
+    <div class="row">
+        <div class="col-12 mb-3">
+            <h3 class="float-md-left">What costumers of {{ coffeeshop.getName() }} say:</h3>
+            <button id="toggle_add_comment" class="btn btn-outline-info float-md-right">Toggle to add Comment</button>
+        </div>
+        <div class="col-12 border-top border-light mb-2 pb-2 d-none" id="add_comment_form_wrapper">
+            <form action="/?page=submit_comment" method="post">
+                <input type="hidden" id="add_comment_csid" name="comment_csid" value="{{ coffeeshop.id }}">
+                <textarea class="w-100 py-2 px-2 border border-light shadow-sm mb-3" placeholder="add you comment here"
+                          id="add_comment_message" name="comment_message" required></textarea>
+                <div class="form-group float-right">
+                    <label for="">Your name</label>
+                    <input class="py-1 px-2 border border-light shadow-sm" type="text" max="50"
+                           id="add_comment_person_name" name="comment_person_name">
+                </div>
+                <button class="btn btn-success" type="submit">Submit Comment</button>
+            </form>
+        </div>
+        {% for comment in comments | reverse %}
+            <div class="col-12 col-md-6 mb-3 ">
+                <div class="media p-3 bg-light text-dark border-light shadow-sm rounded">
+                    <div class="media-body">
+                        <p>{{ comment.message }}</p>
+                        <h5 class="mt-0 float-right"> - {% if comment.name %}{{ comment.name }}{% else %}Anonymous{% endif %} - </h5>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% else %}
-        <div class="col">
-            <p>currently there are no comments about this Coffee Shop</p>
-        </div>
-    {% endfor %}
-    <div class="col-12 hidden" id="add_comment_form_wrapper">
-        <form action="/?page=submit_comment" method="post">
-            <input type="hidden" id="add_comment_csid" name="comment_csid" value="{{ coffeeshop.id }}">
-            <textarea class="w-100 py-3 px-2 border border-light shadow-sm mb-3" placeholder="add you comment here"
-                      id="add_comment_message" name="comment_message" required></textarea>
-            <div class="form-group float-right">
-                <label for="">Your name</label>
-                <input class="py-1 px-2 border border-light shadow-sm" type="text" max="50"
-                       id="add_comment_person_name" name="comment_person_name">
+        {% else %}
+            <div class="col text-center pt-3 mt-3 border-top border-secondary">
+                <p class="lead">currently there are no comments about this Coffee Shop</p>
             </div>
-            <button class="btn btn-success" type="submit">Submit Comment</button>
-        </form>
+        {% endfor %}
+
+
     </div>
-</div>
 
 {% endblock %}
 
 {% block script %}
     <script>
         $('#toggle_add_comment').click(function () {
-            $('#add_comment_form_wrapper').toggleClass('hidden');
+            $('#add_comment_form_wrapper').toggleClass('d-none');
         });
     </script>
 {% endblock %}

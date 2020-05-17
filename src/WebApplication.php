@@ -33,8 +33,6 @@ class WebApplication
     public function run()
     {
         $page = filter_input(INPUT_GET, 'page');
-        $control = filter_input(INPUT_GET, 'control');
-
 
         switch ($page) {
             case 'login':
@@ -55,27 +53,57 @@ class WebApplication
             case 'submit_comment':
                 $this->commentCon->addComment();
                 break;
+
             case 'admin':
-                $this->adminControls();
+                if ($this->loginCon->verifyAccess('ROLE_ADMIN')) {
+                    $this->adminControls();
+                } else {
+                    $this->mainCon->accessDeniedPage();
+                }
                 break;
+
             case 'new_review':
             case 'submit_review':
             case 'comments':
-                $this->userControls($page);
-                break;
-            case 'edit_coffeeshop':
-                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
-                    $this->coffeeshopCon->editCoffeeshopPage();
+            case 'reject_comment':
+            case 'approve_comment':
+                if ($this->loginCon->verifyAccess('ROLE_STAFF')) {
+                    $this->userControls($page);
                 } else {
                     $this->mainCon->accessDeniedPage();
                 }
+                break;
+
+            case 'edit_coffeeshop':
+            case 'submit_coffeeshop_update':
+            case 'owners_shops':
+            case 'owners_profile':
+            case 'edit_owner':
+            case 'submit_edit_owner':
+            case 'menu_control':
+            case 'upload_coffeeshop_picture':
+                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
+                    $this->ownerControlls($page);
+                } else {
+                    $this->mainCon->accessDeniedPage();
+                }
+                break;
+
+            case 'home':
+            default:
+                $this->mainCon->homePage();
+                break;
+        }
+    }
+
+    public function ownerControlls($page)
+    {
+        switch ($page) {
+            case 'edit_coffeeshop':
+                $this->coffeeshopCon->editCoffeeshopPage();
                 break;
             case 'submit_coffeeshop_update':
-                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
-                    $this->coffeeshopCon->updateCoffeeshop();
-                } else {
-                    $this->mainCon->accessDeniedPage();
-                }
+                $this->coffeeshopCon->updateCoffeeshop();
                 break;
             case 'owners_shops':
                 $this->coffeeshopCon->ownersCoffeeshopsPage();
@@ -90,80 +118,79 @@ class WebApplication
                 $this->ownerCon->updateOwnerProfile();
                 break;
             case 'menu_control':
-
-            case 'home':
-            default:
-                $this->mainCon->homePage();
+                $this->menuCon->menuControlPage();
+                break;
+            case 'upload_coffeeshop_picture':
+                $this->pictureCon->savePictureForCoffeeshop();
                 break;
         }
     }
 
+
     public function userControls($page)
     {
-        if ($this->loginCon->verifyAccess('ROLE_STAFF')) {
-            switch ($page) {
-                case 'new_review':
-                    $this->reviewCon->newReviewPage();
-                    break;
-                case 'submit_review':
-                    $this->reviewCon->addReview();
-                    break;
-                case 'comments':
-                    $this->commentCon->commentsReviewPage();
-                    break;
-            }
-        } else {
-            $this->mainCon->accessDeniedPage();
+
+        switch ($page) {
+            case 'new_review':
+                $this->reviewCon->newReviewPage();
+                break;
+            case 'submit_review':
+                $this->reviewCon->addReview();
+                break;
+            case 'comments':
+                $this->commentCon->commentsReviewPage();
+                break;
+            case 'approve_comment':
+                $this->commentCon->approveComment();
+                break;
+            case 'reject_comment':
+                $this->commentCon->deleteComment();
+                break;
         }
     }
 
     public function adminControls()
     {
-        if ($this->loginCon->verifyAccess('ROLE_ADMIN')) {
-            $action = filter_input(INPUT_GET, 'action');
-            if (!$action) {
-                $action = filter_input(INPUT_POST, 'action');
-            }
-            switch ($action) {
-//                case 'search_user':
-//                    break;
-                case 'remove_user':
-                    $this->adminCon->deleteUser();
-                    break;
-                case 'edit_user':
-                    $this->adminCon->editUserPage();
-                    break;
-                case 'update_user':
-                    $this->adminCon->updateUser();
-                    break;
-                case 'reset_password':
-                    $this->adminCon->editPasswordPage();
-                    break;
-                case 'submit_password':
-                    $this->adminCon->changeUserPassword();
-                    break;
-                case 'new_user':
-                    $this->adminCon->newUserPage();
-                    break;
-                case 'submit_new_user':
-                    $this->adminCon->addUser();
-                    break;
-                case 'join_owner':
-                    $this->adminCon->addOwnerProfile();
-                    break;
-                case 'coffeeshop_owners':
-                    $this->adminCon->coffeeshopOwnersSetupPage();
-                    break;
-                case 'update_coffeeshop_owner':
-                    $this->adminCon->setOwnerOfCoffeeshop();
-                    break;
-                default:
-                    $this->adminCon->adminPage();
-            }
-        } else {
-            $this->mainController->accessDeniedPage();
+
+        $action = filter_input(INPUT_GET, 'action');
+        if (!$action) {
+            $action = filter_input(INPUT_POST, 'action');
+        }
+
+        switch ($action) {
+            case 'remove_user':
+                $this->adminCon->deleteUser();
+                break;
+            case 'edit_user':
+                $this->adminCon->editUserPage();
+                break;
+            case 'update_user':
+                $this->adminCon->updateUser();
+                break;
+            case 'reset_password':
+                $this->adminCon->editPasswordPage();
+                break;
+            case 'submit_password':
+                $this->adminCon->changeUserPassword();
+                break;
+            case 'new_user':
+                $this->adminCon->newUserPage();
+                break;
+            case 'submit_new_user':
+                $this->adminCon->addUser();
+                break;
+            case 'join_owner':
+                $this->adminCon->addOwnerProfile();
+                break;
+            case 'coffeeshop_owners':
+                $this->adminCon->coffeeshopOwnersSetupPage();
+                break;
+            case 'update_coffeeshop_owner':
+                $this->adminCon->setOwnerOfCoffeeshop();
+                break;
+            default:
+                $this->adminCon->adminPage();
         }
     }
-
 
 }

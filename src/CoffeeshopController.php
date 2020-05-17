@@ -105,7 +105,7 @@ class CoffeeshopController extends Controller
             $this->renderPage($template, $args);
         }else {
             $this->logError('We could not verify your ownership');
-            $this->redirect($_SERVER['HTTP_REFERER']);
+            $this->redirect('/');
         }
     }
 

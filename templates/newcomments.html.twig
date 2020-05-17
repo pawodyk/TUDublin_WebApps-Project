@@ -4,13 +4,18 @@
 
     {% if session.user_role == 'ROLE_STAFF' %}
         {% for com in comments %}
-            <ul>
-                <li>{{ com.id }}</li>
-                <li>{{ com.getCoffeeshop().name }}</li>
-                <li>{{ com.getName() }}</li>
-                <li>{{ com.getMessage() }}</li>
-                <li>{% if com.isPublished() == 0 %} <a href="" class="btn btn-success"> Publish me!</a> {% else %} I should not be here {% endif %}</li>
-            </ul>
+            <div class="col-12 mb-3 ">
+                <div class="media p-3 bg-light text-dark border-light shadow-sm rounded">
+                    <div class="media-body">
+                        <p>{{ com.message }}</p>
+                        <h5 class="mt-0 float-right"> - {% if com.name %}{{ com.name }}{% else %}Anonymous{% endif %} - </h5>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center my-2">
+                    <a href="/?page=approve_comment&comment={{ com.getId() }}" class="btn btn-success mr-3">Publish</a>
+                    <a href="/?page=reject_comment&comment={{ com.getId() }}" class="btn btn-danger">Discard</a>
+                </div>
+            </div>
             <hr>
         {% endfor %}
     {% else %}

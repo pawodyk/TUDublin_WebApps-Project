@@ -51,18 +51,28 @@
 
                             <hr>
                         </div>
-                        <div><h4>Menu Items</h4>
+                        <div>
+                            <form enctype="multipart/form-data" action="/?page=upload_coffeeshop_picture&csid={{ coffeeshop.getId() }}" method="POST">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+                                <div class="form-group">
+                                    <label for="coffeeshop_picture">Upload Picture for your Coffee Shop: </label>
+                                    <input name="coffeeshop_picture" id="coffeeshop_picture" type="file" class="form-control-file">
+                                </div>
+                                <button type="submit">Send File</button>
+                            </form>
+                            <hr>
+                        </div>
+                        <div>
+                            <h4>Menu Items</h4>
                             <ol>
                                 {% for key, mi in menuitems %}
                                     <li>{{ mi.getItemName() }} : &euro;{{ mi.getItemPrice() }}</li>
                                 {% endfor %}
                             </ol>
-                            <a href="/?page=edit_menu&csid={{ coffeeshop.getId() }}" class="btn btn-primary">edit menu
-                                items</a></div>
+                            <a href="/?page=menu_control" class="btn btn-primary">edit menu
+                                items</a>
+                        </div>
                     </div>
-
-
-
 
                 {% else %}
                     This Coffee Shop do not have Owner assigned to it, please ask page administrator to assign Owner

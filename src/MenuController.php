@@ -37,24 +37,34 @@ class MenuController extends Controller
 //        $this->userRepo = new UserRepository();
     }
 
-    public function editMenuPage()
+    public function menuControlPage()
     {
-        $csid = filter_input(INPUT_GET, 'csid');
-        $cs = $this->csRepo->find($csid);
-        $cs_mi = $this->menuItemRepo->getAllMenuItems($cs->getMenuId());
-        $owners_mi = $this->menuItemRepo->getAllMenuItemsForOwner($cs->getOwnerId());
+//        $ownerId = filter_input(INPUT_GET, 'owner_id');
 
+        $ownerId = $_SESSION['owner_id'];
 
-        $template = 'ownersmenuitems.html.twig';
+        $template = 'menucontrolpanel.html.twig';
         $args = [
-            'coffeeshop'=> $cs,
-            'menuitems'=> $cs_mi,
-            'ownersitems'=>$owners_mi,
+            'coffeeshops'=> $this->csRepo->getAllCoffeeshopsFor($ownerId),
+            'menuitems'=> $this->menuItemRepo->getAllMenuItemsForOwner($ownerId),
         ];
-
 
         $this->renderPage($template, $args);
     }
+
+    public function addMenuItemPage(){
+
+    }
+
+    public function submitNewMenuItem(){
+
+    }
+
+    public function assignMenuToCoffeeshop(){
+
+    }
+
+
 
     /* DEPRECATED FUNCTIONS TODO remove after cleanup */
 

@@ -2,31 +2,31 @@
 
 {% block content %}
     <div class="row">
-            {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
-                {% for cs in coffeeshops %}
-                    <div class="col-12 col-sm-6 ">
-                        <div class="card mb-4 shadow-sm {% if cs.owner_id %} bg-success text-light {% endif %}">
-                            <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
-                            <div class="card-body">
-                                <h3>{{ cs.name }}</h3>
-                                <p class="card-text">{{ cs.summary }}</p>
+        {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
+            {% for cs in coffeeshops %}
+                <div class="col-12 col-sm-6 ">
+                    <div class="card mb-4 shadow-sm {% if cs.owner_id %} bg-success text-light {% endif %}">
+                        <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
+                        <div class="card-body">
+                            <h3>{{ cs.name }}</h3>
+                            <p class="card-text">{{ cs.summary }}</p>
 
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <div class="btn-group">
-                                        <a href="/?page=shop&csid={{ cs.id }}" class="btn btn-sm btn-primary">View</a>
-                                        <a href="/?page=edit_coffeeshop&csid={{ cs.getId() }}" class="btn btn-sm btn-primary">Edit</a>
-                                    </div>
-                                    {#<small class="text-muted"></small>#}
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="btn-group">
+                                    <a href="/?page=shop&csid={{ cs.id }}" class="btn btn-sm btn-primary">View</a>
+                                    <a href="/?page=edit_coffeeshop&csid={{ cs.getId() }}"
+                                       class="btn btn-sm btn-primary">Edit</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                {% else %}
-                    You currently do not own any Coffee Shops, please contact us to claim ownership of one of the shops
-                {% endfor %}
+                </div>
             {% else %}
-                <p>You cannot view this page</p>
-            {% endif %}
+                You currently do not own any Coffee Shops, please contact us to claim ownership of one of the shops
+            {% endfor %}
+        {% else %}
+            <p>You cannot view this page</p>
+        {% endif %}
 
     </div>
 

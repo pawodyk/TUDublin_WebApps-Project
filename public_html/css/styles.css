@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&family=Chivo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:wght@400;700&family=Chivo:wght@300;400;700&display=swap');
 
 html {
     background-color: wheat;
@@ -26,6 +26,16 @@ main {
     min-height: calc(100vh - 292px); /* to eliminate the background below footer when the page dont have enough content to fill the page*/
 }
 
+a.alternative_decoreation{
+    color: inherit;
+    text-decoration: none;
+}
+
+a.alternative_decoreation:hover,
+a.alternative_decoreation:active {
+    font-weight: bold;
+    text-decoration: none;
+}
 
 .navbar_toggler {
     position: absolute;
@@ -50,4 +60,8 @@ main {
 
 .hidden {
     visibility:hidden;
+}
+
+.card img {
+    object-fit: cover;
 }
