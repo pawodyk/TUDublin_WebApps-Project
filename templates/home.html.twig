@@ -2,37 +2,31 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col my-2 my-md-4">
-            <h1>Home</h1>
+    <div class="row border-bottom border-dark mt-5 pt-4 mb-4 pb-4">
+        <div class="col text-center">
+            <h1>Welcome to Coffee Shop Review</h1>
+            <img src="img/logo.png" alt="Logo" width="200">
+            <ol class="list-unstyled mt-5">
+                <li>
+                    <a class="alternative_decoreation lead" href="/?page=shops">
+                        <i class="fas fa-mug-hot"></i>
+                        View All Coffeeshops
+                        <i class="fas fa-mug-hot"></i>
+                    </a>
+                </li>
+                <li>
+                    <a class="alternative_decoreation lead" href="/?page=reviews">
+                        <i class="fas fa-mug-hot"></i>
+                        View All Reviews
+                        <i class="fas fa-mug-hot"></i>
+                    </a>
+                </li>
+            </ol>
         </div>
-
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <h2>Reviews :</h2>
-        </div>
 
-        {% for review in reviews_list %}
-            <div class="col-12 border border-secondary shadow-sm py-1 mb-4">
-                <h3>{{ review.title }}</h3>
-                <p>{{ review.review }} <a href="/?page=review&reviewId={{ review.id }}"><span class="badge badge-info">Read full review</span></a>
-                </p>
-                <p>
-                    <span class="pr-2">Rating ({{ review.rating }}) :</span>
-                    {% for i in 1..review.rating %}
-                        <span class="mr-1"><i class="fas fa-mug-hot"></i></span>
-                    {% endfor %}
-                </p>
-                <p>
-                    <span class="pr-2">Expense ({{ review.expense }}) : </span>
-                    {% for i in 1..review.expense %}
-                        <span class="mr-1"><i class="fas fa-euro-sign"></i></span>
-                    {% endfor %}
-                </p>
-            </div>
-        {% endfor %}
-    </div>
+
+
 
 {% endblock %}

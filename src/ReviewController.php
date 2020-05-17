@@ -66,6 +66,17 @@ class ReviewController extends Controller
         $this->renderPage($template, $args);
     }
 
+    public function reviewsListPage(){
+        $reviews = $this->csReviewRepo->findAll();
+
+        $template = 'reviewslist.html.twig';
+        $args = [
+            'reviews_list' => $reviews,
+        ];
+
+        $this->renderPage($template, $args);
+    }
+
     public function addReview()
     {
         $csid = filter_input(INPUT_POST, 'coffeeshopid');

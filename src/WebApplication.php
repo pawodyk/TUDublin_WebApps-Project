@@ -50,6 +50,9 @@ class WebApplication
             case 'review':
                 $this->reviewCon->reviewPage();
                 break;
+            case 'reviews':
+                $this->reviewCon->reviewsListPage();
+                break;
             case 'submit_comment':
                 $this->commentCon->addComment();
                 break;

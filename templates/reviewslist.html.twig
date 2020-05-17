@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2>Reviews :</h2>
+            <hr class="my-3">
+        </div>
+
+        {% for review in reviews_list %}
+            <div class="col-12 border border-light shadow-lg p-3 mb-4 bg-light">
+                <h3>{{ review.title }}</h3>
+                <div class="row text-center">
+                    <div class="col-12 col-sm-6">
+                        <span class="pr-3 lead">Rating</span>
+                        {% for i in 1..review.rating %}
+                            <span title="Rating {{ review.rating }}" class="mr-1 rating_icon"><i
+                                        class="fas fa-mug-hot"></i></span>
+                        {% endfor %}
+                    </div>
+                    <div class="col-12 col-sm-6">
+                        <span class="pr-3 lead">Expense</span>
+                        {% for i in 1..review.expense %}
+                            <span title="Expense {{ review.expense }}" class="mr-1 rating_icon"><i
+                                        class="fas fa-euro-sign"></i></span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <p>
+                    {{ review.review }}
+                </p>
+                <hr>
+                <div class="text-center mb-2">
+                    <a href="/?page=review&reviewId={{ review.id }}"><span class="badge badge-info mr-5 px-2 py-1">Read full review</span></a>
+                    <a href="/?page=shop&csid={{ review.getCoffeeshopId }}"><span
+                                class="badge badge-info px-2 py-1">View Coffeeshop Profile</span></a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
