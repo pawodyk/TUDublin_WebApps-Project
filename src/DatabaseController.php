@@ -24,6 +24,11 @@ use TUDublin\dbObjects\{
     UserRepository
 };
 
+/**
+ * Class DatabaseController
+ * @package TUDublin
+ * @deprecated 
+ */
 class DatabaseController extends Controller
 {
 

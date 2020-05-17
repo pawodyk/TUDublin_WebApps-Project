@@ -73,6 +73,7 @@ class CoffeeshopRepository extends DatabaseTableRepository
         $statement->execute();
 
         $dataset = $statement->fetch();
+
         return $dataset['expense'];
 
     }

@@ -13,6 +13,8 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->usersRepo = new UserRepository();
     }
 

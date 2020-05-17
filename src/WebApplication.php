@@ -6,43 +6,58 @@ namespace TUDublin;
 class WebApplication
 {
 
-    private $loginController;
-    private $mainController;
-    private $dbController;
+    private $mainCon;
+    private $loginCon;
+    private $coffeeshopCon;
+    private $menuCon;
+    private $reviewCon;
+    private $commentCon;
+    private $adminCon;
+    private $pictureCon;
 
     public function __construct()
     {
-        $this->mainController = new MainController();
-        $this->loginController = new LoginController();
-        $this->dbController = new DatabaseController();
+        $this->mainCon = new MainController();
+        $this->loginCon = new LoginController();
+        $this->coffeeshopCon = new CoffeeshopController();
+        $this->menuCon = new MenuController();
+        $this->reviewCon = new ReviewController();
+        $this->commentCon = new CommentController();
+        $this->adminCon = new AdminController();
+        $this->pictureCon = new PictureController();
 
     }
 
     public function run()
     {
         $page = filter_input(INPUT_GET, 'page');
+        $action = filter_input(INPUT_GET, 'action');
+        if (!$action) {
+            $action = filter_input(INPUT_POST, 'action');
+        }
+
 
         switch ($page) {
             case 'login':
-                $this->loginController->login();
+                $this->loginCon->login();
                 break;
             case 'logout':
-                $this->loginController->logout();
+                $this->loginCon->logout();
                 break;
             case 'shop':
-                $this->mainController->shop();
+                $this->coffeeshopCon->coffeeshopPage();
                 break;
             case 'shops':
-                $this->mainController->shops();
+                $this->coffeeshopCon->coffeeshopsListPage();
                 break;
             case 'review':
-                $this->mainController->viewReview();
+                $this->reviewCon->reviewPage();
                 break;
             case 'submit_comment':
-                $this->dbController->addComment();
+                $this->commentCon->addComment();
                 break;
             case 'admin':
-                $this->adminControls();
+                $this->adminControls($action);
                 break;
             case 'new_review':
             case 'submit_review':
@@ -50,89 +65,83 @@ class WebApplication
                 $this->userControls($page);
                 break;
             case 'edit_coffeeshop':
-                if ($this->loginController->verifyAccess('ROLE_STAFF') || $this->loginController->verifyAccess('ROLE_SHOP')){
-                    $this->mainController->editCoffeeshop();
+                if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')){
+                    $this->coffeeshopCon->editCoffeeshopPage();
                 } else {
-                    $this->mainController->accessDenied();
+                    $this->mainCon->accessDeniedPage();
                 }
                 break;
             case 'submit_coffeeshop_update':
-                $this->dbController->updateCoffeeshop();
+                $this->coffeeshopCon->updateCoffeeshop();
                 break;
             case 'home':
             default:
-                $this->mainController->home();
+                $this->mainCon->homePage();
                 break;
         }
     }
 
     public function userControls($page){
-        if ($this->loginController->verifyAccess('ROLE_STAFF')){
+        if ($this->loginCon->verifyAccess('ROLE_STAFF')){
             switch ($page){
                 case 'new_review':
-                    $this->mainController->newReview();
+                    $this->reviewCon->newReviewPage();
                     break;
                 case 'submit_review':
-                    $this->dbController->addReview();
+                    $this->reviewCon->addReview();
                     break;
                 case 'comments':
-                    $this->mainController->reviewComments();
+                    $this->commentCon->commentsReviewPage();
                     break;
             }
         } else {
-            $this->mainController->accessDenied();
+            $this->mainCon->accessDeniedPage();
         }
     }
 
-    public function adminControls()
+    public function adminControls($action)
     {
-        if ($this->loginController->verifyAccess('ROLE_ADMIN')) {
-
-            $action = filter_input(INPUT_GET, 'action');
-            if (!$action) {
-                $action = filter_input(INPUT_POST, 'action');
-            }
+        if ($this->loginCon->verifyAccess('ROLE_ADMIN')) {
 
             switch ($action) {
-                case 'search_user':
-                    //$this->mainController->searchUser();
-                    break;
+//                case 'search_user':
+//                    break;
                 case 'remove_user':
-                    $this->dbController->deleteUser();
+                    $this->adminCon->deleteUser();
                     break;
                 case 'edit_user':
-                    $this->mainController->editUser();
+                    $this->adminCon->editUserPage();
                     break;
                 case 'update_user':
-                    $this->dbController->updateUser();
+                    $this->adminCon->updateUser();
                     break;
                 case 'reset_password':
-                    $this->mainController->editPassword();
+                    $this->adminCon->editPasswordPage();
                     break;
                 case 'submit_password':
-                    $this->dbController->changeUserPassword();
+                    $this->adminCon->changeUserPassword();
                     break;
                 case 'new_user':
-                    $this->mainController->newUser();
+                    $this->adminCon->newUserPage();
                     break;
                 case 'submit_new_user':
-                    $this->dbController->addUser();
+                    $this->adminCon->addUser();
                     break;
                 case 'join_owner':
-                    $this->dbController->addOwnerProfile();
+                    $this->adminCon->addOwnerProfile();
                     break;
                 case 'coffeeshop_owners':
-                    $this->mainController->coffeeshopOwnersSetup();
+                    $this->adminCon->coffeeshopOwnersSetupPage();
                     break;
                 case 'update_coffeeshop_owner':
-                    $this->dbController->setOwnerOfCoffeeshop();
+                    $this->adminCon->setOwnerOfCoffeeshop();
                     break;
                 default:
-                    $this->mainController->admin();
+                    $this->adminCon->adminPage();
             }
         }
         else {
-            $this->mainController->accessDenied();
+            $this->mainController->accessDeniedPage();
         }
     }
 

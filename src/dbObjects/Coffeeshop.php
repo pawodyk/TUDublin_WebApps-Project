@@ -180,14 +180,14 @@ HERE;
     {
         $csRepo = new CoffeeshopRepository();
 
-        return $csRepo->getAverageRating();
+        return ceil($csRepo->getAverageRating($this->getId()));
     }
 
     public function getAverageExpense()
     {
         $csRepo = new CoffeeshopRepository();
 
-        return $csRepo->getAverageExpense();
+        return ceil($csRepo->getAverageExpense($this->getId()));
     }
 
 }
