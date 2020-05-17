@@ -342,7 +342,7 @@ class AdminController extends Controller
 
     private function hasUniqueUsername($username)
     {
-        $user = $this->userRepo->find($username);
+        $user = $this->userRepo->getUser($username);
 
         if ($user) {
             return false;
