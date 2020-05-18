@@ -3,14 +3,19 @@
 {% block content %}
     <div class="row">
         {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
-            <div class="col">
-                <h2>Welcome user {{ owner.getUser().getUserName() }}</h2>
-                <p>Name: {{ owner.name }}</p>
-                <p>Bio:</p>
-                <p>{{ owner.bio }}</p>
-                <p>
-                    <a href="/?page=edit_owner" class="btn btn-primary">Edit your details </a>
-                </p>
+            <div class="col-12 text-center">
+                <h2>Welcome {{ owner.getUser().getUserName() }}</h2>
+                <hr class="my-3">
+            </div>
+            <div class="col-10 offset-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 bg-light rounded pt-4">
+                <a href="/?page=edit_owner" class="btn btn-primary float-right">Edit your details </a>
+                <h2>My Profile</h2>
+                <hr class="my-3">
+                <div class="p-3">
+                    <p>Name: {{ owner.name }}</p>
+                    <p>Bio:</p>
+                    <p>{{ owner.bio }}</p>
+                </div>
             </div>
         {% else %}
             <p>You cannot view this page</p>

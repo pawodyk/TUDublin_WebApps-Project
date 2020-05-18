@@ -3,6 +3,10 @@
 {% block content %}
     <div class="row">
         {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
+            <div class="col-12 text-center">
+                <h2>My Coffeeshops</h2>
+                <hr class="my-3">
+            </div>
             {% for cs in coffeeshops %}
                 <div class="col-12 col-sm-6 ">
                     <div class="card mb-4 shadow-sm {% if cs.owner_id %} bg-success text-light {% endif %}">

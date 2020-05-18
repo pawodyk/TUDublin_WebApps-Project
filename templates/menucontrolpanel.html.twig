@@ -3,10 +3,11 @@
 {% block content %}
     <div class="row">
         {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}
-            <div class="col">
-
-                <h4>Menu Items</h4>
-
+            <div class="col-12 text-center">
+                <h2>Menu Controls</h2>
+                <hr class="my-3">
+            </div>
+            <div class="col-12">
                 <div class="row">
                     <div class="col">
                         <div class="alert alert-warning text-center">

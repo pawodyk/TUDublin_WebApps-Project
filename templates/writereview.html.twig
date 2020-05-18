@@ -1,47 +1,56 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-
-    {% if session.user_role == 'ROLE_STAFF' %}
-        <h1>WRITE NEW REVIEW</h1>
-        <form method="post" action="/?page=submit_review">
-            <div class="form-group">
-                <label for="reviewtitle">title</label>
-                <input class="form-control" type="text" name="reviewtitle" id="reviewtitle">
+    <div class="row">
+        {% if session.user_role == 'ROLE_STAFF' %}
+            <div class="col-12 text-center">
+                <h2>Write new Review</h2>
+                <hr class="my-3">
             </div>
-            <div class="form-group">
-                <label for="reviewtext">Your Review</label>
-                <textarea class="form-control" name="reviewtext" id="reviewtext" cols="30" rows="10"></textarea>
+            <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+                <form method="post" action="/?page=submit_review">
+                    <div class="form-group">
+                        <label for="reviewtitle">Title</label>
+                        <input class="form-control" type="text" name="reviewtitle" id="reviewtitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewtext">Your Review</label>
+                        <textarea class="form-control" name="reviewtext" id="reviewtext" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewrating">Rating</label>
+                        <input class="form-control" type="range" min="1" max="5" name="reviewrating" id="reviewrating">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewexpense">Expense</label>
+                        <input class="form-control" type="range" min="1" max="5" name="reviewexpense"
+                               id="reviewexpense">
+                    </div>
+                    <div class="input-group">
+                        <select class="custom-select" name="coffeeshopid" id="coffeeshopid">
+                            {% for cs in coffeeshops %}
+                                <option value="{{ cs.getId() }}">{{ cs.getName() }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" id="changecoffeeshopinput">Add new coffee shop
+                            </button>
+                        </div>
+                    </div>
+                    {#            <div class="form-group">#}
+                    {#                <label for="exampleFormControlFile1">Example file input</label>#}
+                    {#                <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
+                    {#            </div>#}
+                    <br>
+                    <div class="text-center">
+                        <button class="btn btn-success" type="submit">PUBLISH</button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="reviewrating">Rating</label>
-                <input class="form-control" type="range" min="1" max="5" name="reviewrating" id="reviewrating">
-            </div>
-            <div class="form-group">
-                <label for="reviewexpense">Expense</label>
-                <input class="form-control" type="range" min="1" max="5" name="reviewexpense" id="reviewexpense">
-            </div>
-            <div class="input-group">
-                <select class="custom-select" name="coffeeshopid" id="coffeeshopid">
-                    {% for cs in coffeeshops %}
-                        <option value="{{ cs.getId() }}">{{ cs.getName() }}</option>
-                    {% endfor %}
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-primary" id="changecoffeeshopinput">Add new coffee shop</button>
-                </div>
-            </div>
-            {#            <div class="form-group">#}
-            {#                <label for="exampleFormControlFile1">Example file input</label>#}
-            {#                <input type="file" class="form-control-file" id="exampleFormControlFile1">#}
-            {#            </div>#}
-            <br>
-            <button type="submit">PUBLISH</button>
-        </form>
-    {% else %}
-        <p>You cannot view this page</p>
-    {% endif %}
-
+        {% else %}
+            <p>You cannot view this page</p>
+        {% endif %}
+    </div>
 
 
 {% endblock %}

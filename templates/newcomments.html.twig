@@ -1,28 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-
-    {% if session.user_role == 'ROLE_STAFF' %}
-        {% for com in comments %}
-            <div class="col-12 mb-3 ">
-                <div class="media p-3 bg-light text-dark border-light shadow-sm rounded">
-                    <div class="media-body">
-                        <p>{{ com.message }}</p>
-                        <h5 class="mt-0 float-right"> - {% if com.name %}{{ com.name }}{% else %}Anonymous{% endif %} - </h5>
+    <div class="row">
+        {% if session.user_role == 'ROLE_STAFF' %}
+            <div class="col-12 text-center">
+                <h2>Publish Comments</h2>
+                <hr class="my-3">
+            </div>
+            {% for com in comments %}
+                <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mb-3 ">
+                    <div class="media p-3 bg-light text-dark border-light shadow-sm rounded">
+                        <div class="media-body">
+                            <p>{{ com.message }}</p>
+                            <h5 class="mt-0 float-right">
+                                - {% if com.name %}{{ com.name }}{% else %}Anonymous{% endif %} - </h5>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center my-2">
+                        <a href="/?page=approve_comment&comment={{ com.getId() }}"
+                           class="btn btn-success mr-3">Publish</a>
+                        <a href="/?page=reject_comment&comment={{ com.getId() }}" class="btn btn-danger">Discard</a>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center my-2">
-                    <a href="/?page=approve_comment&comment={{ com.getId() }}" class="btn btn-success mr-3">Publish</a>
-                    <a href="/?page=reject_comment&comment={{ com.getId() }}" class="btn btn-danger">Discard</a>
-                </div>
-            </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>You cannot view this page</p>
-    {% endif %}
-
-
-
-
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>You cannot view this page</p>
+        {% endif %}
+    </div>
 {% endblock %}
