@@ -124,10 +124,10 @@
             <form action="/?page=submit_comment" method="post">
                 <input type="hidden" id="add_comment_csid" name="comment_csid" value="{{ coffeeshop.id }}">
                 <textarea class="w-100 py-2 px-2 border border-light shadow-sm mb-3" placeholder="add you comment here"
-                          id="add_comment_message" name="comment_message" required></textarea>
+                          id="add_comment_message" name="comment_message" maxlength="500" required></textarea>
                 <div class="form-group float-right">
                     <label for="">Your name</label>
-                    <input class="py-1 px-2 border border-light shadow-sm" type="text" max="50"
+                    <input class="py-1 px-2 border border-light shadow-sm" type="text" maxlength="50"
                            id="add_comment_person_name" name="comment_person_name">
                 </div>
                 <button class="btn btn-success" type="submit">Submit Comment</button>

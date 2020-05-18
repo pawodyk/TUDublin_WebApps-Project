@@ -11,11 +11,11 @@
                 <form method="post" action="/?page=submit_review">
                     <div class="form-group">
                         <label for="reviewtitle">Title</label>
-                        <input class="form-control" type="text" name="reviewtitle" id="reviewtitle">
+                        <input class="form-control" type="text" name="reviewtitle" id="reviewtitle" maxlength="120" required>
                     </div>
                     <div class="form-group">
                         <label for="reviewtext">Your Review</label>
-                        <textarea class="form-control" name="reviewtext" id="reviewtext" cols="30" rows="10"></textarea>
+                        <textarea class="form-control" name="reviewtext" id="reviewtext" cols="30" rows="10" maxlength="5000"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="reviewrating">Rating</label>
@@ -59,7 +59,7 @@
 {% block script %}
     <script>
         var element_selectShop = $('#coffeeshopid');
-        var element_newShopName = $('<input class="form-control" type="text" name="newcoffeeshopname" id="newcoffeeshopname" placeholder="New Coffee Shop Name">');
+        var element_newShopName = $('<input class="form-control" type="text" name="newcoffeeshopname" id="newcoffeeshopname" placeholder="New Coffee Shop Name" required max="120">');
 
 
         $("#changecoffeeshopinput").click(function (event) {

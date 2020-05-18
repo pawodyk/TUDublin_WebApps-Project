@@ -8,11 +8,11 @@
                 <form action="/?page=submit_edit_owner" method="post">
                     <div class="form-group">
                         <label for="owner_name">Name</label>
-                        <input type="text" class="form-control" id="owner_name" name="owner_name" value="{{ owner.name }}">
+                        <input type="text" class="form-control" id="owner_name" name="owner_name" value="{{ owner.name }}" maxlength="120">
                     </div>
                     <div class="form-group">
                         <label for="">Bio:</label>
-                        <textarea class="form-control" name="owner_bio" id="owner_bio">{{ owner.bio }}</textarea>
+                        <textarea class="form-control" name="owner_bio" id="owner_bio" maxlength="500">{{ owner.bio }}</textarea>
                     </div>
                     <p>
                         <button type="submit" class="btn btn-primary">Submit changes</button>

@@ -5,6 +5,7 @@ namespace TUDublin;
 
 
 use TUDublin\dbObjects\Coffeeshop;
+use TUDublin\dbObjects\CoffeeshopAddress;
 use TUDublin\dbObjects\CoffeeshopAddressRepository;
 use TUDublin\dbObjects\CoffeeshopCommentRepository;
 use TUDublin\dbObjects\CoffeeshopOwnerRepository;
@@ -56,7 +57,7 @@ class CoffeeshopController extends Controller
             'comments' => $comments,
         ];
 
-         $this->renderPage($template, $args);
+        $this->renderPage($template, $args);
     }
 
     public function coffeeshopsListPage()
@@ -88,10 +89,11 @@ class CoffeeshopController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function ownersCoffeeshopsPage(){
+    public function ownersCoffeeshopsPage()
+    {
         $owner_id = $_SESSION['owner_id'];
 
-        if ($owner_id){
+        if ($owner_id) {
             $cs = $this->csRepo->getAllCoffeeshopsFor($owner_id);
 //            $cs_mi = $this->menuItemRepo->getAllMenuItems($cs->getMenuId());
 //            $owners_mi = [] ; //getMenuItemsForOwner($cs->getOwnerId());
@@ -103,7 +105,7 @@ class CoffeeshopController extends Controller
             ];
 
             $this->renderPage($template, $args);
-        }else {
+        } else {
             $this->logError('We could not verify your ownership');
             $this->redirect('/');
         }
@@ -117,41 +119,109 @@ class CoffeeshopController extends Controller
 
         $cs = $this->csRepo->find($csId);
 
-        $cs->setName($csName);
-        $cs->setSummary($csSummary);
+        if ($cs) {
 
-        $csUpdateResult =  $this->csRepo->update($cs);
+            $addressUpdateResult = false;
+            $csUpdateResult = false;
 
-        $addressStreet1 = filter_input(INPUT_POST, 'address_street1');
-        $addressStreet2 = filter_input(INPUT_POST, 'address_street2');
-        $addressCity = filter_input(INPUT_POST, 'address_city');
-        $addressCounty = filter_input(INPUT_POST, 'address_county');
-        $addressPostcode = filter_input(INPUT_POST, 'address_postcode');
+            $csDataValidated = true;
+            $adrsDataValidated = true;
 
-        $adrs = $this->csAddressRepo->find($cs->getAddressId());
-        $adrs->setStreet1($addressStreet1);
-        $adrs->setStreet2($addressStreet2);
-        $adrs->setCity($addressCity);
-        $adrs->setCounty($addressCounty);
-        $adrs->setPostcode($addressPostcode);
+            $addressStreet1 = filter_input(INPUT_POST, 'address_street1');
+            $addressStreet2 = filter_input(INPUT_POST, 'address_street2');
+            $addressCity = filter_input(INPUT_POST, 'address_city');
+            $addressCounty = filter_input(INPUT_POST, 'address_county');
+            $addressPostcode = filter_input(INPUT_POST, 'address_postcode');
 
-        $addressUpdateResult = $this->csAddressRepo->update($adrs);
-
-        if ($csUpdateResult && $addressUpdateResult) {
-            $this->logMessage('Update Successful');
-        }else {
-            if (!$csUpdateResult) {
-                $this->logError('Could not update Coffee Shop');
+            if (strlen($addressStreet1) > 120 || empty($addressStreet1)) {
+                $adrsDataValidated = false;
+                $this->logError('First line of address is incorrect [Max: 120 characters and cannot be empty] ');
             }
-            if (!$addressUpdateResult){
-                $this->logError('Could not update address');
+            if (strlen($addressStreet2) > 120) {
+                $adrsDataValidated = false;
+                $this->logError('Second line of address is incorrect [Max: 120 characters]');
+            }
+            if (strlen($addressCity) > 60 || empty($addressStreet1)) {
+                $adrsDataValidated = false;
+                $this->logError('City data is incorrect [Max: 60 characters and cannot be empty]');
+            }
+            if (strlen($addressCounty) > 60) {
+                $adrsDataValidated = false;
+                $this->logError('County data is incorrect [Max: 60 characters]');
+            }
+            if (strlen($addressPostcode) > 20) {
+                $adrsDataValidated = false;
+                $this->logError('Postcode data is incorrect [Max: 20 characters]');
+            }
+
+            if ($adrsDataValidated) {
+                if ($cs->getAddressId()) {
+                    $adrs = $this->csAddressRepo->find($cs->getAddressId());
+                    if ($adrs) {
+                        $adrs->setStreet1($addressStreet1);
+                        $adrs->setStreet2($addressStreet2);
+                        $adrs->setCity($addressCity);
+                        $adrs->setCounty($addressCounty);
+                        $adrs->setPostcode($addressPostcode);
+
+                        $addressUpdateResult = $this->csAddressRepo->update($adrs);
+
+                    }
+                } else {
+                    $newAdrs = new CoffeeshopAddress();
+
+                    $newAdrs->setStreet1($addressStreet1);
+                    $newAdrs->setStreet2($addressStreet2);
+                    $newAdrs->setCity($addressCity);
+                    $newAdrs->setCounty($addressCounty);
+                    $newAdrs->setPostcode($addressPostcode);
+
+                    $newAdrsId = $this->csAddressRepo->create($newAdrs);
+
+                    if ($newAdrsId > 0) {
+                        $addressUpdateResult = true;
+                        $cs->setAddressId($newAdrsId);
+                    }
+                }
+            }
+
+            if (strlen($csName) > 120) {
+                $csDataValidated = false;
+                $this->logError('Your coffeeshop name is too long');
+            } elseif (empty($csName)) {
+                $csDataValidated = false;
+                $this->logError('Your coffeeshop name cannot be empty');
+            } else {
+                $cs->setName($csName);
+            }
+
+            if (strlen($csName) > 1000) {
+                $csDataValidated = false;
+                $this->logError('Your coffeeshop summary is too long');
+            } else {
+                $cs->setSummary($csSummary);
+            }
+
+            if ($csDataValidated) {
+                $csUpdateResult = $this->csRepo->update($cs);
+            }
+
+
+            if ($csUpdateResult && $addressUpdateResult) {
+                $this->logMessage('Update Successful');
+            } else {
+                if (!$csUpdateResult) {
+                    $this->logError('Could not update Coffee Shop');
+                }
+                if (!$addressUpdateResult) {
+                    $this->logError('Could not update address');
+                }
             }
         }
 
-        $this->redirect('/', [
-            'page'=>'shop',
-            'csid'=>$csId,
-        ]);
+
+        $this->redirect('/', ['page' => 'shop',
+            'csid' => $csId,]);
 
     }
 

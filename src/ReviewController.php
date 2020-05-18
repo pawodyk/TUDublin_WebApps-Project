@@ -66,7 +66,8 @@ class ReviewController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function reviewsListPage(){
+    public function reviewsListPage()
+    {
         $reviews = $this->csReviewRepo->findAll();
 
         $template = 'reviewslist.html.twig';
@@ -85,45 +86,53 @@ class ReviewController extends Controller
         $rating = filter_input(INPUT_POST, 'reviewrating', FILTER_VALIDATE_INT);
         $expense = filter_input(INPUT_POST, 'reviewexpense', FILTER_VALIDATE_INT);
 
-        if (!isset($csid)){
+        if (!isset($csid)) {
             $csname = filter_input(INPUT_POST, 'newcoffeeshopname');
 
             $cs = new Coffeeshop();
-            $cs->setName($csname);
-            $csid = $this->csRepo->create($cs);
+            if (strlen($csname) > 120) {
+                $csid = 0;
+                $this->logError("Coffeeshop name cannot be empty or have more then 120 characters.");
+            } else {
+                $cs->setName($csname);
+                $csid = $this->csRepo->create($cs);
+            }
 
-            if ($csid < 0){
-                $this->logError("Failed to create new Coffee Shop");
+
+        }
+        if ($csid <= 0) {
+            $this->logError("Failed to create new Coffee Shop");
+
+        } elseif (strlen($title) > 120) {
+            $this->logError('Review Title is too long');
+
+        } else {
+            $review = new CoffeeshopReview();
+
+            $review->setCoffeeshopId($csid);
+            $review->setTitle($title);
+            $review->setReview($text);
+            $review->setRating($rating);
+            $review->setExpense($expense);
+            $review->setReviewDate(date('Y-m-d'));
+
+            $result = $this->csReviewRepo->create($review);
+
+            if ($result > 0) {
+                $this->logMessage('Successfully added new review');
                 $this->redirect('/', [
-                    'page'=>'new_review'
+                    'page' => 'shop',
+                    'csid' => $csid,
                 ]);
             }
         }
 
-        $review = new CoffeeshopReview();
-
-        $review->setCoffeeshopId($csid);
-        $review->setTitle($title);
-        $review->setReview($text);
-        $review->setRating($rating);
-        $review->setExpense($expense);
-        $review->setReviewDate(date('Y-m-d'));
+        $this->logError('Could not add the review');
+        $this->redirect('/', [
+            'page' => 'new_review'
+        ]);
 
 
-        $result = $this->csReviewRepo->create($review);
-
-        if ($result > 0 ){
-            $this->logMessage('Successfully added new review');
-            $this->redirect('/', [
-                'page'=>'shop',
-                'csid'=>$csid,
-            ]);
-        } else {
-            $this->logError('Could not add the review');
-            $this->redirect('/', [
-                'page'=>'new_review'
-            ]);
-        }
     }
 
     /* DEPRACATED FUNCTIONS TODO remove after cleanup */
@@ -133,7 +142,8 @@ class ReviewController extends Controller
      * @return mixed|null
      * @deprecated
      */
-    public function getReview($reviewId){
+    public function getReview($reviewId)
+    {
         return $this->csReviewRepo->find($reviewId);
     }
 

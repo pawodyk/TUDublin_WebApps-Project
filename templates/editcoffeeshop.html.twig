@@ -30,23 +30,23 @@
                                         <input class="form-control mb-2" type="text" id="address_street1"
                                                name="address_street1"
                                                placeholder="street line 1"
-                                               value="{{ coffeeshop.getAddress().getStreet1() }}">
+                                               value="{{ coffeeshop.getAddress().getStreet1() }}" max="120" required>
                                         <input class="form-control mb-2" type="text" id="address_street2"
                                                name="address_street2"
                                                placeholder="street line 2"
-                                               value="{{ coffeeshop.getAddress().getStreet2() }}">
+                                               value="{{ coffeeshop.getAddress().getStreet2() }}" max="120">
                                         <input class="form-control mb-2" type="text" id="address_city"
                                                name="address_city"
-                                               placeholder="city" value="{{ coffeeshop.getAddress().getCity() }}">
+                                               placeholder="city" value="{{ coffeeshop.getAddress().getCity() }}" max="60" required>
                                         <input class="form-control mb-2" type="text" id="address_county"
                                                name="address_county"
-                                               placeholder="county" value="{{ coffeeshop.getAddress().getCounty() }}">
+                                               placeholder="county" value="{{ coffeeshop.getAddress().getCounty() }}" max="60">
                                         <input class="form-control mb-2" type="text" id="address_postcode"
                                                name="address_postcode" placeholder="postcode"
-                                               value="{{ coffeeshop.getAddress().getPostcode() }}">
+                                               value="{{ coffeeshop.getAddress().getPostcode() }}" max="20" >
                                     </div>
                                 </div>
-                                <button type="submit">Update Coffee shop info</button>
+                                <button class="btn btn-info" type="submit">Update Coffee shop info</button>
                             </form>
 
                             <hr>
@@ -58,7 +58,7 @@
                                     <label for="coffeeshop_picture">Upload Picture for your Coffee Shop: </label>
                                     <input name="coffeeshop_picture" id="coffeeshop_picture" type="file" class="form-control-file">
                                 </div>
-                                <button type="submit">Send File</button>
+                                <button class="btn btn-secondary" type="submit">Send File</button>
                             </form>
                             <hr>
                         </div>
@@ -69,7 +69,7 @@
                                     <li>{{ mi.getItemName() }} : &euro;{{ mi.getItemPrice() }}</li>
                                 {% endfor %}
                             </ol>
-                            <a href="/?page=menu_control" class="btn btn-primary">edit menu
+                            <a href="/?page=menu_control" class="btn btn-primary disabled">edit menu
                                 items</a>
                         </div>
                     </div>

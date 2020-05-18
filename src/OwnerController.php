@@ -42,27 +42,43 @@ class OwnerController extends Controller
         $this->renderPage($template, $args);
     }
 
-    public function updateOwnerProfile(){
+    public function updateOwnerProfile()
+    {
         $ownerName = filter_input(INPUT_POST, 'owner_name');
         $ownerBio = filter_input(INPUT_POST, 'owner_bio');
+        $inputValidated = true;
 
-        $o = $this->ownerRepo->find($this->getOwnerId());
-        $o->setName($ownerName);
-        $o->setBio($ownerBio);
-        $result = $this->ownerRepo->update($o);
+        if (strlen($ownerName) > 120) {
+            $inputValidated = false;
+            $this->logError('Your name is too long');
+        }
+        if (strlen($ownerBio) > 500){
+            $inputValidated = false;
+            $this->logError('Your Bio is too long');
+        }
 
-        if ($result){
-            $this->logMessage('Sucessfulty updated your owner profile');
+        if ($inputValidated) {
+            $o = $this->ownerRepo->find($this->getOwnerId());
+
+            $o->setName($ownerName);
+            $o->setBio($ownerBio);
+
+            $result = $this->ownerRepo->update($o);
+        }
+
+        if ($result) {
+            $this->logMessage('Successfully updated your owner profile');
         } else {
             $this->logError('Could not edit profile, please try again later');
         }
 
         $this->redirect('/', [
-            'page'=>'owners_profile',
+            'page' => 'owners_profile',
         ]);
     }
 
-    private function getOwnerId(){
+    private function getOwnerId()
+    {
         return $_SESSION['owner_id'];
     }
 

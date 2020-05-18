@@ -89,18 +89,33 @@ class CommentController extends Controller
     }
 
     public function addComment(){
+        $validInput = true;
+
         $csid = filter_input(INPUT_POST, 'comment_csid');
         $message = filter_input(INPUT_POST, 'comment_message');
         $name = filter_input(INPUT_POST, 'comment_person_name');
 
+        if (strlen($message) > 500){
+            $validInput =false;
+            $this->logError('Message is too long, Max 500 characters');
+        }
+        if (strlen($name) > 60) {
+            $validInput =false;
+            $this->logError('Used name is too long, max 60 characters.');
+        }
 
-        $com = new CoffeeshopComment();
+        if ($validInput){
+            $com = new CoffeeshopComment();
 
-        $com->setCoffeeshopId($csid);
-        $com->setMessage($message);
-        $com->setName($name);
+            $com->setCoffeeshopId($csid);
+            $com->setMessage($message);
+            $com->setName($name);
 
-        $result = $this->csCommentRepo->create($com);
+            $result = $this->csCommentRepo->create($com);
+        } else {
+            $result = 0;
+        }
+
 
         if ($result>0){
             $this->logMessage("Comment added successfully and will be reviewed by member of CSR staff.");

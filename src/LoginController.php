@@ -44,7 +44,14 @@ class LoginController extends Controller
 
                 if ($userRole == 'ROLE_SHOP'){
                     $o = $this->ownersRepo->getOwnerByUserId($userId);
-                    $_SESSION['owner_id'] = $o->getId();
+                    if ($o){
+                        $_SESSION['owner_id'] = $o->getId();
+                    }else {
+                        $_SESSION = [];
+                        $this->logError('You are not assigned to Owner account, please contact CSR Admin');
+                        $this->redirect($_SERVER['HTTP_REFERER']);
+                    }
+
                 }
 
                 $this->logMessage('Login Successful!');

@@ -162,8 +162,12 @@ HERE;
             $output[] = $this->street2;
         }
         $output[] = $this->city;
-        $output[] = 'Co. ' . $this->county;
-        $output[] = $this->postcode;
+        if ($this->county){
+            $output[] = 'Co. ' . $this->county;
+        }
+        if ($this->postcode){
+            $output[] = $this->postcode;
+        }
 
         return $output;
     }
