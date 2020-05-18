@@ -1,42 +1,64 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    {% if session.user_role == "ROLE_ADMIN" and user.getId() != session.user_id %}
-        {% if user %}
-            <form method="POST" action="/?page=admin&action=update_user">
-                <input type="hidden" id="userid" name="userid" value="{{ user.getId() }}">
-                <label for="username">Username:</label>
-                <input type="text" maxlength="50" id="username" name="username" value="{{ user.getUsername() }}">
-                <br>
-                <label for="userrole">User Role</label>
-                <select class="custom-select" id="userrole" name="userrole">
-                    <option value="ROLE_STAFF" {% if user.getUserRole() == 'ROLE_STAFF' %}selected{% endif %}>
-                        ROLE_STAFF
-                    </option>
-                    <option value="ROLE_SHOP" {% if user.getUserRole() == 'ROLE_SHOP' %}selected{% endif %}>
-                        ROLE_SHOP
-                    </option>
-                    <option value="ROLE_ADMIN" {% if user.getUserRole() == 'ROLE_ADMIN' %}selected{% endif %}>
-                        ROLE_ADMIN
-                    </option>
-                </select>
-                <p>
-                    {% if user.getUserRole() == 'ROLE_SHOP' %}
-                        <small>warning! changeing user type for shop owner will delete the link to their shop, and erase
-                            the paid content</small>
-                    {% endif %}
-                </p>
-                <button class="btn btn-primary" type="submit">Submit changes</button>
-                <a class="btn btn-warning" href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset
-                    Password</a>
-                <a class="btn btn-danger" href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
-            </form>
+    <div class="row py-4">
+        {% if session.user_role == "ROLE_ADMIN" and user.getId() != session.user_id %}
+            <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 ">
+                <h2 class="mb-3 pb-3 border-bottom border-secondary">User Control Panel</h2>
+                {% if user %}
+                    <div class="col-12 border-bottom border-secondary">
+                        <h3>Editing user ID {{ user.getId() }}</h3>
+                        <form method="POST" action="/?page=admin&action=update_user">
+                            <input type="hidden" id="userid" name="userid" value="{{ user.getId() }}">
+                            <div class="form-group">
+                                <label for="username">Username:</label>
+                                <input type="text" maxlength="50" id="username" name="username"
+                                       value="{{ user.getUsername() }}" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="userrole">User Role</label>
+                                <select class="custom-select" id="userrole" name="userrole">
+                                    <option value="ROLE_STAFF"
+                                            {% if user.getUserRole() == 'ROLE_STAFF' %}selected{% endif %}>
+                                        ROLE_STAFF
+                                    </option>
+                                    <option value="ROLE_SHOP"
+                                            {% if user.getUserRole() == 'ROLE_SHOP' %}selected{% endif %}>
+                                        ROLE_SHOP
+                                    </option>
+                                    <option value="ROLE_ADMIN"
+                                            {% if user.getUserRole() == 'ROLE_ADMIN' %}selected{% endif %}>
+                                        ROLE_ADMIN
+                                    </option>
+                                </select>
+                                <p class="text-center">
+                                    {% if user.getUserRole() == 'ROLE_SHOP' %}
+                                        <small>warning! changeing user type for shop owner will delete the link to their
+                                            shop, and erase the paid content</small>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-primary" type="submit">Submit changes</button>
+                                <a class="btn btn-warning"
+                                   href="/?page=admin&action=reset_password&userid={{ user.getId() }}">Reset
+                                    Password</a>
+                                <a class="btn btn-danger"
+                                   href="/?page=admin&action=remove_user&userid={{ user.getId() }}">Remove</a>
+                            </div>
+
+                        </form>
+                    </div>
+                {% else %}
+                    <p class="lead my-4 text-center">Could not find user.</p>
+                {% endif %}
+                <div class="col my-4 text-center">
+                    <p>Return to <a class="alternative_decoreation" href="/?page=admin">admin page</a></p>
+                </div>
+            </div>
 
         {% else %}
-            <p>Could not find user.</p>
+            <p>You cannot view this page</p>
         {% endif %}
-        <p><a href="/?page=admin">return to admin page</a></p>
-    {% else %}
-        <p>You cannot view this page</p>
-    {% endif %}
+    </div>
 {% endblock %}

@@ -2,36 +2,48 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-12">
-            <p>test</p>
-            <ul>
-                {% for coffeeshop in coffeeshops %}
-                    <li>{{ coffeeshop.getName() }}
-                        <form method="get" action="">
-                            <input type="hidden" name="page" value="admin">
-                            <input type="hidden" name="action" value="update_coffeeshop_owner">
-                            <input type="hidden" name="coffeeshopid" value="{{ coffeeshop.getId() }}">
-                            <label for="owner"></label>
-                            <select name="owner_select" id="owner_select" onchange="this.form.submit()">
+    <div class="row py-4">
+        {% if session.user_role == "ROLE_ADMIN" %}
+            <div class="col-12 col-md-8 offset-md-2">
+                <h2 class="mb-3 pb-3 border-bottom border-secondary">Owner to Coffeeshop Assigment Menu</h2>
+                <ul class="list-unstyled">
+                    {% for coffeeshop in coffeeshops %}
+                        <li>Assign Coffeeshop : {{ coffeeshop.getName() }} to
+                            <form method="get" action="">
+                                <input type="hidden" name="page" value="admin">
+                                <input type="hidden" name="action" value="update_coffeeshop_owner">
+                                <input type="hidden" name="coffeeshopid" value="{{ coffeeshop.getId() }}">
+                                {#                            <label for="owner_select">Assign to</label>#}
+                                <div class="input-group">
+                                    <select class="custom-select" name="owner_select" id="owner_select"
+                                            onchange="this.form.submit()">
 
-                                <option value="-1" {% if not coffeeshop.getOwner() %} selected {% endif %}>
-                                    [no registered owner]
-                                </option>
+                                        <option value="-1" {% if not coffeeshop.getOwner() %} selected {% endif %}>
+                                            [no registered owner]
+                                        </option>
 
-                                {% for owner in owners %}
-                                    <option value="{{ owner.getId() }}"
-                                            {% if owner.getId() == coffeeshop.getOwner().getId() %}selected {% endif %}>
-                                        {{ owner.getUser().getUsername() }} [Owner ID: {{ owner.getId() }}]
-                                    </option>
-                                {% endfor %}
-                            </select>
-                            <button class="btn btn-success" type="submit">Update</button>
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+                                        {% for owner in owners %}
+                                            <option value="{{ owner.getId() }}"
+                                                    {% if owner.getId() == coffeeshop.getOwner().getId() %}selected {% endif %}>
+                                                {{ owner.getUser().getUsername() }} [Owner ID: {{ owner.getId() }}]
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="col my-4 text-center border-top mt-3 pt-3 mb-3">
+                    <p>Return to <a class="alternative_decoreation" href="/?page=admin">admin page</a></p>
+                </div>
+            </div>
+        {% else %}
+            <div class="col p-4 m-4">You cannot view this page</div>
+        {% endif %}
     </div>
 
 {% endblock %}

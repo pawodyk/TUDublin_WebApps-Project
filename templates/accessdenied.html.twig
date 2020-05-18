@@ -2,9 +2,20 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-12 bg-danger">
-            <h2>You're user role dont allow permission to view this page.</h2>
+    <div class="row my-4">
+        <div class="col-12 bg-danger p-5 rounded text-center">
+            <h2>You're don't have permissions to view this page.</h2>
+
+            <p>Go to <a href="/" class="alternative_decoreation">homepage</a></p>
+            {% if not session.user_id %}
+                <div>
+                    <p>* OR *</p>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">
+                        Login
+                    </button>
+                </div>
+            {% endif %}
+
         </div>
     </div>
 
