@@ -12,28 +12,56 @@
                     <div class="col">
                         <div class="alert alert-warning text-center">
                             <h5>Work in progress!</h5>
-                            <p>This Feature is not yet completed, if you wish to edit your menu please contact CSR Staff and they will be happy to help.</p>
+                            <p>This Feature is not yet completed, if you wish to edit your menu please contact CSR Staff
+                                and they will be happy to help.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    {% for cs in coffeeshops%}
+                    {% for cs in coffeeshops %}
                         <div class="col-12 col-md-6 col-xl-4">
                             <h4>Coffeeshop: {{ cs.getName() }}</h4>
-                            <h5>{% if cs.getMenuId() %}Menu ID {{ cs.getMenuId() }} {% else %} No Menu selected {% endif %}</h5>
-                            <ol>
-                                {% for mi in cs.menuList() %}
-                                    <li>{{ mi.getItemName() }} : &euro;{{ mi.getItemPrice() }}</li>
-                                {% endfor %}
-                            </ol>
+                            <form method="get" action="/">
+                                <input type="hidden" name="page" value="asign_menu_coffeeshop">
+                                <input type="hidden" name="coffeeshopid" value="{{ cs.getId() }}">
+                                <div class="input-group">
+                                    <select class="custom-select" name="menu_select" id="menu_select"
+                                            onchange="this.form.submit()">
+
+                                        <option value="-1" {% if not cs.getMenuId() %} selected {% endif %}>
+                                            No Menu Selected
+                                        </option>
+
+                                        {% for menuid in menuIdlist %}
+                                            <option value="{{ menuid }}"
+                                                    {% if cs.getMenuId() == menuid %} selected {% endif %}>
+                                                Menu ID: {{ menuid }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                            {% if cs.getMenuId() %}
+                                <hr>
+                                <ol>
+                                    {% for mi in cs.menuList() %}
+                                        <li>{{ mi.getItemName() }} : &euro;{{ mi.getItemPrice() }}</li>
+                                    {% endfor %}
+                                </ol>
+                            {% endif %}
+
+                            <hr>
                         </div>
                     {% endfor %}
                 </div>
 
 
-{#                <a href="/?page=menu_control" class="btn btn-primary">edit menu#}
-{#                    items</a>#}
+                {#                <a href="/?page=menu_control" class="btn btn-primary">edit menu#}
+                {#                    items</a>#}
             </div>
         {% else %}
             <p>You cannot view this page</p>

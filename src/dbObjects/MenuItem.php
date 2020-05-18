@@ -13,9 +13,7 @@ CREATE TABLE `menuitem` (
   `menu_id` int NULL,
   `item_name` varchar(60),
   `item_price` double(5,2),
-  PRIMARY KEY (`id`),
-  KEY `FK_MENUITEM_MENU` (`menu_id`),
-  CONSTRAINT `FK_MENUITEM_COFFEESHOP` FOREIGN KEY (`menu_id`) REFERENCES `coffeeshop` (`menu_id`)
+  PRIMARY KEY (`id`)
 );
 HERE;
     private $id;

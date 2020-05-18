@@ -158,7 +158,9 @@ HERE;
     public function getInArray(){
         $output = [];
         $output[] = $this->street1;
-        $output[] = $this->street2;
+        if ($this->street2){
+            $output[] = $this->street2;
+        }
         $output[] = $this->city;
         $output[] = 'Co. ' . $this->county;
         $output[] = $this->postcode;

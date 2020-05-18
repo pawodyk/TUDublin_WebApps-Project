@@ -85,6 +85,7 @@ class WebApplication
             case 'submit_edit_owner':
             case 'menu_control':
             case 'upload_coffeeshop_picture':
+            case 'asign_menu_coffeeshop':
                 if ($this->loginCon->verifyAccess('ROLE_STAFF') || $this->loginCon->verifyAccess('ROLE_SHOP')) {
                     $this->ownerControlls($page);
                 } else {
@@ -125,6 +126,9 @@ class WebApplication
                 break;
             case 'upload_coffeeshop_picture':
                 $this->pictureCon->savePictureForCoffeeshop();
+                break;
+            case 'asign_menu_coffeeshop':
+                $this->menuCon->assignMenuToCoffeeshop();
                 break;
         }
     }
