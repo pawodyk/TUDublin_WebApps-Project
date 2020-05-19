@@ -77,7 +77,11 @@
                     </div>
 
                 {% else %}
-                    This Coffee Shop do not have Owner assigned to it, please ask page administrator to assign Owner
+                    <div class="col text-center my-4">
+                        <h2>The Coffee Shop <strong class="font-italic">{{ coffeeshop.getName() }}</strong> do not have Owner assigned to it, please ask page administrator to assign Owner</h2>
+                        <a class="alternative_decoreation lead" href="/?page=shop&csid={{ coffeeshop.getId() }}">Go back to shop profile</a>
+                    </div>
+
                 {% endif %}
             {% else %}
                 <p>You cannot view this page</p>
