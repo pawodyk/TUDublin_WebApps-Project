@@ -39,22 +39,6 @@ HERE;
     /**
      * @return mixed
      */
-    public function getCoffeeshopId()
-    {
-        return $this->coffeeshop_id;
-    }
-
-    /**
-     * @param mixed $coffeeshop_id
-     */
-    public function setCoffeeshopId($coffeeshop_id)
-    {
-        $this->coffeeshop_id = $coffeeshop_id;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getName()
     {
         return $this->name;

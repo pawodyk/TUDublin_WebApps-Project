@@ -9,11 +9,10 @@
         </div>
 
         {% for cs in coffeeshop_list %}
-
             <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-0">
                 <a class="text-decoration-none text-dark text-center" href="/?page=shop&csid={{ cs.id }}">
                     <div class="card mb-4 shadow-sm border border-light {% if cs.getOwnerId() %} border-success{% endif %}">
-                        <img src="img/default.jpg" class="card-img-top" width="100%" height="225">
+                        <img src="{% if cs.getPictureId() %} img/uploads/{{ cs.getPicture().getFilename() }} {% else %}img/default.jpg {% endif %}" class="card-img-top" width="100%" height="225">
                         <div class="card-body">
                             <h3>{{ cs.name }}</h3>
                             {#<p class="card-text">{{ cs.summary }}</p>#}

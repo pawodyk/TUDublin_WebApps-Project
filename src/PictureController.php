@@ -5,6 +5,7 @@ namespace TUDublin;
 
 
 use TUDublin\dbObjects\CoffeeshopRepository;
+use TUDublin\dbObjects\Picture;
 use TUDublin\dbObjects\PictureRepository;
 
 class PictureController extends Controller
@@ -30,10 +31,32 @@ class PictureController extends Controller
         $csId = filter_input(INPUT_GET, 'csid');
         $uploadfile = self::UPLOAD_DIR . basename($_FILES['coffeeshop_picture']['name']);
 
-        $isSafeToUpload = true;
+        $isSafeToUpload = true; //$this->runFileCheck()'
+
+        if ($_FILES['coffeeshop_picture']['size'] > 1000000) {
+            $this->logError('Exceeded filesize limit.');
+            $isSafeToUpload = false;
+        }
+
         if ($isSafeToUpload){
             if (move_uploaded_file($_FILES['coffeeshop_picture']['tmp_name'], $uploadfile)) {
-                $this->logMessage('Upload Successful');
+
+                try {
+                    $cs = $this->csRepo->find($csId);
+
+                    $p = new Picture();
+                    $p->setName('Photo of Coffee Shop ID' . $csId);
+                    $p->setFilename($_FILES['coffeeshop_picture']['name']);
+
+                    $cs->setPictureId($this->pictureRepo->create($p));
+                    $this->csRepo->update($cs);
+
+                    $this->logMessage('Upload Successful');
+                } catch (Exception $e){
+                    $this->logError('could not save the file');
+                }
+
+
                 $this->redirect('/',[
                     'page'=>'shop',
                     'csid'=>$csId,
@@ -42,6 +65,8 @@ class PictureController extends Controller
             } else {
                 $this->logError('could not upload the file');
             }
+        } else{
+            $this->logError('File upload is unsafe');
         }
 
         $this->redirect('/',[
@@ -51,10 +76,19 @@ class PictureController extends Controller
 
     }
 
-    private function runFileCheck()
+
+    private function generateRandomName(){
+        $output = '';
+        for ($i = 0; $i < 10; $i++){
+            $output .= rand(0,9);
+        }
+        return $output;
+    }
+
+    private function runFileCheck($file)
     {
-        // Checking $_FILES['upfile']['error'] value.
-        switch ($_FILES['upfile']['error']) {
+        // Checking $file['error'] value.
+        switch ($file['error']) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
@@ -73,7 +107,7 @@ class PictureController extends Controller
         }
 
         // Checking filesize here.
-        if ($_FILES['upfile']['size'] > 1000000) {
+        if ($file['size'] > 1000000) {
             $this->logError('Exceeded filesize limit.');
             return false;
         }
@@ -82,7 +116,7 @@ class PictureController extends Controller
         $finfo = new finfo(FILEINFO_MIME_TYPE);;
 
         if (false === array_search(
-                $finfo->file($_FILES['upfile']['tmp_name']),
+                $finfo->file($file['tmp_name']),
                 array(
                     'jpg' => 'image/jpeg',
                     'png' => 'image/png',

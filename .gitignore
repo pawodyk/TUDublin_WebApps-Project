@@ -2,6 +2,7 @@
 .idea/
 env/
 vendor/
+public_html/img/uploads/
 composer.lock
 runMigration.bat
 runServer.bat
