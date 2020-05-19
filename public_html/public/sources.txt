@@ -1,5 +1,28 @@
+SOURCES: 
+
 - picture for default.jpg image
     https://unsplash.com/photos/NZMeJsrMC8U
 
 - names of a drinks for coffee shop menu in database
     https://nbcoffee.com/menu/
+	
+
+- PHP file upload:
+https://www.php.net/manual/en/features.file-upload.php#114004
+https://www.php.net/manual/en/features.file-upload.post-method.php
+https://www.tutorialspoint.com/php/php_file_uploading.htm
+
+
+
+TECHNOLOGY
+
+-Font awesome icons
+https://fontawesome.com/
+
+-Bootstrap 4
+https://getbootstrap.com/
+
+-jQuery
+https://jquery.com/
+
+
