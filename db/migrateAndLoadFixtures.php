@@ -226,7 +226,13 @@ foreach (PREDEFINED_USERS as $cred) {
     $u->setPassword($cred['pass']);
     $u->setUserRole($cred['role']);
 
-    $usersRepo->create($u);
+    $uid = $usersRepo->create($u);
+
+    if ($cred['role'] == 'ROLE_SHOP'){
+     $o = new CoffeeshopOwner();
+     $o->setUserId($uid);
+     $csOwnerRepo->create($o);
+    }
 }
 
 //$users =
