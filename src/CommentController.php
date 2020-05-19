@@ -3,40 +3,20 @@
 
 namespace TUDublin;
 
-
-use TUDublin\dbObjects\CoffeeshopAddressRepository;
 use TUDublin\dbObjects\CoffeeshopComment;
 use TUDublin\dbObjects\CoffeeshopCommentRepository;
-use TUDublin\dbObjects\CoffeeshopOwnerRepository;
-use TUDublin\dbObjects\CoffeeshopRepository;
-use TUDublin\dbObjects\CoffeeshopReviewRepository;
-use TUDublin\dbObjects\MenuItemRepository;
-use TUDublin\dbObjects\PictureRepository;
-use TUDublin\dbObjects\UserRepository;
 
 class CommentController extends Controller
 {
 
-    private $csRepo;
-    private $csAddressRepo;
     private $csCommentRepo;
-    private $csOwnerRepo;
-    private $csReviewRepo;
-    private $menuItemRepo;
-    private $pictureRepo;
-    private $userRepo;
 
     public function __construct()
     {
         parent::__construct();
-//        $this->csRepo = new CoffeeshopRepository();
-//        $this->csAddressRepo = new CoffeeshopAddressRepository();
+
         $this->csCommentRepo = new CoffeeshopCommentRepository();
-//        $this->csOwnerRepo = new CoffeeshopOwnerRepository();
-//        $this->csReviewRepo = new CoffeeshopReviewRepository();
-//        $this->menuItemRepo = new MenuItemRepository();
-//        $this->pictureRepo = new PictureRepository();
-//        $this->userRepo = new UserRepository();
+
     }
 
     public function commentsReviewPage()
@@ -128,37 +108,6 @@ class CommentController extends Controller
             'csid'=>$csid,
         ]);
 
-    }
-
-    /* DEPRECATED FUNCTIONS TODO remove after cleanup */
-
-    /**
-     * @deprecated
-     */
-    public function getAllCommentFor($coffeeshopId)
-    {
-        return $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function  getPublishedCommentsFor($coffeeshopId){
-        $comments = $this->csCommentRepo->getAllCommentsForCoffeeshop($coffeeshopId);
-        foreach ($comments as $key=>$comment){
-            if (!$comment->getIsPublished()){
-                unset($comments[$key]);
-            }
-        }
-        return $comments;
-
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getNewComments(){
-        return $this->csCommentRepo->getAllNonPublishedComments();
     }
 
 }

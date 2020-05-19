@@ -22,7 +22,7 @@ class OwnerController extends Controller
     {
         $owner = $this->ownerRepo->find($this->getOwnerId());
 
-        $template = 'ownerProfile.html.twig';
+        $template = 'ownerprofile.html.twig';
         $args = [
             'owner' => $owner,
         ];
@@ -34,7 +34,7 @@ class OwnerController extends Controller
     {
         $owner = $this->ownerRepo->find($this->getOwnerId());
 
-        $template = 'editOwnerProfile.html.twig';
+        $template = 'editownerprofile.html.twig';
         $args = [
             'owner' => $owner,
         ];

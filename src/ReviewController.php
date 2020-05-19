@@ -5,39 +5,25 @@ namespace TUDublin;
 
 
 use TUDublin\dbObjects\Coffeeshop;
-use TUDublin\dbObjects\CoffeeshopAddressRepository;
-use TUDublin\dbObjects\CoffeeshopCommentRepository;
-use TUDublin\dbObjects\CoffeeshopOwnerRepository;
 use TUDublin\dbObjects\CoffeeshopRepository;
 use TUDublin\dbObjects\CoffeeshopReview;
 use TUDublin\dbObjects\CoffeeshopReviewRepository;
-use TUDublin\dbObjects\MenuItemRepository;
-use TUDublin\dbObjects\PictureRepository;
-use TUDublin\dbObjects\UserRepository;
+
 
 class ReviewController extends Controller
 {
 
     private $csRepo;
-    private $csAddressRepo;
-    private $csCommentRepo;
-    private $csOwnerRepo;
     private $csReviewRepo;
-    private $menuItemRepo;
-    private $pictureRepo;
-    private $userRepo;
+
 
     public function __construct()
     {
         parent::__construct();
+
         $this->csRepo = new CoffeeshopRepository();
-//        $this->csAddressRepo = new CoffeeshopAddressRepository();
-//        $this->csCommentRepo = new CoffeeshopCommentRepository();
-//        $this->csOwnerRepo = new CoffeeshopOwnerRepository();
         $this->csReviewRepo = new CoffeeshopReviewRepository();
-//        $this->menuItemRepo = new MenuItemRepository();
-//        $this->pictureRepo = new PictureRepository();
-//        $this->userRepo = new UserRepository();
+
     }
 
     public function newReviewPage()
@@ -133,36 +119,5 @@ class ReviewController extends Controller
         ]);
 
 
-    }
-
-    /* DEPRACATED FUNCTIONS TODO remove after cleanup */
-
-    /**
-     * @param $reviewId
-     * @return mixed|null
-     * @deprecated
-     */
-    public function getReview($reviewId)
-    {
-        return $this->csReviewRepo->find($reviewId);
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getAllReviews()
-    {
-        return $this->csReviewRepo->findAll();
-    }
-
-    /**
-     * @param $coffeeshopId
-     * @return array
-     * @deprecated
-     */
-    public function getAllReviewsFor($coffeeshopId)
-    {
-        return $this->csReviewRepo->getAllReviewsForCoffeeshop($coffeeshopId);
     }
 }

@@ -4,14 +4,10 @@
 namespace TUDublin;
 
 
-use TUDublin\dbObjects\CoffeeshopAddressRepository;
-use TUDublin\dbObjects\CoffeeshopCommentRepository;
 use TUDublin\dbObjects\CoffeeshopOwner;
 use TUDublin\dbObjects\CoffeeshopOwnerRepository;
 use TUDublin\dbObjects\CoffeeshopRepository;
-use TUDublin\dbObjects\CoffeeshopReviewRepository;
 use TUDublin\dbObjects\MenuItemRepository;
-use TUDublin\dbObjects\PictureRepository;
 use TUDublin\dbObjects\User;
 use TUDublin\dbObjects\UserRepository;
 
@@ -377,30 +373,6 @@ class AdminController extends Controller
         $owner = new CoffeeshopOwner();
         $owner->setUserId($userId);
         $this->csOwnerRepo->create($owner);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getAllUsers()
-    {
-        return $this->userRepo->findAll();
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getUser($userId)
-    {
-        return $this->userRepo->find($userId);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getAllOwners()
-    {
-        return $this->csOwnerRepo->findAll();
     }
 
 }

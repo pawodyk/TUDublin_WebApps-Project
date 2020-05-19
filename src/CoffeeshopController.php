@@ -232,34 +232,4 @@ class CoffeeshopController extends Controller
         $this->csRepo->create($cs);
     }
 
-    /* DEPRACATED FUNCTIONS TODO remove after cleanup */
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    public function getCoffeeshops()
-    {
-        return $this->csRepo->findAll();
-    }
-
-    /**
-     * @param $coffeeshopId
-     * @return mixed|null
-     * @deprecated
-     */
-    public function getCoffeeshop($coffeeshopId)
-    {
-        return $this->csRepo->find($coffeeshopId);
-    }
-
-    /**
-     * @param $ownerId
-     * @return array
-     * @deprecated
-     */
-    public function getAllCoffeeshopsForOwner($ownerId)
-    {
-        return $this->csRepo->getAllCoffeeshopsFor($ownerId);
-    }
 }
