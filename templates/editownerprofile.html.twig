@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block nav_owners_profile %} active {% endblock %}
+
 {% block content %}
     <div class="row">
         {% if session.user_role == 'ROLE_STAFF' or session.user_role == 'ROLE_SHOP' %}

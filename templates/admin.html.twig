@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block nav_admin %} active {% endblock %}
+
 {% block content %}
     {% if session.user_role == "ROLE_ADMIN" %}
         <div class="row pt-5 pb-4">
